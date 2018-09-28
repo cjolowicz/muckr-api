@@ -1,7 +1,8 @@
 language: python
 python:
   - "3.6"
-script: pytest
+install: make install
+script: make test
 branches:
   only:
     - master
