@@ -6,6 +6,7 @@ run:
 install:
 	pip install pipenv
 	pipenv install --dev --three
+	pipenv install .
 
 test:
 	pipenv run py.test
