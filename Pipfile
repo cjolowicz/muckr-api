@@ -5,11 +5,11 @@ name = "pypi"
 
 [packages]
 flask = "*"
-pytest = "*"
-coverage = "*"
 gunicorn = "*"
 
 [dev-packages]
+pytest = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.6"
