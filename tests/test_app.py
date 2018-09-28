@@ -1,11 +1,11 @@
-import muckr
+import muckr_service
 
 import pytest
 
 
 @pytest.fixture
 def client():
-    return muckr.app.test_client()
+    return muckr_service.app.test_client()
 
 def test_hello(client):
     response = client.get('/')

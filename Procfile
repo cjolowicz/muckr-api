@@ -1,1 +1,1 @@
-web: gunicorn muckr:app
+web: gunicorn muckr_service:app

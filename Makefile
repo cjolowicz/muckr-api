@@ -1,4 +1,4 @@
-app=muckr
+app=muckr_service
 
 run:
 	pipenv run env FLASK_APP=$(app) FLASK_ENV=development flask run
