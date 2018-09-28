@@ -3,6 +3,9 @@ app=muckr
 run:
 	pipenv run env FLASK_APP=$(app) FLASK_ENV=development flask run
 
+local:
+	pipenv run heroku local
+
 install:
 	pip install pipenv
 	pipenv install --dev --three
