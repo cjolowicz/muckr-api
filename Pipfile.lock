@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "091509d6f04633d85037f61927f1c3abdf226b356b3a7d22bce685c81fbe1987"
+            "sha256": "8959b500af0979567134164a56b825e7b0e4165b8bcac8f0c4949ded01e4689e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -110,10 +110,6 @@
                 "sha256:fcbfeaea0be121980e15bc97b3817b5202ca73d0eae185b4550cbfce2a3ebb3d"
             ],
             "version": "==4.3.0"
-        },
-        "muckr-service": {
-            "editable": true,
-            "path": "."
         },
         "pluggy": {
             "hashes": [
