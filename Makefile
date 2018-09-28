@@ -9,3 +9,6 @@ install:
 
 test:
 	pipenv run py.test
+
+clean:
+	git clean -fxd
