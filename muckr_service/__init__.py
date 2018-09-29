@@ -30,4 +30,5 @@ manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 manager.create_api(Person, methods=['GET', 'POST', 'DELETE'])
 manager.create_api(Computer, methods=['GET'])
 
-app.run()
+if __name__ == '__main__':
+    app.run()
