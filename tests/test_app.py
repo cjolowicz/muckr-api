@@ -1,5 +1,5 @@
 import pytest
-import yaml
+import json
 
 import muckr_service
 
@@ -10,7 +10,7 @@ def client():
 
 def test_person(client):
     response = client.get('/api/person')
-    assert yaml.load(response.data) == {
+    assert json.loads(response.data) == {
         'num_results': 0,
         'objects': [],
         'page': 1,
