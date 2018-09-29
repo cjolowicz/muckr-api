@@ -1,11 +1,11 @@
 import flask
-import flask.ext.sqlalchemy
-import flask.ext.restless
+import flask_sqlalchemy
+import flask_restless
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = flask.ext.sqlalchemy.SQLAlchemy(app)
+db = flask_sqlalchemy.SQLAlchemy(app)
 
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,7 +23,7 @@ class Computer(db.Model):
 
 db.create_all()
 
-manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
+manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 
 # Create API endpoints, which will be available at /api/<tablename> by
 # default.
