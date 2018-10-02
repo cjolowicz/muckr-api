@@ -1,5 +1,7 @@
 import flask
 
+from . import monkeypatch
+
 def create_app(config=None):
     app = flask.Flask(__name__)
     app.config.from_mapping(
