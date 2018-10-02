@@ -3,10 +3,13 @@ import json
 
 import muckr_service
 
+@pytest.fixture
+def app():
+    return muckr_service.create_app()
 
 @pytest.fixture
-def client():
-    return muckr_service.app.test_client()
+def client(app):
+    return app.test_client()
 
 def test_get_person(client):
     response = client.get('/api/person')

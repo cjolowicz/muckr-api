@@ -1,1 +1,1 @@
-web: gunicorn muckr_service:app
+web: gunicorn 'muckr_service:create_app()'
