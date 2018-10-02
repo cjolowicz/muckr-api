@@ -5,7 +5,10 @@ import muckr_service
 
 @pytest.fixture
 def app():
-    return muckr_service.create_app()
+    return muckr_service.create_app({
+        'TESTING': True,
+        'SQLALCHEMY_DATABASE_URI': 'sqlite://', # in-memory database
+    })
 
 @pytest.fixture
 def client(app):
