@@ -26,13 +26,16 @@ if flask_restless.__version__ == '0.17.0':
     _extract_error_messages, flask_restless.views.extract_error_messages = \
         flask_restless.views.extract_error_messages, extract_error_messages
 
-def create_app():
+def create_app(config=None):
     app = flask.Flask(__name__)
     app.config.from_mapping(
         DEBUG=True,
         SQLALCHEMY_DATABASE_URI='sqlite:////tmp/test.db',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
+
+    if config is not None:
+        app.config.from_mapping(config)
 
     db = flask_sqlalchemy.SQLAlchemy(app)
     table_args = {
