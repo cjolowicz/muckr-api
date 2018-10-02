@@ -2,27 +2,27 @@ import flask_sqlalchemy
 import flask_restless
 
 def init_app(app):
-    db = flask_sqlalchemy.SQLAlchemy(app)
+    database = flask_sqlalchemy.SQLAlchemy(app)
 
-    class Person(db.Model):
-        id         = db.Column(db.Integer, primary_key=True)
-        name       = db.Column(db.Unicode, unique=True)
-        birth_date = db.Column(db.Date)
+    class Person(database.Model):
+        id         = database.Column(database.Integer, primary_key=True)
+        name       = database.Column(database.Unicode, unique=True)
+        birth_date = database.Column(database.Date)
 
-    class Computer(db.Model):
-        id            = db.Column(db.Integer, primary_key=True)
-        name          = db.Column(db.Unicode, unique=True)
-        vendor        = db.Column(db.Unicode)
-        purchase_time = db.Column(db.DateTime)
-        owner_id      = db.Column(db.Integer,
-                                  db.ForeignKey('person.id'))
-        owner = db.relationship(
+    class Computer(database.Model):
+        id            = database.Column(database.Integer, primary_key=True)
+        name          = database.Column(database.Unicode, unique=True)
+        vendor        = database.Column(database.Unicode)
+        purchase_time = database.Column(database.DateTime)
+        owner_id      = database.Column(database.Integer,
+                                        database.ForeignKey('person.id'))
+        owner = database.relationship(
             'Person',
-            backref=db.backref('computers', lazy='dynamic'))
+            backref=database.backref('computers', lazy='dynamic'))
 
-    db.create_all()
+    database.create_all()
 
-    manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
+    manager = flask_restless.APIManager(app, flask_sqlalchemy_db=database)
 
     # Create API endpoints, which will be available at /api/<tablename> by
     # default.
