@@ -36,3 +36,7 @@ def test_post_person(client):
         'birth_date': u'1809-02-12',
         'computers': [],
     }
+
+if __name__ == '__main__':
+    import sys
+    pytest.main(sys.argv)
