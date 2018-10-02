@@ -32,13 +32,21 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db = flask_sqlalchemy.SQLAlchemy(app)
+    table_args = {
+        'autoload': True,
+        'autoload_with': db.engine,
+    }
 
     class Person(db.Model):
+        __table_args__ = table_args
+
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.Unicode, unique=True)
         birth_date = db.Column(db.Date)
 
     class Computer(db.Model):
+        __table_args__ = table_args
+
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.Unicode, unique=True)
         vendor = db.Column(db.Unicode)
