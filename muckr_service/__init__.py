@@ -38,21 +38,13 @@ def create_app(config=None):
         app.config.from_mapping(config)
 
     db = flask_sqlalchemy.SQLAlchemy(app)
-    table_args = {
-        'autoload': True,
-        'autoload_with': db.engine,
-    }
 
     class Person(db.Model):
-        __table_args__ = table_args
-
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.Unicode, unique=True)
         birth_date = db.Column(db.Date)
 
     class Computer(db.Model):
-        __table_args__ = table_args
-
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.Unicode, unique=True)
         vendor = db.Column(db.Unicode)
