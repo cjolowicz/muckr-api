@@ -1,18 +1,7 @@
-import flask
-import flask.cli
-import click
-
 from muckr_service import database as db
 
 def init_database():
     db.create_all()
-
-@click.command('init-database')
-@flask.cli.with_appcontext
-def init_database_command():
-    '''Initialize the database.'''
-    init_database()
-    click.echo('Initialized the database.')
 
 class Person(db.Model):
     id         = db.Column(db.Integer, primary_key=True)
@@ -28,5 +17,3 @@ class Computer(db.Model):
     owner = db.relationship(
         'Person',
         backref=db.backref('computers', lazy='dynamic'))
-
-app.cli.add_command(init_database_command)
