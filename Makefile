@@ -6,12 +6,12 @@ run:
 heroku-local:
 	pipenv run heroku local
 
-install:
+travis-install:
 	pip install pipenv
 	pipenv install --dev --three
 	pipenv install -e .
 
-test:
+travis-script:
 	pipenv run py.test
 
 clean:

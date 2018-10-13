@@ -1,8 +1,8 @@
 language: python
 python:
   - "3.6"
-install: make install
-script: make test
+install: make travis-install
+script: make travis-script
 branches:
   only:
     - master
