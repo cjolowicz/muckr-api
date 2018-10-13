@@ -1,8 +1,5 @@
 from muckr_service import database as db
 
-def init_database():
-    db.create_all()
-
 class Person(db.Model):
     id         = db.Column(db.Integer, primary_key=True)
     name       = db.Column(db.Unicode, unique=True)
