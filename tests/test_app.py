@@ -2,7 +2,7 @@ import pytest
 import json
 
 import muckr_service
-import muckr_service.database
+import muckr_service.models
 
 @pytest.fixture
 def app():
@@ -12,7 +12,7 @@ def app():
     })
 
     with app.app_context():
-        muckr_service.database.init_database()
+        muckr_service.models.init_database()
 
     return app
 

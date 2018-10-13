@@ -12,8 +12,8 @@ def create_app(config=None):
     if config is not None:
         app.config.from_mapping(config)
 
-    from . import database
-    database.init_app(app)
+    from . import models
+    models.init_app(app)
 
     return app
 
