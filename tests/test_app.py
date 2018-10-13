@@ -2,13 +2,15 @@ import pytest
 import json
 
 import muckr_service
+import config
+
+class TestConfig(config.Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 @pytest.fixture
 def app():
-    app = muckr_service.create_app({
-        'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': 'sqlite://', # in-memory database
-    })
+    app = muckr_service.create_app(TestConfig)
 
     app_context = app.app_context()
     app_context.push()

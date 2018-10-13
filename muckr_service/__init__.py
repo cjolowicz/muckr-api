@@ -1,19 +1,14 @@
 import flask
 import flask_sqlalchemy
 import flask_restless
+import config
 
 database = flask_sqlalchemy.SQLAlchemy()
 manager = flask_restless.APIManager()
 
-def create_app(config=None):
+def create_app(config_class=config.Config):
     app = flask.Flask(__name__)
-    app.config.from_mapping(
-        SQLALCHEMY_DATABASE_URI='sqlite:////tmp/test.db',
-        SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    )
-
-    if config is not None:
-        app.config.from_mapping(config)
+    app.config.from_object(config_class)
 
     database.init_app(app)
     manager.init_app(app, flask_sqlalchemy_db=database)
