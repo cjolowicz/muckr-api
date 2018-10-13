@@ -12,7 +12,7 @@ travis-install:
 	pipenv install -e .
 
 travis-script:
-	pipenv run py.test
+	pipenv run tests/test_app.py
 
 clean:
 	git clean -fxd

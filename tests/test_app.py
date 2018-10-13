@@ -1,4 +1,4 @@
-import pytest
+import unittest
 import json
 
 import muckr_service
@@ -8,55 +8,47 @@ class TestConfig(config.Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
-@pytest.fixture
-def app():
-    app = muckr_service.create_app(TestConfig)
+class MuckrServiceTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = muckr_service.create_app(TestConfig)
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        muckr_service.database.create_all()
+        self.client = self.app.test_client()
 
-    app_context = app.app_context()
-    app_context.push()
+    def tearDown(self):
+        muckr_service.database.session.remove()
+        muckr_service.database.drop_all()
+        self.app_context.pop()
 
-    muckr_service.database.create_all()
+    def test_get_person(self):
+        response = self.client.get('/api/person')
+        assert json.loads(response.data) == {
+            'num_results': 0,
+            'objects': [],
+            'page': 1,
+            'total_pages': 0
+        }
 
-    yield app
+    def test_post_person(self):
+        person = {
+            'name': u'Abraham Lincoln',
+            'birth_date': u'1809-02-12',
+        }
 
-    muckr_service.database.session.remove()
-    muckr_service.database.drop_all()
+        response = self.client.post(
+            '/api/person',
+            data=json.dumps(person),
+            headers={'Content-Type': 'application/json'}
+        )
 
-    app_context.pop()
-
-@pytest.fixture
-def client(app):
-    return app.test_client()
-
-def test_get_person(client):
-    response = client.get('/api/person')
-    assert json.loads(response.data) == {
-        'num_results': 0,
-        'objects': [],
-        'page': 1,
-        'total_pages': 0
-    }
-
-def test_post_person(client):
-    person = {
-        'name': u'Abraham Lincoln',
-        'birth_date': u'1809-02-12',
-    }
-
-    response = client.post(
-        '/api/person',
-        data=json.dumps(person),
-        headers={'Content-Type': 'application/json'}
-    )
-
-    assert response.status == '201 CREATED'
-    assert json.loads(response.data) == {
-        'id': 1,
-        'name': u'Abraham Lincoln',
-        'birth_date': u'1809-02-12',
-        'computers': [],
-    }
+        assert response.status == '201 CREATED'
+        assert json.loads(response.data) == {
+            'id': 1,
+            'name': u'Abraham Lincoln',
+            'birth_date': u'1809-02-12',
+            'computers': [],
+        }
 
 if __name__ == '__main__':
-    import sys
-    pytest.main(sys.argv)
+    unittest.main(verbosity=2)
