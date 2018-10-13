@@ -2,8 +2,6 @@ import flask
 import flask_sqlalchemy
 import flask_restless
 
-from . import monkeypatch
-
 database = flask_sqlalchemy.SQLAlchemy()
 manager = flask_restless.APIManager()
 
