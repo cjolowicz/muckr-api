@@ -1,11 +1,12 @@
 import flask
 import flask.cli
-import flask_sqlalchemy
 import flask_restless
 import click
 
+from muckr_service import database as db
+
 def init_database():
-    flask.g.database.create_all()
+    db.create_all()
 
 @click.command('init-database')
 @flask.cli.with_appcontext
@@ -14,33 +15,26 @@ def init_database_command():
     init_database()
     click.echo('Initialized the database.')
 
-def init_app(app):
-    database = flask_sqlalchemy.SQLAlchemy(app)
+class Person(db.Model):
+    id         = db.Column(db.Integer, primary_key=True)
+    name       = db.Column(db.Unicode, unique=True)
+    birth_date = db.Column(db.Date)
 
-    with app.app_context():
-        flask.g.database = database
+class Computer(db.Model):
+    id            = db.Column(db.Integer, primary_key=True)
+    name          = db.Column(db.Unicode, unique=True)
+    vendor        = db.Column(db.Unicode)
+    purchase_time = db.Column(db.DateTime)
+    owner_id      = db.Column(db.Integer, db.ForeignKey('person.id'))
+    owner = db.relationship(
+        'Person',
+        backref=db.backref('computers', lazy='dynamic'))
 
-    class Person(database.Model):
-        id         = database.Column(database.Integer, primary_key=True)
-        name       = database.Column(database.Unicode, unique=True)
-        birth_date = database.Column(database.Date)
+manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 
-    class Computer(database.Model):
-        id            = database.Column(database.Integer, primary_key=True)
-        name          = database.Column(database.Unicode, unique=True)
-        vendor        = database.Column(database.Unicode)
-        purchase_time = database.Column(database.DateTime)
-        owner_id      = database.Column(database.Integer,
-                                        database.ForeignKey('person.id'))
-        owner = database.relationship(
-            'Person',
-            backref=database.backref('computers', lazy='dynamic'))
+# Create API endpoints, which will be available at /api/<tablename> by
+# default.
+manager.create_api(Person, methods=['GET', 'POST', 'DELETE'])
+manager.create_api(Computer, methods=['GET'])
 
-    manager = flask_restless.APIManager(app, flask_sqlalchemy_db=database)
-
-    # Create API endpoints, which will be available at /api/<tablename> by
-    # default.
-    manager.create_api(Person, methods=['GET', 'POST', 'DELETE'])
-    manager.create_api(Computer, methods=['GET'])
-
-    app.cli.add_command(init_database_command)
+app.cli.add_command(init_database_command)
