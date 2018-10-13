@@ -1,6 +1,5 @@
 import flask
 import flask.cli
-import flask_restless
 import click
 
 from muckr_service import database as db
@@ -29,12 +28,5 @@ class Computer(db.Model):
     owner = db.relationship(
         'Person',
         backref=db.backref('computers', lazy='dynamic'))
-
-manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-
-# Create API endpoints, which will be available at /api/<tablename> by
-# default.
-manager.create_api(Person, methods=['GET', 'POST', 'DELETE'])
-manager.create_api(Computer, methods=['GET'])
 
 app.cli.add_command(init_database_command)
