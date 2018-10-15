@@ -2,6 +2,7 @@ import unittest
 import datetime
 
 import muckr_service.app
+import muckr_service.extensions
 import muckr_service.models
 import muckr_service.config
 
@@ -14,11 +15,11 @@ class MuckrServiceTestCase(unittest.TestCase):
         self.app = muckr_service.app.create_app(TestConfig)
         self.app_context = self.app.app_context()
         self.app_context.push()
-        muckr_service.app.database.create_all()
+        muckr_service.extensions.database.create_all()
 
     def tearDown(self):
-        muckr_service.app.database.session.remove()
-        muckr_service.app.database.drop_all()
+        muckr_service.extensions.database.session.remove()
+        muckr_service.extensions.database.drop_all()
         self.app_context.pop()
 
     def test_person(self):
