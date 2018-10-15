@@ -1,3 +1,3 @@
-import muckr_service.app
+import muckr.app
 
-app = muckr_service.app.create_app()
+app = muckr.app.create_app()

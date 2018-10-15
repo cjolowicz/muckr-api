@@ -1,30 +1,30 @@
 import unittest
 import datetime
 
-import muckr_service.app
-import muckr_service.extensions
-import muckr_service.models
-import muckr_service.config
+import muckr.app
+import muckr.extensions
+import muckr.models
+import muckr.config
 
-class TestConfig(muckr_service.config.Config):
+class TestConfig(muckr.config.Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
-class MuckrServiceTestCase(unittest.TestCase):
+class MuckrTestCase(unittest.TestCase):
     def setUp(self):
-        self.app = muckr_service.app.create_app(TestConfig)
+        self.app = muckr.app.create_app(TestConfig)
         self.app_context = self.app.app_context()
         self.app_context.push()
-        muckr_service.extensions.database.create_all()
+        muckr.extensions.database.create_all()
 
     def tearDown(self):
-        muckr_service.extensions.database.session.remove()
-        muckr_service.extensions.database.drop_all()
+        muckr.extensions.database.session.remove()
+        muckr.extensions.database.drop_all()
         self.app_context.pop()
 
     def test_person(self):
         birth_date = datetime.datetime(1970, 1, 1)
-        person = muckr_service.models.Person(
+        person = muckr.models.Person(
             name='john',
             birth_date=birth_date)
 
