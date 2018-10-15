@@ -1,5 +1,8 @@
-import pytest
 import datetime
+import os
+
+import environs
+import pytest
 
 import muckr.app
 import muckr.extensions
@@ -50,3 +53,23 @@ class TestViews:
     def test_index(self, client):
         response = client.get('/')
         assert response.data == b'Hello, world!'
+
+
+@pytest.mark.usefixtures('app')
+class TestConfig:
+    def test_config_requires_secret_key(self):
+        try:
+            del os.environ['SECRET_KEY']
+        except KeyError:
+            pass
+
+        with pytest.raises(environs.EnvError):
+            import muckr.config # noqa
+
+    def test_config_reads_environment_variables(self):
+        os.environ['SECRET_KEY'] = 'secret-key'
+        os.environ['DATABASE_URL'] = 'sqlite://'
+
+        import muckr.config
+        assert muckr.config.SECRET_KEY == 'secret-key'
+        assert muckr.config.SQLALCHEMY_DATABASE_URI == 'sqlite://'
