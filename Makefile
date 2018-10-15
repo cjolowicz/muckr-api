@@ -12,5 +12,8 @@ travis-install:
 travis-script:
 	pipenv run python tests/test_app.py
 
+generate-secretkey:
+	@pipenv run python -c 'import secrets; print("SECRET_KEY={}".format(secrets.token_urlsafe()))'
+
 clean:
 	git clean -fxd
