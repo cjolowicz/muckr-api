@@ -18,8 +18,8 @@ test:
 	pipenv run python -m flake8
 	pipenv run py.test tests --verbose --cov=muckr
 
-generate-secretkey:
-	@pipenv run python -c 'import secrets; print("SECRET_KEY={}".format(secrets.token_urlsafe()))'
+env-secretkey:
+	echo SECRET_KEY=$$(pipenv run python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
 
 clean:
 	git clean -fxd
