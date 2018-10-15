@@ -12,7 +12,6 @@ flask-migrate = "*"
 
 [dev-packages]
 pytest = "*"
-coverage = "*"
 "flake8" = "*"
 
 [requires]
