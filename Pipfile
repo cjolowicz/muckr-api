@@ -8,10 +8,10 @@ flask = "*"
 gunicorn = "*"
 flask-sqlalchemy = "*"
 environs = "*"
-pytest = "*"
 flask-migrate = "*"
 
 [dev-packages]
+pytest = "*"
 coverage = "*"
 "flake8" = "*"
 
