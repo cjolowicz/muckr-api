@@ -16,8 +16,6 @@ def create_app(config_class=muckr_service.config.Config):
 
     import muckr_service.models
 
-    # Create API endpoints, which will be available at /api/<tablename> by
-    # default.
     manager.create_api(muckr_service.models.Person, methods=['GET', 'POST', 'DELETE'])
     manager.create_api(muckr_service.models.Computer, methods=['GET'])
 
