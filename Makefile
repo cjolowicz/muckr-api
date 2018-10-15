@@ -1,7 +1,5 @@
-app=muckr_service
-
 flask-run:
-	pipenv run env FLASK_APP=$(app) FLASK_ENV=development flask run
+	pipenv run env FLASK_ENV=development flask run
 
 heroku-local:
 	pipenv run heroku local
