@@ -13,6 +13,3 @@ def create_app(config_class=muckr.config.Config):
     app.register_blueprint(muckr.main.routes.blueprint)
 
     return app
-
-if __name__ == '__main__':
-    create_app().run()
