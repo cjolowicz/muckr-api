@@ -1,4 +1,3 @@
-import datetime
 import os
 
 import environs
@@ -39,14 +38,21 @@ def client(app, database):
 
 @pytest.mark.usefixtures('database')
 class TestModels:
-    def test_person(self):
-        birth_date = datetime.datetime(1970, 1, 1)
-        person = muckr.models.Person(
-            name='john',
-            birth_date=birth_date)
+    def test_user(self):
+        user = muckr.models.User(
+            username='john',
+            email='john@example.com',
+            password_hash='xxxx')
 
-        assert person.name == 'john'
-        assert person.birth_date == birth_date
+        assert user.id is None
+        assert user.username == 'john'
+        assert user.email == 'john@example.com'
+        assert user.password_hash == 'xxxx'
+
+        muckr.extensions.database.session.add(user)
+        muckr.extensions.database.session.commit()
+
+        assert user.id == 1
 
 
 class TestViews:
