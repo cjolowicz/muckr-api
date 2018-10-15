@@ -14,12 +14,12 @@ def create_app(config_class=muckr_service.config.Config):
     database.init_app(app)
     manager.init_app(app, flask_sqlalchemy_db=database)
 
-    from muckr_service.models import Person, Computer
+    import muckr_service.models
 
     # Create API endpoints, which will be available at /api/<tablename> by
     # default.
-    manager.create_api(Person, methods=['GET', 'POST', 'DELETE'])
-    manager.create_api(Computer, methods=['GET'])
+    manager.create_api(muckr_service.models.Person, methods=['GET', 'POST', 'DELETE'])
+    manager.create_api(muckr_service.models.Computer, methods=['GET'])
 
     return app
 
