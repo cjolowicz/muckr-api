@@ -29,6 +29,11 @@ def database(app):
     muckr.extensions.database.drop_all()
 
 
+@pytest.fixture
+def client(app, database):
+    return app.test_client()
+
+
 @pytest.mark.usefixtures('database')
 class TestPerson:
     def test_person(self):
@@ -39,3 +44,9 @@ class TestPerson:
 
         assert person.name == 'john'
         assert person.birth_date == birth_date
+
+
+class TestViews:
+    def test_index(self, client):
+        response = client.get('/')
+        assert response.data == b'Hello, world!'
