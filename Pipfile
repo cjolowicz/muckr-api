@@ -9,6 +9,7 @@ gunicorn = "*"
 flask-sqlalchemy = "*"
 environs = "*"
 pytest = "*"
+flask-migrate = "*"
 
 [dev-packages]
 coverage = "*"
