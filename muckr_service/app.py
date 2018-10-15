@@ -9,8 +9,8 @@ def create_app(config_class=muckr_service.config.Config):
     import muckr_service.extensions
     muckr_service.extensions.database.init_app(app)
 
-    import muckr_service.main
-    app.register_blueprint(muckr_service.main.blueprint)
+    import muckr_service.main.routes
+    app.register_blueprint(muckr_service.main.routes.blueprint)
 
     return app
 

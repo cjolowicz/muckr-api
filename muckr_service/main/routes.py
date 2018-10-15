@@ -1,5 +1,7 @@
-import muckr_service.main
+import flask
 
-@muckr_service.main.blueprint.route('/')
+blueprint = flask.Blueprint('main', __name__)
+
+@blueprint.route('/')
 def index():
     return 'Hello, world!'
