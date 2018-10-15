@@ -1,3 +1,5 @@
+app=muckr-service
+
 flask-run:
 	pipenv run env FLASK_ENV=development flask run
 
@@ -6,6 +8,9 @@ flask-shell:
 
 heroku-local:
 	pipenv run heroku local
+
+heroku-secretkey:
+	pipenv run heroku config:set --app=$(app) SECRET_KEY=$$(pipenv run python -c 'import secrets; print(secrets.token_urlsafe())')
 
 travis-install:
 	pip install pipenv
