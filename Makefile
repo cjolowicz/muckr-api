@@ -10,7 +10,7 @@ travis-install:
 	pipenv install -e .
 
 travis-script:
-	pipenv run python tests/test_app.py
+	pipenv run py.test tests --verbose
 
 generate-secretkey:
 	@pipenv run python -c 'import secrets; print("SECRET_KEY={}".format(secrets.token_urlsafe()))'

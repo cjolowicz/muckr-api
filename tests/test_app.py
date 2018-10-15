@@ -1,22 +1,33 @@
-import unittest
+import pytest
 import datetime
 
 import muckr.app
 import muckr.extensions
 import muckr.models
 
-class MuckrTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = muckr.app.create_app('tests.config')
-        self.app_context = self.app.app_context()
-        self.app_context.push()
+@pytest.fixture
+def app():
+    app = muckr.app.create_app('tests.config')
+    context = app.test_request_context()
+    context.push()
+
+    yield app
+
+    context.pop()
+
+@pytest.fixture
+def database(app):
+    muckr.extensions.database.app = app
+    with app.app_context():
         muckr.extensions.database.create_all()
 
-    def tearDown(self):
-        muckr.extensions.database.session.remove()
-        muckr.extensions.database.drop_all()
-        self.app_context.pop()
+    yield muckr.extensions.database
 
+    muckr.extensions.database.session.close()
+    muckr.extensions.database.drop_all()
+
+@pytest.mark.usefixtures('database')
+class TestPerson:
     def test_person(self):
         birth_date = datetime.datetime(1970, 1, 1)
         person = muckr.models.Person(
@@ -25,6 +36,3 @@ class MuckrTestCase(unittest.TestCase):
 
         assert person.name == 'john'
         assert person.birth_date == birth_date
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
