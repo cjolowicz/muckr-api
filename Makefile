@@ -10,6 +10,7 @@ travis-install:
 	pipenv install -e .
 
 travis-script:
+	pipenv run python -m flake8
 	pipenv run py.test tests --verbose
 
 generate-secretkey:
