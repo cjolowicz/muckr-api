@@ -9,7 +9,9 @@ travis-install:
 	pipenv install --dev --three
 	pipenv install -e .
 
-travis-script:
+travis-script: test
+
+test:
 	pipenv run python -m flake8
 	pipenv run py.test tests --verbose
 
