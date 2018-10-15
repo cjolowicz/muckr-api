@@ -1,6 +1,9 @@
 flask-run:
 	pipenv run env FLASK_ENV=development flask run
 
+flask-shell:
+	pipenv run flask shell
+
 heroku-local:
 	pipenv run heroku local
 
