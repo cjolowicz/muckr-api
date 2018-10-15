@@ -13,7 +13,7 @@ travis-script: test
 
 test:
 	pipenv run python -m flake8
-	pipenv run py.test tests --verbose
+	pipenv run py.test tests --verbose --cov=muckr
 
 generate-secretkey:
 	@pipenv run python -c 'import secrets; print("SECRET_KEY={}".format(secrets.token_urlsafe()))'
