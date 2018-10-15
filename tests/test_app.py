@@ -35,7 +35,7 @@ def client(app, database):
 
 
 @pytest.mark.usefixtures('database')
-class TestPerson:
+class TestModels:
     def test_person(self):
         birth_date = datetime.datetime(1970, 1, 1)
         person = muckr.models.Person(
