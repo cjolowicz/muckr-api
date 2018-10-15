@@ -63,6 +63,12 @@ class TestConfig:
         except KeyError:
             pass
 
+        env = environs.Env()
+        env.read_env()
+
+        if 'SECRET_KEY' in os.environ:
+            pytest.skip('SECRET_KEY set in .env file')
+
         with pytest.raises(environs.EnvError):
             import muckr.config # noqa
 
