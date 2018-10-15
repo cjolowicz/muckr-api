@@ -1,4 +1,4 @@
-from muckr_service import database as db
+from muckr_service.app import database as db
 
 class Person(db.Model):
     id         = db.Column(db.Integer, primary_key=True)
