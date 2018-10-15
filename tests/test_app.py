@@ -2,9 +2,9 @@ import unittest
 import json
 
 import muckr_service
-import config
+import muckr_service.config
 
-class TestConfig(config.Config):
+class TestConfig(muckr_service.config.Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 

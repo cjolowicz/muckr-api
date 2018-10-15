@@ -1,12 +1,13 @@
 import flask
 import flask_sqlalchemy
 import flask_restless
-import config
+
+import muckr_service.config
 
 database = flask_sqlalchemy.SQLAlchemy()
 manager = flask_restless.APIManager()
 
-def create_app(config_class=config.Config):
+def create_app(config_class=muckr_service.config.Config):
     app = flask.Flask(__name__)
     app.config.from_object(config_class)
 
