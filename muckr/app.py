@@ -1,12 +1,11 @@
 import flask
 
-import muckr.config
 import muckr.extensions
 import muckr.main.views
 
-def create_app(config_class=muckr.config.Config):
+def create_app(config_object='muckr.config'):
     app = flask.Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(config_object)
 
     muckr.extensions.database.init_app(app)
 

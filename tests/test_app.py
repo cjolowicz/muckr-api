@@ -4,15 +4,10 @@ import datetime
 import muckr.app
 import muckr.extensions
 import muckr.models
-import muckr.config
-
-class TestConfig(muckr.config.Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 class MuckrTestCase(unittest.TestCase):
     def setUp(self):
-        self.app = muckr.app.create_app(TestConfig)
+        self.app = muckr.app.create_app('tests.config')
         self.app_context = self.app.app_context()
         self.app_context.push()
         muckr.extensions.database.create_all()
