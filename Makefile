@@ -12,6 +12,9 @@ heroku-local:
 heroku-secretkey:
 	pipenv run heroku config:set --app=$(app) SECRET_KEY=$$(pipenv run python -c 'import secrets; print(secrets.token_urlsafe())')
 
+heroku-logs:
+	pipenv run heroku logs --app=$(app)
+
 travis-install:
 	pip install pipenv
 	pipenv install --dev --three
