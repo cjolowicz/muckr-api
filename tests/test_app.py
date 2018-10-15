@@ -5,6 +5,7 @@ import muckr.app
 import muckr.extensions
 import muckr.models
 
+
 @pytest.fixture
 def app():
     app = muckr.app.create_app('tests.config')
@@ -14,6 +15,7 @@ def app():
     yield app
 
     context.pop()
+
 
 @pytest.fixture
 def database(app):
@@ -25,6 +27,7 @@ def database(app):
 
     muckr.extensions.database.session.close()
     muckr.extensions.database.drop_all()
+
 
 @pytest.mark.usefixtures('database')
 class TestPerson:

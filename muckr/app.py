@@ -3,6 +3,7 @@ import flask
 import muckr.extensions
 import muckr.main.views
 
+
 def create_app(config_object='muckr.config'):
     app = flask.Flask(__name__)
     app.config.from_object(config_object)
