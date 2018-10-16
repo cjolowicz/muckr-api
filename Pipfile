@@ -9,6 +9,7 @@ gunicorn = "*"
 flask-sqlalchemy = "*"
 environs = "*"
 flask-migrate = "*"
+flask-bcrypt = "*"
 
 [dev-packages]
 pytest = "*"
