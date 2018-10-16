@@ -5,8 +5,8 @@ import muckr.models
 
 
 @pytest.mark.usefixtures('database')
-class TestModels:
-    def test_user(self):
+class TestUser:
+    def test_create_user(self):
         user = muckr.models.User(
             username='john',
             email='john@example.com',
