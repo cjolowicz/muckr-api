@@ -1,3 +1,4 @@
+import muckr.extensions
 from muckr.extensions import database as db
 
 
@@ -9,3 +10,11 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+    def set_password(self, password):
+        self.password_hash = muckr.extensions.bcrypt.generate_password_hash(
+            password).decode('utf-8')
+
+    def check_password(self, password):
+        return muckr.extensions.bcrypt.check_password_hash(
+            self.password_hash, password)
