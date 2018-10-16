@@ -10,6 +10,7 @@ def create_app(config_object='muckr.config'):
 
     muckr.extensions.database.init_app(app)
     muckr.extensions.migrate.init_app(app, muckr.extensions.database)
+    muckr.extensions.bcrypt.init_app(app)
 
     app.register_blueprint(muckr.main.views.blueprint)
 
