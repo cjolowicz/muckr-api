@@ -1,1 +1,1 @@
-web: pip install psycopg2 && gunicorn wsgi:app
+web: gunicorn wsgi:app
