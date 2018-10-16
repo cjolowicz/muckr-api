@@ -21,3 +21,13 @@ class TestUser:
         muckr.extensions.database.session.commit()
 
         assert user.id == 1
+
+    def test_set_password(self):
+        user = muckr.models.User(
+            username='john',
+            email='john@example.com')
+
+        user.set_password('secret')
+
+        assert user.check_password('secret')
+        assert not user.check_password('wrong')
