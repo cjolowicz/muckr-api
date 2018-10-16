@@ -10,15 +10,19 @@ def create_app(config_object='muckr.config'):
     app = flask.Flask(__name__)
     app.config.from_object(config_object)
 
-    muckr.extensions.database.init_app(app)
-    muckr.extensions.migrate.init_app(app, muckr.extensions.database)
-    muckr.extensions.bcrypt.init_app(app)
+    register_extensions(app)
 
     app.register_blueprint(muckr.main.views.blueprint)
 
     register_shellcontext(app)
 
     return app
+
+
+def register_extensions(app):
+    muckr.extensions.database.init_app(app)
+    muckr.extensions.migrate.init_app(app, muckr.extensions.database)
+    muckr.extensions.bcrypt.init_app(app)
 
 
 def _import(name):
