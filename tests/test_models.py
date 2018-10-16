@@ -16,6 +16,7 @@ class TestUser:
         assert user.username == 'john'
         assert user.email == 'john@example.com'
         assert user.password_hash == 'xxxx'
+        assert str(user) == '<User john>'
 
         muckr.extensions.database.session.add(user)
         muckr.extensions.database.session.commit()
