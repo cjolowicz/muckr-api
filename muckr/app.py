@@ -11,9 +11,7 @@ def create_app(config_object='muckr.config'):
     app.config.from_object(config_object)
 
     register_extensions(app)
-
-    app.register_blueprint(muckr.main.views.blueprint)
-
+    register_blueprints(app)
     register_shellcontext(app)
 
     return app
@@ -23,6 +21,10 @@ def register_extensions(app):
     muckr.extensions.database.init_app(app)
     muckr.extensions.migrate.init_app(app, muckr.extensions.database)
     muckr.extensions.bcrypt.init_app(app)
+
+
+def register_blueprints(app):
+    app.register_blueprint(muckr.main.views.blueprint)
 
 
 def _import(name):
