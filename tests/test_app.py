@@ -4,12 +4,6 @@ import environs
 import pytest
 
 
-class TestViews:
-    def test_index(self, client):
-        response = client.get('/')
-        assert response.data == b'Hello, world!'
-
-
 @pytest.mark.usefixtures('app')
 class TestConfig:
     def test_config_requires_secret_key(self):
