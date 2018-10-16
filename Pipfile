@@ -16,6 +16,7 @@ flask-bcrypt = "*"
 pytest = "*"
 "flake8" = "*"
 pytest-cov = "*"
+factory-boy = "*"
 
 [requires]
 python_version = "3.6"
