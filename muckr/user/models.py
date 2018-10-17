@@ -1,3 +1,5 @@
+from marshmallow import Schema, fields
+
 import muckr.extensions
 from muckr.extensions import database as db
 
@@ -19,8 +21,9 @@ class User(db.Model):
         return muckr.extensions.bcrypt.check_password_hash(
             self.password_hash, password)
 
-    def to_dict(self):
-        return {
-            'username': self.username,
-            'email': self.email,
-        }
+
+class UserSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    username = fields.Str()
+    email = fields.Email()
+    password_hash = fields.Str(load_only=True)
