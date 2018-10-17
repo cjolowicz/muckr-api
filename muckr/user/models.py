@@ -4,6 +4,10 @@ from muckr.extensions import bcrypt
 from muckr.extensions import database as db
 
 
+def generate_password_hash(password):
+    return bcrypt.generate_password_hash(password).decode('utf-8')
+
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -14,8 +18,7 @@ class User(db.Model):
         return '<User {}>'.format(self.username)
 
     def set_password(self, password):
-        self.password_hash = bcrypt.generate_password_hash(
-            password).decode('utf-8')
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
@@ -27,7 +30,9 @@ class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.Str(required=True)
     email = fields.Email(required=True)
-    password_hash = fields.Str(load_only=True)
+    password_hash = fields.Function(load_only=True,
+                                    load_from='password',
+                                    deserialize=generate_password_hash)
 
     @post_load
     def make_object(self, data):
