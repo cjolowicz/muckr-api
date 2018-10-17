@@ -27,11 +27,10 @@ def create_user():
     schema = UserSchema()
     json = flask.request.get_json() or {}
 
-    data, errors = schema.load(json)
+    user, errors = schema.load(json)
     if errors:
         return jsonify(errors), 422
 
-    user = User(**data)
     database.session.add(user)
     database.session.commit()
 
