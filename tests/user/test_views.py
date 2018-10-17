@@ -11,4 +11,5 @@ class TestUser:
         response = client.get('/users/{id}'.format(id=user.id))
         data, errors = UserSchema().dump(user)
 
+        assert response.status == '200 OK'
         assert response.get_json() == data
