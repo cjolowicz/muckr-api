@@ -17,6 +17,8 @@ def jsonify(data):
 def get_user(id):
     user = User.query.get_or_404(id)
     data, errors = UserSchema().dump(user)
+    if errors:
+        return jsonify(errors), 500
     return jsonify(data)
 
 
@@ -34,6 +36,9 @@ def create_user():
     database.session.commit()
 
     data, errors = schema.dump(user)
+    if errors:
+        return jsonify(errors), 500
+
     response = jsonify(data)
     response.status_code = 201
     response.headers['Location'] = flask.url_for('user.get_user', id=user.id)
