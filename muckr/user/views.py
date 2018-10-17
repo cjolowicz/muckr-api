@@ -7,7 +7,7 @@ from muckr.extensions import database
 blueprint = flask.Blueprint('user', __name__)
 
 
-def jsonify(data):
+def _jsonify(data):
     response = flask.jsonify(data)
     response.mimetype = 'application/vnd.api+json'
     return response
@@ -18,8 +18,8 @@ def get_user(id):
     user = User.query.get_or_404(id)
     data, errors = UserSchema().dump(user)
     if errors:
-        return jsonify(errors), 500
-    return jsonify(data)
+        return _jsonify(errors), 500
+    return _jsonify(data)
 
 
 @blueprint.route('/users', methods=['POST'])
@@ -29,16 +29,16 @@ def create_user():
 
     user, errors = schema.load(json)
     if errors:
-        return jsonify(errors), 422
+        return _jsonify(errors), 422
 
     database.session.add(user)
     database.session.commit()
 
     data, errors = schema.dump(user)
     if errors:
-        return jsonify(errors), 500
+        return _jsonify(errors), 500
 
-    response = jsonify(data)
+    response = _jsonify(data)
     response.status_code = 201
     response.headers['Location'] = flask.url_for('user.get_user', id=user.id)
     return response
