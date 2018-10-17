@@ -9,5 +9,7 @@ blueprint = flask.Blueprint('user', __name__)
 @blueprint.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
-    data, errors = UserSchema().dumps(user)
-    return data
+    data, errors = UserSchema().dump(user)
+    response = flask.jsonify(data)
+    response.mimetype = 'application/vnd.api+json'
+    return response
