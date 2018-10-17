@@ -1,6 +1,6 @@
 import json
 
-from muckr.user.models import UserSchema
+from muckr.user.models import User, UserSchema
 
 from tests.user.factories import UserFactory
 
@@ -27,3 +27,17 @@ class TestUser:
         assert response.status == '201 CREATED'
         assert response.get_json()['id'] > 0
         assert response.get_json() == data
+
+    def test_create_user_with_password(self, client):
+        data = {
+            'username': 'user0',
+            'email': 'user0@example.com',
+            'password': 'secret',
+        }
+
+        response = client.post('/users', data=json.dumps(data),
+                               content_type='application/json')
+
+        user = User.query.get(response.get_json()['id'])
+
+        assert user.check_password(data['password'])
