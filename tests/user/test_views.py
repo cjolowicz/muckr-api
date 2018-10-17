@@ -1,11 +1,11 @@
 from muckr.user.models import UserSchema
 
-import tests.user.factories
+from tests.user.factories import UserFactory
 
 
 class TestUser:
     def test_get_user(self, database, client):
-        user = tests.user.factories.UserFactory.create()
+        user = UserFactory.create()
         database.session.commit()
 
         response = client.get('/users/{id}'.format(id=user.id))
