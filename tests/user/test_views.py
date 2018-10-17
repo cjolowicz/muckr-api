@@ -9,6 +9,6 @@ class TestUser:
         database.session.commit()
 
         response = client.get('/users/{id}'.format(id=user.id))
-        data, errors = UserSchema().dumps(user)
+        data, errors = UserSchema().dump(user)
 
-        assert response.data.decode('utf-8') == data
+        assert response.get_json() == data
