@@ -11,6 +11,7 @@ environs = "*"
 flask-migrate = "*"
 flask-bcrypt = "*"
 "psycopg2" = "*"
+marshmallow = "*"
 
 [dev-packages]
 pytest = "*"
