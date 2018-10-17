@@ -1,7 +1,5 @@
 import flask
 
-import muckr.user.models # noqa
-
 
 blueprint = flask.Blueprint('main', __name__)
 

@@ -18,3 +18,9 @@ class User(db.Model):
     def check_password(self, password):
         return muckr.extensions.bcrypt.check_password_hash(
             self.password_hash, password)
+
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'email': self.email,
+        }
