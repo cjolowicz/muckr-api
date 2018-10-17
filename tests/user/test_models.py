@@ -3,7 +3,7 @@ import pytest
 import muckr.extensions
 import muckr.user.models
 
-import tests.factories
+import tests.user.factories
 
 
 @pytest.mark.usefixtures('database')
@@ -26,7 +26,7 @@ class TestUser:
         assert user.id == 1
 
     def test_set_password(self):
-        user = tests.factories.UserFactory()
+        user = tests.user.factories.UserFactory()
 
         user.set_password('secret')
 
