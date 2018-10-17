@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, post_load
 
-import muckr.extensions
+from muckr.extensions import bcrypt
 from muckr.extensions import database as db
 
 
@@ -14,12 +14,11 @@ class User(db.Model):
         return '<User {}>'.format(self.username)
 
     def set_password(self, password):
-        self.password_hash = muckr.extensions.bcrypt.generate_password_hash(
+        self.password_hash = bcrypt.generate_password_hash(
             password).decode('utf-8')
 
     def check_password(self, password):
-        return muckr.extensions.bcrypt.check_password_hash(
-            self.password_hash, password)
+        return bcrypt.check_password_hash(self.password_hash, password)
 
 
 class UserSchema(Schema):
