@@ -38,5 +38,5 @@ def register_shellcontext(app):
     def shell_context():
         return dict(_import(name) for name in [
             'muckr.extensions.database',
-            'muckr.models.User',
+            'muckr.user.models.User',
         ])

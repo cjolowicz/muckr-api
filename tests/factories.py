@@ -3,7 +3,7 @@ from factory import PostGenerationMethodCall, Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 
 from muckr.extensions import database
-from muckr.models import User
+from muckr.user.models import User
 
 
 class BaseFactory(SQLAlchemyModelFactory):

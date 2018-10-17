@@ -1,7 +1,7 @@
 import pytest
 
 import muckr.extensions
-import muckr.models
+import muckr.user.models
 
 import tests.factories
 
@@ -9,7 +9,7 @@ import tests.factories
 @pytest.mark.usefixtures('database')
 class TestUser:
     def test_create_user(self):
-        user = muckr.models.User(
+        user = muckr.user.models.User(
             username='john',
             email='john@example.com',
             password_hash='xxxx')
