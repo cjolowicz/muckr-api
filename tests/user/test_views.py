@@ -1,3 +1,4 @@
+import pytest
 import json
 
 from muckr.user.models import User, UserSchema
@@ -5,20 +6,28 @@ from muckr.user.models import User, UserSchema
 from tests.user.factories import UserFactory
 
 
-class TestUser:
-    def test_list_users(self, database, client):
-        users = UserFactory.create_batch(10)
-        database.session.commit()
+@pytest.fixture
+def user(database):
+    user = UserFactory.create()
+    database.session.commit()
+    return user
 
+
+@pytest.fixture
+def users(database):
+    users = UserFactory.create_batch(10)
+    database.session.commit()
+    return users
+
+
+class TestUser:
+    def test_list_users(self, users, client):
         response = client.get('/users')
 
         assert response.status == '200 OK'
         assert response.get_json() == UserSchema(many=True).dump(users).data
 
-    def test_get_user(self, database, client):
-        user = UserFactory.create()
-        database.session.commit()
-
+    def test_get_user(self, user, client):
         response = client.get('/users/{id}'.format(id=user.id))
 
         assert response.status == '200 OK'
