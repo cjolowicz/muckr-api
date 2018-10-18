@@ -13,5 +13,5 @@ def error_response(status_code, message=None, details=None):
 
     response = jsonify(payload)
     response.status_code = status_code
-    response.mimetype = 'application/vnd.api+json'
+    response.mimetype = 'application/json'
     return response

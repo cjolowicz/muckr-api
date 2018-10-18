@@ -12,7 +12,7 @@ users_schema = UserSchema(many=True)
 
 def _jsonify(data):
     response = flask.jsonify(data)
-    response.mimetype = 'application/vnd.api+json'
+    response.mimetype = 'application/json'
     return response
 
 
