@@ -149,6 +149,23 @@ class TestUser:
         self.check_put_request_fails_if_attribute_exists(
             'email', users, client)
 
+    def check_put_request_succeeds_if_attribute_is_unchanged(
+            self, attribute, user, client):
+        value = getattr(user, attribute)
+        response = client.put('/users/{id}'.format(id=user.id),
+                              data=json.dumps({attribute: value}),
+                              content_type='application/json')
+        assert response.status == '200 OK'
+        assert getattr(User.query.get(user.id), attribute) == value
+
+    def test_put_request_succeeds_if_username_is_unchanged(self, user, client):
+        self.check_put_request_succeeds_if_attribute_is_unchanged(
+            'username', user, client)
+
+    def test_put_request_succeeds_if_email_is_unchanged(self, user, client):
+        self.check_put_request_succeeds_if_attribute_is_unchanged(
+            'email', user, client)
+
     def test_delete_request_removes_user(self, user, client):
         response = client.delete('/users/{id}'.format(id=user.id))
 
