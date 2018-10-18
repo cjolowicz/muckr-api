@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields
+from marshmallow.validate import Length
 
 from muckr.extensions import bcrypt
 from muckr.extensions import database as db
@@ -27,7 +28,7 @@ class UserSchema(Schema):
     __model__ = User
 
     id = fields.Integer(dump_only=True)
-    username = fields.Str(required=True)
+    username = fields.Str(required=True, validate=Length(min=1))
     email = fields.Email(required=True)
     password = fields.Function(load_only=True, required=True)
 

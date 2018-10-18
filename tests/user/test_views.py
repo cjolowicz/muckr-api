@@ -79,6 +79,17 @@ class TestUser:
         assert response.status == '400 BAD REQUEST'
         assert attribute in response.get_json()['details']
 
+    def test_post_request_fails_if_username_is_empty(
+            self, client):
+        user = UserFactory.build()
+        data = user_schema.dump(user).data
+        data['username'] = ''
+        data['password'] = 'secret'
+        response = client.post('/users', data=json.dumps(data),
+                               content_type='application/json')
+        assert response.status == '422 UNPROCESSABLE ENTITY'
+        assert 'username' in response.get_json()['details']
+
     @pytest.mark.parametrize('data', [
         {
             'username': 'john',
@@ -147,6 +158,13 @@ class TestUser:
                               content_type='application/json')
         assert response.status == '200 OK'
         assert getattr(User.query.get(user.id), attribute) == value
+
+    def test_put_request_fails_if_username_is_empty(
+            self, user, client):
+        response = client.post('/users', data=json.dumps({'username': ''}),
+                               content_type='application/json')
+        assert response.status == '422 UNPROCESSABLE ENTITY'
+        assert 'username' in response.get_json()['details']
 
     def test_delete_request_removes_user(self, user, client):
         response = client.delete('/users/{id}'.format(id=user.id))
