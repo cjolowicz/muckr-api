@@ -159,8 +159,13 @@ class TestUser:
         assert response.status == '200 OK'
         assert getattr(User.query.get(user.id), attribute) == value
 
-    def test_put_request_fails_if_username_is_empty(
-            self, user, client):
+    @pytest.mark.parametrize('attribute,value', [
+        ('username', ''),
+        ('email', ''),
+        ('email', 'foo'),
+    ])
+    def test_put_request_fails_if_attribute_is_invalid(
+            self, user, client, attribute, value):
         response = client.post('/users', data=json.dumps({'username': ''}),
                                content_type='application/json')
         assert response.status == '422 UNPROCESSABLE ENTITY'
