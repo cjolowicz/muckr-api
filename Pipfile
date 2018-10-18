@@ -12,6 +12,7 @@ flask-migrate = "*"
 flask-bcrypt = "*"
 "psycopg2" = "*"
 marshmallow = "*"
+flask-httpauth = "*"
 
 [dev-packages]
 pytest = "*"
