@@ -108,5 +108,5 @@ class TestUser:
         response = client.delete('/users/{id}'.format(id=user.id))
 
         assert response.status == '204 NO CONTENT'
-        # assert response.get_json() == {}
+        assert response.data == b''
         assert User.query.get(user.id) is None
