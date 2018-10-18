@@ -17,27 +17,25 @@ class TestUser:
 
     def test_create_user(self, client):
         user = UserFactory.build()
-        data = UserSchema().dump(user).data
+        sent = UserSchema().dump(user).data
+        sent['password'] = 'secret'
 
-        response = client.post('/users', data=json.dumps(data),
+        response = client.post('/users', data=json.dumps(sent),
                                content_type='application/json')
-
-        data['id'] = response.get_json()['id']
 
         assert response.status == '201 CREATED'
-        assert response.get_json()['id'] > 0
-        assert response.get_json() == data
 
-    def test_create_user_with_password(self, client):
-        data = {
-            'username': 'user0',
-            'email': 'user0@example.com',
-            'password': 'secret',
-        }
+        recv = response.get_json()
 
-        response = client.post('/users', data=json.dumps(data),
-                               content_type='application/json')
+        assert recv is not None
+        assert 'id' in recv
 
-        user = User.query.get(response.get_json()['id'])
+        user = User.query.get(recv['id'])
 
-        assert user.check_password(data['password'])
+        assert user is not None
+        assert user.id == recv['id']
+        for key in ['username', 'email']:
+            assert sent[key] == recv[key]
+            assert sent[key] == getattr(user, key)
+        assert 'password' not in recv
+        assert user.check_password(sent['password'])
