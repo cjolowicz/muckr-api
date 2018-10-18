@@ -22,19 +22,19 @@ def users(database):
 
 
 class TestUser:
-    def test_list_users(self, users, client):
+    def test_get_request_returns_list_of_users(self, users, client):
         response = client.get('/users')
 
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(users).data
 
-    def test_get_user(self, user, client):
+    def test_get_request_returns_user(self, user, client):
         response = client.get('/users/{id}'.format(id=user.id))
 
         assert response.status == '200 OK'
         assert response.get_json() == user_schema.dump(user).data
 
-    def test_create_user(self, client):
+    def test_post_request_creates_user(self, client):
         user = UserFactory.build()
         sent = user_schema.dump(user).data
         sent['password'] = 'secret'
