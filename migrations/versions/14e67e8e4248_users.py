@@ -1,7 +1,7 @@
 """users
 
 Revision ID: 14e67e8e4248
-Revises: create user table
+Revises:
 Create Date: 2018-10-15 22:15:29.598764
 
 """
