@@ -1,4 +1,5 @@
 import flask
+from marshmallow import ValidationError
 
 from muckr.user.models import User, UserSchema
 from muckr.extensions import database
@@ -22,8 +23,6 @@ def get_users():
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
     users = User.query.paginate(page, per_page, False)
     data, errors = users_schema.dump(users.items)
-    if errors:
-        return error_response(500)
     return _jsonify(data)
 
 
@@ -31,17 +30,16 @@ def get_users():
 def get_user(id):
     user = User.query.get_or_404(id)
     data, errors = user_schema.dump(user)
-    if errors:
-        return error_response(500)
     return _jsonify(data)
 
 
 @blueprint.route('/users', methods=['POST'])
 def create_user():
     json = flask.request.get_json() or {}
-    data, errors = user_schema.load(json)
-    if errors:
-        return _jsonify(errors), 422
+    try:
+        data, errors = user_schema.load(json)
+    except ValidationError as error:
+        return error_response(422, details=error.messages)
 
     for key in ['username', 'email']:
         condition = {key: data[key]}
@@ -58,8 +56,6 @@ def create_user():
     database.session.commit()
 
     data, errors = user_schema.dump(user)
-    if errors:
-        return error_response(500)
 
     response = _jsonify(data)
     response.status_code = 201
@@ -71,9 +67,10 @@ def create_user():
 def update_user(id):
     user = User.query.get_or_404(id)
     json = flask.request.get_json() or {}
-    data, errors = UserSchema(partial=True).load(json)
-    if errors:
-        return error_response(500)
+    try:
+        data, errors = UserSchema(partial=True).load(json)
+    except ValidationError as error:
+        return error_response(422, details=error.messages)
 
     for key in ['username', 'email']:
         if key in data and data[key] != getattr(user, key):
@@ -93,9 +90,6 @@ def update_user(id):
     database.session.commit()
 
     data, errors = UserSchema().dump(user)
-    if errors:
-        return error_response(500)
-
     return _jsonify(data)
 
 

@@ -30,3 +30,6 @@ class UserSchema(Schema):
     username = fields.Str(required=True)
     email = fields.Email(required=True)
     password = fields.Function(load_only=True, required=True)
+
+    class Meta:
+        strict = True
