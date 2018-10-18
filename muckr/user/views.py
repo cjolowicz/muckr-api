@@ -5,6 +5,8 @@ from muckr.extensions import database
 
 
 blueprint = flask.Blueprint('user', __name__)
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 
 def _jsonify(data):
@@ -18,7 +20,7 @@ def get_users():
     page = flask.request.args.get('page', 1, type=int)
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
     users = User.query.paginate(page, per_page, False)
-    data, errors = UserSchema(many=True).dump(users.items)
+    data, errors = users_schema.dump(users.items)
     if errors:
         return _jsonify(errors), 500
     return _jsonify(data)
@@ -27,7 +29,7 @@ def get_users():
 @blueprint.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
-    data, errors = UserSchema().dump(user)
+    data, errors = user_schema.dump(user)
     if errors:
         return _jsonify(errors), 500
     return _jsonify(data)
@@ -35,17 +37,16 @@ def get_user(id):
 
 @blueprint.route('/users', methods=['POST'])
 def create_user():
-    schema = UserSchema()
     json = flask.request.get_json() or {}
 
-    user, errors = schema.load(json)
+    user, errors = user_schema.load(json)
     if errors:
         return _jsonify(errors), 422
 
     database.session.add(user)
     database.session.commit()
 
-    data, errors = schema.dump(user)
+    data, errors = user_schema.dump(user)
     if errors:
         return _jsonify(errors), 500
 
