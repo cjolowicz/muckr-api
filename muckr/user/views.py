@@ -38,10 +38,14 @@ def get_user(id):
 @blueprint.route('/users', methods=['POST'])
 def create_user():
     json = flask.request.get_json() or {}
-
-    user, errors = user_schema.load(json)
+    data, errors = user_schema.load(json)
     if errors:
         return _jsonify(errors), 422
+
+    password = data.pop('password', None)
+    user = User(**data)
+    if password is not None:
+        user.set_password(password)
 
     database.session.add(user)
     database.session.commit()

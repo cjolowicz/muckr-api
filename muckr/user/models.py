@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields
 
 from muckr.extensions import bcrypt
 from muckr.extensions import database as db
@@ -30,11 +30,3 @@ class UserSchema(Schema):
     username = fields.Str(required=True)
     email = fields.Email(required=True)
     password = fields.Function(load_only=True, required=True)
-
-    @post_load
-    def make_object(self, data):
-        password = data.pop('password', None)
-        user = self.__model__(**data)
-        if password is not None:
-            user.set_password(password)
-        return user
