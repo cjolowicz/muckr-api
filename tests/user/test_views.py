@@ -131,6 +131,24 @@ class TestUser:
             assert data[key] == getattr(user, key)
         assert 'password' not in data
 
+    def check_put_request_fails_if_attribute_exists(
+            self, attribute, users, client):
+        user, user2 = users[:2]
+        data = {attribute: getattr(user2, attribute)}
+        response = client.put('/users/{id}'.format(id=user.id),
+                              data=json.dumps(data),
+                              content_type='application/json')
+        assert response.status == '400 BAD REQUEST'
+        assert attribute in response.get_json()['details']
+
+    def test_put_request_fails_if_username_exists(self, users, client):
+        self.check_put_request_fails_if_attribute_exists(
+            'username', users, client)
+
+    def test_put_request_fails_if_email_exists(self, users, client):
+        self.check_put_request_fails_if_attribute_exists(
+            'email', users, client)
+
     def test_delete_request_removes_user(self, user, client):
         response = client.delete('/users/{id}'.format(id=user.id))
 

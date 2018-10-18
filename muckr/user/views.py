@@ -44,7 +44,8 @@ def create_user():
         return _jsonify(errors), 422
 
     for key in ['username', 'email']:
-        if User.query.filter_by(**{key: data[key]}).first():
+        condition = {key: data[key]}
+        if User.query.filter_by(**condition).first():
             message = 'please use a different {key}'.format(key=key)
             return error_response(400, message=message, details={key: message})
 
@@ -73,6 +74,14 @@ def update_user(id):
     data, errors = UserSchema(partial=True).load(json)
     if errors:
         return error_response(500)
+
+    for key in ['username', 'email']:
+        if key in data and data[key] != getattr(user, key):
+            condition = {key: data[key]}
+            if User.query.filter_by(**condition).first():
+                message = 'please use a different {key}'.format(key=key)
+                return error_response(400, message=message,
+                                      details={key: message})
 
     password = data.pop('password', None)
     if password is not None:
