@@ -43,6 +43,11 @@ def create_user():
     if errors:
         return _jsonify(errors), 422
 
+    for key in ['username', 'email']:
+        if User.query.filter_by(**{key: data[key]}).first():
+            message = 'please use a different {key}'.format(key=key)
+            return error_response(400, message=message, details={key: message})
+
     password = data.pop('password', None)
     user = User(**data)
     if password is not None:

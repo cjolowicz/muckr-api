@@ -67,6 +67,25 @@ class TestUser:
         assert 'password' not in recv
         assert user.check_password(sent['password'])
 
+    def check_post_request_fails_if_attribute_exists(
+            self, attribute, user, client):
+        user, existing_user = UserFactory.build(), user
+        data = user_schema.dump(user).data
+        data[attribute] = getattr(existing_user, attribute)
+        data['password'] = 'secret'
+        response = client.post('/users', data=json.dumps(data),
+                               content_type='application/json')
+        assert response.status == '400 BAD REQUEST'
+        assert attribute in response.get_json()['details']
+
+    def test_post_request_fails_if_username_exists(self, user, client):
+        self.check_post_request_fails_if_attribute_exists(
+            'username', user, client)
+
+    def test_post_request_fails_if_email_exists(self, user, client):
+        self.check_post_request_fails_if_attribute_exists(
+            'email', user, client)
+
     def check_attributes_after_put_request(self, client, user, data):
         original = user_schema.dump(user).data
         original['password'] = 'example'
