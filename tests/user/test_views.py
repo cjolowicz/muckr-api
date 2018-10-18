@@ -79,16 +79,21 @@ class TestUser:
         assert response.status == '400 BAD REQUEST'
         assert attribute in response.get_json()['details']
 
-    def test_post_request_fails_if_username_is_empty(
-            self, client):
+    @pytest.mark.parametrize('attribute,value', [
+        ('username', ''),
+        ('email', ''),
+        ('email', 'foo'),
+    ])
+    def test_post_request_fails_if_attribute_is_invalid(
+            self, client, attribute, value):
         user = UserFactory.build()
         data = user_schema.dump(user).data
-        data['username'] = ''
+        data[attribute] = value
         data['password'] = 'secret'
         response = client.post('/users', data=json.dumps(data),
                                content_type='application/json')
         assert response.status == '422 UNPROCESSABLE ENTITY'
-        assert 'username' in response.get_json()['details']
+        assert attribute in response.get_json()['details']
 
     @pytest.mark.parametrize('data', [
         {
