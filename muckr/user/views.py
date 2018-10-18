@@ -82,3 +82,12 @@ def update_user(id):
         return _jsonify(errors), 500
 
     return _jsonify(data)
+
+
+@blueprint.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    user = User.query.get_or_404(id)
+    database.session.delete(user)
+    database.session.commit()
+
+    return _jsonify({}), 204

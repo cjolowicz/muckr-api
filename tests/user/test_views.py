@@ -103,3 +103,10 @@ class TestUser:
         for key in ['username', 'email']:
             assert data[key] == getattr(user, key)
         assert 'password' not in data
+
+    def test_delete_request_removes_user(self, user, client):
+        response = client.delete('/users/{id}'.format(id=user.id))
+
+        assert response.status == '204 NO CONTENT'
+        # assert response.get_json() == {}
+        assert User.query.get(user.id) is None
