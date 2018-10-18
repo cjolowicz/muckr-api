@@ -6,6 +6,15 @@ from tests.user.factories import UserFactory
 
 
 class TestUser:
+    def test_list_users(self, database, client):
+        users = UserFactory.create_batch(10)
+        database.session.commit()
+
+        response = client.get('/users')
+
+        assert response.status == '200 OK'
+        assert response.get_json() == UserSchema(many=True).dump(users).data
+
     def test_get_user(self, database, client):
         user = UserFactory.create()
         database.session.commit()

@@ -13,6 +13,17 @@ def _jsonify(data):
     return response
 
 
+@blueprint.route('/users', methods=['GET'])
+def list_users():
+    page = flask.request.args.get('page', 1, type=int)
+    per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
+    users = User.query.paginate(page, per_page, False)
+    data, errors = UserSchema(many=True).dump(users.items)
+    if errors:
+        return _jsonify(errors), 500
+    return _jsonify(data)
+
+
 @blueprint.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
