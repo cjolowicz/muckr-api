@@ -58,3 +58,27 @@ def create_user():
     response.status_code = 201
     response.headers['Location'] = flask.url_for('user.get_user', id=user.id)
     return response
+
+
+@blueprint.route('/users/<int:id>', methods=['PUT'])
+def update_user(id):
+    user = User.query.get_or_404(id)
+    json = flask.request.get_json() or {}
+    data, errors = UserSchema(partial=True).load(json)
+    if errors:
+        return _jsonify(errors), 500
+
+    password = data.pop('password', None)
+    if password is not None:
+        user.set_password(password)
+
+    for key, value in data.items():
+        setattr(user, key, value)
+
+    database.session.commit()
+
+    data, errors = UserSchema().dump(user)
+    if errors:
+        return _jsonify(errors), 500
+
+    return _jsonify(data)

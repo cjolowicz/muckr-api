@@ -1,7 +1,8 @@
 import pytest
 import json
 
-from muckr.user.models import User, UserSchema
+from muckr.user.models import User
+from muckr.user.views import user_schema, users_schema
 
 from tests.user.factories import UserFactory
 
@@ -25,17 +26,17 @@ class TestUser:
         response = client.get('/users')
 
         assert response.status == '200 OK'
-        assert response.get_json() == UserSchema(many=True).dump(users).data
+        assert response.get_json() == users_schema.dump(users).data
 
     def test_get_user(self, user, client):
         response = client.get('/users/{id}'.format(id=user.id))
 
         assert response.status == '200 OK'
-        assert response.get_json() == UserSchema().dump(user).data
+        assert response.get_json() == user_schema.dump(user).data
 
     def test_create_user(self, client):
         user = UserFactory.build()
-        sent = UserSchema().dump(user).data
+        sent = user_schema.dump(user).data
         sent['password'] = 'secret'
 
         response = client.post('/users', data=json.dumps(sent),
@@ -57,3 +58,48 @@ class TestUser:
             assert sent[key] == getattr(user, key)
         assert 'password' not in recv
         assert user.check_password(sent['password'])
+
+    def check_attributes_after_put_request(self, client, user, data):
+        original = user_schema.dump(user).data
+        original['password'] = 'example'
+        response = client.put('/users/{id}'.format(id=user.id),
+                              data=json.dumps(data),
+                              content_type='application/json')
+
+        assert response.status == '200 OK'
+
+        for key in ['id', 'username', 'email', 'password']:
+            value = data[key] if key in data and key != 'id' else original[key]
+            if key == 'password':
+                assert user.check_password(value)
+            else:
+                assert getattr(user, key) == value
+
+    def test_put_request_modifies_username_and_email(self, user, client):
+        self.check_attributes_after_put_request(client, user, {
+            'username': 'john',
+            'email': 'john@example.com',
+        })
+
+    def test_put_request_modifies_password(self, user, client):
+        self.check_attributes_after_put_request(client, user, {
+            'password': 'new-secret'
+        })
+
+    def test_put_request_does_not_modify_id(self, user, client):
+        self.check_attributes_after_put_request(client, user, {
+            'id': 123,
+        })
+
+    def test_put_request_returns_modified_user(self, user, client):
+        original_id = user.id
+        response = client.put('/users/{id}'.format(id=user.id),
+                              data=json.dumps({'email': 'john@example.com'}),
+                              content_type='application/json')
+        data = response.get_json()
+        user = User.query.get(data['id'])
+
+        assert data['id'] == original_id
+        for key in ['username', 'email']:
+            assert data[key] == getattr(user, key)
+        assert 'password' not in data
