@@ -67,7 +67,8 @@ class TestUser:
         assert 'password' not in recv
         assert user.check_password(sent['password'])
 
-    def check_post_request_fails_if_attribute_exists(
+    @pytest.mark.parametrize('attribute', ('username', 'email'))
+    def test_post_request_fails_if_attribute_exists(
             self, attribute, user, client):
         user, existing_user = UserFactory.build(), user
         data = user_schema.dump(user).data
@@ -78,15 +79,26 @@ class TestUser:
         assert response.status == '400 BAD REQUEST'
         assert attribute in response.get_json()['details']
 
-    def test_post_request_fails_if_username_exists(self, user, client):
-        self.check_post_request_fails_if_attribute_exists(
-            'username', user, client)
-
-    def test_post_request_fails_if_email_exists(self, user, client):
-        self.check_post_request_fails_if_attribute_exists(
-            'email', user, client)
-
-    def check_attributes_after_put_request(self, client, user, data):
+    @pytest.mark.parametrize('data', [
+        {
+            'username': 'john',
+            'email': 'john@example.com',
+            'password': 'new-secret',
+        },
+        {
+            'username': 'john',
+        },
+        {
+            'email': 'john@example.com',
+        },
+        {
+            'password': 'new-secret',
+        },
+        {
+            'id': 123,
+        },
+    ])
+    def test_put_request_modifies_attributes(self, client, user, data):
         original = user_schema.dump(user).data
         original['password'] = 'example'
         response = client.put('/users/{id}'.format(id=user.id),
@@ -102,22 +114,6 @@ class TestUser:
             else:
                 assert getattr(user, key) == value
 
-    def test_put_request_modifies_username_and_email(self, user, client):
-        self.check_attributes_after_put_request(client, user, {
-            'username': 'john',
-            'email': 'john@example.com',
-        })
-
-    def test_put_request_modifies_password(self, user, client):
-        self.check_attributes_after_put_request(client, user, {
-            'password': 'new-secret'
-        })
-
-    def test_put_request_does_not_modify_id(self, user, client):
-        self.check_attributes_after_put_request(client, user, {
-            'id': 123,
-        })
-
     def test_put_request_returns_modified_user(self, user, client):
         original_id = user.id
         response = client.put('/users/{id}'.format(id=user.id),
@@ -131,7 +127,8 @@ class TestUser:
             assert data[key] == getattr(user, key)
         assert 'password' not in data
 
-    def check_put_request_fails_if_attribute_exists(
+    @pytest.mark.parametrize('attribute', ('username', 'email'))
+    def test_put_request_fails_if_attribute_exists(
             self, attribute, users, client):
         user, user2 = users[:2]
         data = {attribute: getattr(user2, attribute)}
@@ -141,15 +138,8 @@ class TestUser:
         assert response.status == '400 BAD REQUEST'
         assert attribute in response.get_json()['details']
 
-    def test_put_request_fails_if_username_exists(self, users, client):
-        self.check_put_request_fails_if_attribute_exists(
-            'username', users, client)
-
-    def test_put_request_fails_if_email_exists(self, users, client):
-        self.check_put_request_fails_if_attribute_exists(
-            'email', users, client)
-
-    def check_put_request_succeeds_if_attribute_is_unchanged(
+    @pytest.mark.parametrize('attribute', ('username', 'email'))
+    def test_put_request_succeeds_if_attribute_is_unchanged(
             self, attribute, user, client):
         value = getattr(user, attribute)
         response = client.put('/users/{id}'.format(id=user.id),
@@ -157,14 +147,6 @@ class TestUser:
                               content_type='application/json')
         assert response.status == '200 OK'
         assert getattr(User.query.get(user.id), attribute) == value
-
-    def test_put_request_succeeds_if_username_is_unchanged(self, user, client):
-        self.check_put_request_succeeds_if_attribute_is_unchanged(
-            'username', user, client)
-
-    def test_put_request_succeeds_if_email_is_unchanged(self, user, client):
-        self.check_put_request_succeeds_if_attribute_is_unchanged(
-            'email', user, client)
 
     def test_delete_request_removes_user(self, user, client):
         response = client.delete('/users/{id}'.format(id=user.id))
