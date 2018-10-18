@@ -2,6 +2,7 @@ import flask
 
 from muckr.user.models import User, UserSchema
 from muckr.extensions import database
+from muckr.errors import error_response
 
 
 blueprint = flask.Blueprint('user', __name__)
@@ -22,7 +23,7 @@ def get_users():
     users = User.query.paginate(page, per_page, False)
     data, errors = users_schema.dump(users.items)
     if errors:
-        return _jsonify(errors), 500
+        return error_response(500)
     return _jsonify(data)
 
 
@@ -31,7 +32,7 @@ def get_user(id):
     user = User.query.get_or_404(id)
     data, errors = user_schema.dump(user)
     if errors:
-        return _jsonify(errors), 500
+        return error_response(500)
     return _jsonify(data)
 
 
@@ -52,7 +53,7 @@ def create_user():
 
     data, errors = user_schema.dump(user)
     if errors:
-        return _jsonify(errors), 500
+        return error_response(500)
 
     response = _jsonify(data)
     response.status_code = 201
@@ -66,7 +67,7 @@ def update_user(id):
     json = flask.request.get_json() or {}
     data, errors = UserSchema(partial=True).load(json)
     if errors:
-        return _jsonify(errors), 500
+        return error_response(500)
 
     password = data.pop('password', None)
     if password is not None:
@@ -79,7 +80,7 @@ def update_user(id):
 
     data, errors = UserSchema().dump(user)
     if errors:
-        return _jsonify(errors), 500
+        return error_response(500)
 
     return _jsonify(data)
 

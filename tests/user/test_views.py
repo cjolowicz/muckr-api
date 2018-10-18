@@ -34,6 +34,14 @@ class TestUser:
         assert response.status == '200 OK'
         assert response.get_json() == user_schema.dump(user).data
 
+    def test_get_request_returns_404(self, client):
+        response = client.get('/users/1')
+
+        assert response.status == '404 NOT FOUND'
+        assert response.get_json() == {
+            'error': 'Not Found',
+        }
+
     def test_post_request_creates_user(self, client):
         user = UserFactory.build()
         sent = user_schema.dump(user).data
