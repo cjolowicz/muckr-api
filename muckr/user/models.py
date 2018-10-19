@@ -38,6 +38,10 @@ class User(db.Model):
         db.session.add(self)
         return self.token
 
+    def revoke_token(self):
+        if self.token is not None:
+            self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
+
 
 class UserSchema(Schema):
     __model__ = User

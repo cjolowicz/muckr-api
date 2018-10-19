@@ -32,3 +32,14 @@ class TestUser:
         assert user.token_expiration < datetime.utcnow() + timedelta(3600)
         assert len(token) == 64
         assert all(char in '0123456789abcdef' for char in token)
+
+    def test_revoke_token_expires_token(self, user):
+        token = user.get_token()
+        user.revoke_token()
+        assert user.token == token
+        assert user.token_expiration < datetime.utcnow()
+
+    def test_revoke_token_is_noop_without_token(self, user):
+        user.revoke_token()
+        assert user.token is None
+        assert user.token_expiration is None
