@@ -24,7 +24,7 @@ def _create_token_auth_header(token):
     return {'Authorization': 'Bearer {token}'.format(token=token)}
 
 
-class TestUser:
+class TestGetUsers:
     def test_get_request_returns_list_of_users(self, user, admin, client):
         users = [user, admin]
         response = client.get(
@@ -88,6 +88,8 @@ class TestUser:
             headers=_create_token_auth_header(users[0].get_token()))
         assert response.status == '401 UNAUTHORIZED'
 
+
+class TestGetUser:
     def test_get_request_returns_user(self, user, client):
         response = client.get(
             '/users/{id}'.format(id=user.id),
@@ -125,6 +127,8 @@ class TestUser:
             'error': 'Not Found',
         }
 
+
+class TestPostUser:
     def test_post_request_creates_user(self, client):
         user = UserFactory.build()
         sent = user_schema.dump(user).data
@@ -182,6 +186,8 @@ class TestUser:
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert attribute in response.get_json()['details']
 
+
+class TestPutUser:
     @pytest.mark.parametrize('data', [
         {
             'username': 'john',
@@ -300,6 +306,8 @@ class TestUser:
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert 'username' in response.get_json()['details']
 
+
+class TestDeleteUser:
     def test_delete_request_removes_user(self, user, client):
         response = client.delete(
             '/users/{id}'.format(id=user.id),
@@ -330,7 +338,7 @@ class TestUser:
         assert User.query.get(user.id) is None
 
 
-class TestToken:
+class TestPostToken:
     def test_post_request_creates_valid_token(self, user, client, database):
         response = client.post(
             '/tokens',
@@ -357,6 +365,8 @@ class TestToken:
         assert 'error' in response.get_json()
         assert user.token is None
 
+
+class TestDeleteToken:
     def test_delete_request_expires_token(self, user, client):
         response = client.post(
             '/tokens',
