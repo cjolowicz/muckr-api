@@ -19,6 +19,7 @@ class TestUser:
         assert user.check_password('example')
         assert user.token is None
         assert user.token_expiration is None
+        assert user.is_admin is None
         assert str(user) == '<User john>'
 
     def test_user_is_saved_to_database(self, user):
@@ -27,6 +28,7 @@ class TestUser:
         assert dbuser.username == user.username
         assert dbuser.email == user.email
         assert dbuser.password_hash == user.password_hash
+        assert dbuser.is_admin is False
 
     def test_set_password_modifies_password(self, user):
         user.set_password('secret')

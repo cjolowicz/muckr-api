@@ -18,6 +18,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     token = db.Column(db.String(64), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    is_admin = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
