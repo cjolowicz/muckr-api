@@ -2,6 +2,8 @@
 from werkzeug.http import HTTP_STATUS_CODES
 from flask import jsonify
 
+from muckr.extensions import database
+
 
 def error_response(status_code, message=None, details=None):
     status = HTTP_STATUS_CODES.get(status_code, 'Unknown error')
@@ -16,3 +18,11 @@ def error_response(status_code, message=None, details=None):
     response.status_code = status_code
     response.mimetype = 'application/json'
     return response
+
+
+def handle_error(error):
+    # If a HTTPException, pull the `code` attribute; default to 500
+    status_code = getattr(error, 'code', 500)
+    if status_code == 500:
+        database.session.rollback()
+    return error_response(status_code)

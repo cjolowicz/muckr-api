@@ -33,14 +33,8 @@ def register_blueprints(app):
 
 
 def register_errorhandlers(app):
-    def handle_error(error):
-        # If a HTTPException, pull the `code` attribute; default to 500
-        status_code = getattr(error, 'code', 500)
-        if status_code == 500:
-            muckr.extensions.database.session.rollback()
-        return muckr.errors.error_response(status_code)
-    for errcode in [401, 404, 500]:
-        app.errorhandler(errcode)(handle_error)
+    for status_code in [401, 404, 500]:
+        app.errorhandler(status_code)(muckr.errors.handle_error)
 
 
 def _import(name):
