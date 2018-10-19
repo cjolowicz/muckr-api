@@ -5,7 +5,7 @@ from tests.user.factories import UserFactory
 
 
 class TestUser:
-    def test_create_user(self, database):
+    def test_user_is_created(self, database):
         user = UserFactory(username='john', email='john@example.com')
 
         assert user.id is None
@@ -20,13 +20,13 @@ class TestUser:
 
         assert user.id == 1
 
-    def test_set_password(self, user):
+    def test_set_password_modifies_password(self, user):
         user.set_password('secret')
 
         assert user.check_password('secret')
         assert not user.check_password('wrong')
 
-    def test_get_token(self, user):
+    def test_get_token_returns_valid_token(self, user):
         token = user.get_token()
         assert user.token == token
         assert user.token_expiration < datetime.utcnow() + timedelta(3600)
