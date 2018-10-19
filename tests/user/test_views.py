@@ -8,20 +8,6 @@ from muckr.user.views import user_schema, users_schema
 from tests.user.factories import UserFactory
 
 
-@pytest.fixture
-def user(database):
-    user = UserFactory.create()
-    database.session.commit()
-    return user
-
-
-@pytest.fixture
-def users(database):
-    users = UserFactory.create_batch(10)
-    database.session.commit()
-    return users
-
-
 class TestUser:
     def test_get_request_returns_list_of_users(self, users, client):
         response = client.get('/users')
