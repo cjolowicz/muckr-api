@@ -42,6 +42,13 @@ class User(db.Model):
         if self.token is not None:
             self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
 
+    @staticmethod
+    def check_token(token):
+        user = User.query.filter_by(token=token).first()
+        if user is not None and user.token_expiration is not None and \
+                user.token_expiration > datetime.utcnow():
+            return user
+
 
 class UserSchema(Schema):
     __model__ = User
