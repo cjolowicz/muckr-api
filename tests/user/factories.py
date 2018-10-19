@@ -1,5 +1,8 @@
 '''Factories to help in user tests.'''
-from factory import PostGenerationMethodCall, Sequence
+from datetime import datetime, timedelta
+import secrets
+
+from factory import PostGenerationMethodCall, Sequence, LazyFunction
 from factory.alchemy import SQLAlchemyModelFactory
 
 from muckr.extensions import database
@@ -22,6 +25,9 @@ class UserFactory(BaseFactory):
     username = Sequence(lambda n: 'user{0}'.format(n))
     email = Sequence(lambda n: 'user{0}@example.com'.format(n))
     password_hash = PostGenerationMethodCall('set_password', 'example')
+    token = LazyFunction(lambda: secrets.token_hex(32))
+    token_expiration = LazyFunction(
+        lambda: datetime.utcnow() + timedelta(seconds=3600))
 
     class Meta:
         '''Factory configuration.'''

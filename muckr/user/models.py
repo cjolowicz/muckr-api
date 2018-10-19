@@ -1,4 +1,7 @@
 '''User models.'''
+import secrets
+from datetime import datetime, timedelta
+
 from marshmallow import Schema, fields
 from marshmallow.validate import Length
 
@@ -13,6 +16,8 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    token = db.Column(db.String(64), index=True, unique=True)
+    token_expiration = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
