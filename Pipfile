@@ -13,6 +13,7 @@ flask-bcrypt = "*"
 "psycopg2" = "*"
 marshmallow = "*"
 flask-httpauth = "*"
+marshmallow-jsonapi = "*"
 
 [dev-packages]
 pytest = "*"

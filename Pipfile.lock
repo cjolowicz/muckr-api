@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a6aa3b201940844727e047e920bfaaf9e63ebeaeba3eb87840e6f15675b01176"
+            "sha256": "979d3c2cc6616b1cbe7004d488e01952a15f1142b2105ed544e52a620410231d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -193,6 +193,14 @@
             ],
             "index": "pypi",
             "version": "==2.16.0"
+        },
+        "marshmallow-jsonapi": {
+            "hashes": [
+                "sha256:120f6ef37b48723f2d32310de923ee44b1358c1962bd1e7aa585f6cf21f6c8cc",
+                "sha256:8944bf3afc8d521b252b4bc1e6f9bca88d19567a5ce7dd54e836927ec2c4ad08"
+            ],
+            "index": "pypi",
+            "version": "==0.20.4"
         },
         "psycopg2": {
             "hashes": [
