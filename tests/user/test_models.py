@@ -12,9 +12,8 @@ class TestUser:
         assert user.username == 'john'
         assert user.email == 'john@example.com'
         assert user.check_password('example')
-        assert len(user.token) == 64
-        assert all(char in '0123456789abcdef' for char in user.token)
-        assert user.token_expiration < datetime.utcnow() + timedelta(days=1)
+        assert user.token is None
+        assert user.token_expiration is None
         assert str(user) == '<User john>'
 
         database.session.commit()
