@@ -128,22 +128,26 @@ class TestUser:
     def test_post_request_creates_user(self, client):
         user = UserFactory.build()
         sent = user_schema.dump(user).data
-        sent['password'] = 'secret'
+        sent['data']['attributes']['password'] = 'secret'
 
         response = client.post('/users', data=json.dumps(sent),
-                               content_type='application/json')
+                               content_type='application/vnd.api+json')
 
         assert response.status == '201 CREATED'
 
         recv = response.get_json()
 
         assert recv is not None
+
+        sent, recv = sent['data'], recv['data']
         assert 'id' in recv
 
         user = User.query.get(recv['id'])
 
         assert user is not None
         assert user.id == recv['id']
+
+        sent, recv = sent['attributes'], recv['attributes']
         for key in ['username', 'email']:
             assert sent[key] == recv[key]
             assert sent[key] == getattr(user, key)
