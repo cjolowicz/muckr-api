@@ -50,6 +50,13 @@ class TestUser:
         response = client.get('/users/{id}'.format(id=user.id))
         assert response.status == '401 UNAUTHORIZED'
 
+    def test_get_request_fails_for_another_user(self, users, client):
+        user, user2 = users[:2]
+        response = client.get(
+            '/users/{id}'.format(id=user2.id),
+            headers=_create_token_auth_header(user.get_token()))
+        assert response.status == '401 UNAUTHORIZED'
+
     def test_get_request_returns_404(self, user, client):
         response = client.get(
             '/users/2',
@@ -172,6 +179,15 @@ class TestUser:
             content_type='application/json')
         assert response.status == '401 UNAUTHORIZED'
 
+    def test_put_request_fails_for_another_user(self, users, client):
+        user, user2 = users[:2]
+        response = client.put(
+            '/users/{id}'.format(id=user2.id),
+            data=json.dumps({'email': 'john@example.com'}),
+            content_type='application/json',
+            headers=_create_token_auth_header(user.get_token()))
+        assert response.status == '401 UNAUTHORIZED'
+
     @pytest.mark.parametrize('attribute', ('username', 'email'))
     def test_put_request_fails_if_attribute_exists(
             self, attribute, users, client):
@@ -224,6 +240,13 @@ class TestUser:
     def test_delete_request_fails_without_authentication(self, user, client):
         response = client.delete(
             '/users/{id}'.format(id=user.id))
+        assert response.status == '401 UNAUTHORIZED'
+
+    def test_delete_request_fails_for_another_user(self, users, client):
+        user, user2 = users[:2]
+        response = client.delete(
+            '/users/{id}'.format(id=user2.id),
+            headers=_create_token_auth_header(user.get_token()))
         assert response.status == '401 UNAUTHORIZED'
 
 

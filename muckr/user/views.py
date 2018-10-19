@@ -33,6 +33,9 @@ def get_users():
 @token_auth.login_required
 def get_user(id):
     user = User.query.get_or_404(id)
+    if user.id != flask.g.current_user.id:
+        return error_response(401)
+
     data, errors = user_schema.dump(user)
     return _jsonify(data)
 
@@ -71,6 +74,9 @@ def create_user():
 @token_auth.login_required
 def update_user(id):
     user = User.query.get_or_404(id)
+    if user.id != flask.g.current_user.id:
+        return error_response(401)
+
     json = flask.request.get_json() or {}
     try:
         data, errors = UserSchema(partial=True).load(json)
@@ -102,6 +108,9 @@ def update_user(id):
 @token_auth.login_required
 def delete_user(id):
     user = User.query.get_or_404(id)
+    if user.id != flask.g.current_user.id:
+        return error_response(401)
+
     database.session.delete(user)
     database.session.commit()
 
