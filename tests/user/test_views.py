@@ -34,6 +34,48 @@ class TestUser:
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(users).data
 
+    def test_get_request_returns_first_page_of_users_by_default(
+            self, users, admin, client):
+        users.append(admin)
+        response = client.get(
+            '/users',
+            headers=_create_token_auth_header(admin.get_token()))
+
+        assert response.status == '200 OK'
+        assert response.get_json() == users_schema.dump(users[:10]).data
+
+    @pytest.mark.parametrize('page', [1, 2, 3, 4])
+    def test_get_request_returns_requested_page_of_users(
+            self, users, admin, client, page):
+        users.append(admin)
+        response = client.get(
+            '/users',
+            query_string={'page': page},
+            headers=_create_token_auth_header(admin.get_token()))
+
+        per_page = 10
+        offset = per_page * (page - 1)
+        window = users[offset:offset+per_page]
+
+        assert response.status == '200 OK'
+        assert response.get_json() == users_schema.dump(window).data
+
+    @pytest.mark.parametrize('page', [1, 2, 3, 4])
+    @pytest.mark.parametrize('per_page', [1, 2, 5, 10, 20, 50])
+    def test_get_request_returns_requested_number_of_users(
+            self, users, admin, client, page, per_page):
+        users.append(admin)
+        response = client.get(
+            '/users',
+            query_string={'page': page, 'per_page': per_page},
+            headers=_create_token_auth_header(admin.get_token()))
+
+        offset = per_page * (page - 1)
+        window = users[offset:offset+per_page]
+
+        assert response.status == '200 OK'
+        assert response.get_json() == users_schema.dump(window).data
+
     def test_get_request_for_users_fails_without_authentication(
             self, users, client):
         response = client.get('/users')

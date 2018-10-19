@@ -21,6 +21,6 @@ def admin(database):
 
 @pytest.fixture
 def users(database):
-    users = UserFactory.create_batch(10)
+    users = UserFactory.create_batch(25)  # fill more than 2 pages
     database.session.commit()
     return users
