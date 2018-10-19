@@ -20,6 +20,7 @@ def _jsonify(data):
 
 
 @blueprint.route('/users', methods=['GET'])
+@token_auth.login_required
 def get_users():
     page = flask.request.args.get('page', 1, type=int)
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
@@ -29,6 +30,7 @@ def get_users():
 
 
 @blueprint.route('/users/<int:id>', methods=['GET'])
+@token_auth.login_required
 def get_user(id):
     user = User.query.get_or_404(id)
     data, errors = user_schema.dump(user)
@@ -66,6 +68,7 @@ def create_user():
 
 
 @blueprint.route('/users/<int:id>', methods=['PUT'])
+@token_auth.login_required
 def update_user(id):
     user = User.query.get_or_404(id)
     json = flask.request.get_json() or {}
@@ -96,6 +99,7 @@ def update_user(id):
 
 
 @blueprint.route('/users/<int:id>', methods=['DELETE'])
+@token_auth.login_required
 def delete_user(id):
     user = User.query.get_or_404(id)
     database.session.delete(user)
