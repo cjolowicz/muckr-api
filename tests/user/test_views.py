@@ -1,6 +1,8 @@
 '''Test user views.'''
-import pytest
+import base64
+
 import json
+import pytest
 
 from muckr.user.models import User
 from muckr.user.views import user_schema, users_schema
@@ -169,3 +171,40 @@ class TestUser:
         assert response.status == '204 NO CONTENT'
         assert response.data == b''
         assert User.query.get(user.id) is None
+
+
+def _create_basic_auth_header(username, password):
+    payload = b':'.join((
+        username.encode('utf-8'),
+        password.encode('utf-8')))
+
+    return {'Authorization': 'Basic {base64}'.format(
+        base64=base64.b64encode(payload).decode('utf-8'))}
+
+
+class TestToken:
+    def test_post_request_creates_valid_token(self, user, client, database):
+        response = client.post(
+            '/tokens',
+            data=json.dumps({}),
+            content_type='application/json',
+            headers=_create_basic_auth_header(user.username, 'example'))
+
+        database.session.refresh(user)
+
+        assert response.status == '201 CREATED'
+        assert response.get_json()['token'] == user.token
+        assert user.check_token(user.token) is user
+
+    def test_post_request_fails_without_authentication(
+            self, user, client, database):
+        response = client.post(
+            '/tokens',
+            data=json.dumps({}),
+            content_type='application/json')
+
+        database.session.refresh(user)
+
+        assert response.status == '401 UNAUTHORIZED'
+        assert 'error' in response.get_json()
+        assert user.token is None

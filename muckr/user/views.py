@@ -2,9 +2,10 @@
 import flask
 from marshmallow import ValidationError
 
-from muckr.user.models import User, UserSchema
-from muckr.extensions import database
 from muckr.errors import error_response
+from muckr.extensions import database
+from muckr.user.auth import basic_auth
+from muckr.user.models import User, UserSchema
 
 
 blueprint = flask.Blueprint('user', __name__)
@@ -101,3 +102,11 @@ def delete_user(id):
     database.session.commit()
 
     return _jsonify({}), 204
+
+
+@blueprint.route('/tokens', methods=['POST'])
+@basic_auth.login_required
+def create_token():
+    token = flask.g.current_user.get_token()
+    database.session.commit()
+    return _jsonify({'token': token}), 201
