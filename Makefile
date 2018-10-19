@@ -24,7 +24,7 @@ travis-script: test
 
 test:
 	pipenv run python -m flake8
-	pipenv run py.test tests --verbose --cov=muckr
+	pipenv run python -m pytest tests --verbose --cov=muckr
 
 env-secretkey:
 	echo SECRET_KEY=$$(pipenv run python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
