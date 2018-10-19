@@ -52,8 +52,6 @@ class User(db.Model):
 
 
 class UserSchema(Schema):
-    __model__ = User
-
     id = fields.Integer(dump_only=True)
     username = fields.Str(required=True, validate=Length(min=1))
     email = fields.Email(required=True)
