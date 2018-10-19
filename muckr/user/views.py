@@ -22,6 +22,8 @@ def _jsonify(data):
 @blueprint.route('/users', methods=['GET'])
 @token_auth.login_required
 def get_users():
+    if not flask.g.current_user.is_admin:
+        return error_response(401)
     page = flask.request.args.get('page', 1, type=int)
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
     users = User.query.paginate(page, per_page, False)

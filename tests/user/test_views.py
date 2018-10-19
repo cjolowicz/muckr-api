@@ -25,10 +25,11 @@ def _create_token_auth_header(token):
 
 
 class TestUser:
-    def test_get_request_returns_list_of_users(self, users, client):
+    def test_get_request_returns_list_of_users(self, user, admin, client):
+        users = [user, admin]
         response = client.get(
             '/users',
-            headers=_create_token_auth_header(users[0].get_token()))
+            headers=_create_token_auth_header(admin.get_token()))
 
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(users).data
@@ -36,6 +37,13 @@ class TestUser:
     def test_get_request_for_users_fails_without_authentication(
             self, users, client):
         response = client.get('/users')
+        assert response.status == '401 UNAUTHORIZED'
+
+    def test_get_request_for_users_fails_without_admin_status(
+            self, users, client):
+        response = client.get(
+            '/users',
+            headers=_create_token_auth_header(users[0].get_token()))
         assert response.status == '401 UNAUTHORIZED'
 
     def test_get_request_returns_user(self, user, client):

@@ -12,6 +12,14 @@ def user(database):
 
 
 @pytest.fixture
+def admin(database):
+    user = UserFactory.create(username='admin')
+    user.is_admin = True
+    database.session.commit()
+    return user
+
+
+@pytest.fixture
 def users(database):
     users = UserFactory.create_batch(10)
     database.session.commit()
