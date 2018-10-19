@@ -4,7 +4,7 @@ from marshmallow import ValidationError
 
 from muckr.errors import error_response
 from muckr.extensions import database
-from muckr.user.auth import basic_auth
+from muckr.user.auth import basic_auth, token_auth
 from muckr.user.models import User, UserSchema
 
 
@@ -110,3 +110,11 @@ def create_token():
     token = flask.g.current_user.get_token()
     database.session.commit()
     return _jsonify({'token': token}), 201
+
+
+@blueprint.route('/tokens', methods=['DELETE'])
+@token_auth.login_required
+def delete_token():
+    flask.g.current_user.revoke_token()
+    database.session.commit()
+    return _jsonify({}), 204

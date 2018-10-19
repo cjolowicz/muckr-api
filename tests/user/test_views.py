@@ -1,5 +1,6 @@
 '''Test user views.'''
 import base64
+import random
 
 import json
 import pytest
@@ -182,6 +183,10 @@ def _create_basic_auth_header(username, password):
         base64=base64.b64encode(payload).decode('utf-8'))}
 
 
+def _create_token_auth_header(token):
+    return {'Authorization': 'Bearer {token}'.format(token=token)}
+
+
 class TestToken:
     def test_post_request_creates_valid_token(self, user, client, database):
         response = client.post(
@@ -208,3 +213,35 @@ class TestToken:
         assert response.status == '401 UNAUTHORIZED'
         assert 'error' in response.get_json()
         assert user.token is None
+
+    def test_delete_request_expires_token(self, user, client):
+        response = client.post(
+            '/tokens',
+            data=json.dumps({}),
+            content_type='application/json',
+            headers=_create_basic_auth_header(user.username, 'example'))
+
+        token = response.get_json()['token']
+
+        response = client.delete(
+            '/tokens',
+            headers=_create_token_auth_header(token))
+
+        assert response.status == '204 NO CONTENT'
+        assert response.data == b''
+        assert user.check_token(token) is None
+
+    @pytest.mark.parametrize('token', [
+        '',
+        '0' * 64,
+        ''.join(random.choices('0123456789abcdef', k=64)),
+    ])
+    def test_delete_request_fails_without_authentication(
+            self, user, client, token):
+        user.get_token()
+        response = client.delete(
+            '/tokens',
+            headers=_create_token_auth_header(token))
+
+        assert response.status == '401 UNAUTHORIZED'
+        assert user.check_token(user.token) is not None
