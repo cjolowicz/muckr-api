@@ -1,3 +1,8 @@
+'''Extensions module.
+
+Each extension is initialized in the app factory located
+in app.py.
+'''
 import flask_sqlalchemy
 import flask_migrate
 import flask_bcrypt

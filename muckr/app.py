@@ -1,3 +1,4 @@
+'''The app module, containing the app factory function.'''
 import importlib
 
 import flask

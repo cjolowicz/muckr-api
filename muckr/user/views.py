@@ -1,3 +1,4 @@
+'''User views.'''
 import flask
 from marshmallow import ValidationError
 

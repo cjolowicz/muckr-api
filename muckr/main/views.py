@@ -1,3 +1,4 @@
+'''The root of the web service.'''
 import flask
 
 

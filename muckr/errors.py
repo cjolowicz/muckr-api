@@ -1,3 +1,4 @@
+'''Error handlers.'''
 from werkzeug.http import HTTP_STATUS_CODES
 from flask import jsonify
 
