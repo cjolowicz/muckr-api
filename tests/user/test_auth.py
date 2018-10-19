@@ -1,4 +1,5 @@
 '''Test user authentication.'''
+import flask
 import pytest
 
 from muckr.user.auth import verify_password, basic_auth_error
@@ -13,10 +14,14 @@ from tests.user.factories import UserFactory
     ('invalid', 'invalid', False),
 ])
 def test_verify_password(database, username, password, result):
-    UserFactory.create()
+    user = UserFactory.create()
     database.session.commit()
 
     assert verify_password(username, password) == result
+    if result:
+        assert flask.g.current_user.id == user.id
+    else:
+        assert 'current_user' not in flask.g
 
 
 @pytest.mark.usefixtures('app')
