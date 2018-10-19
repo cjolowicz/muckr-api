@@ -107,6 +107,14 @@ class TestUser:
             headers=_create_token_auth_header(user.get_token()))
         assert response.status == '401 UNAUTHORIZED'
 
+    def test_get_request_by_admin_succeeds_for_another_user(
+            self, admin, user, client):
+        response = client.get(
+            '/users/{id}'.format(id=user.id),
+            headers=_create_token_auth_header(admin.get_token()))
+        assert response.status == '200 OK'
+        assert response.get_json() == user_schema.dump(user).data
+
     def test_get_request_returns_404(self, user, client):
         response = client.get(
             '/users/2',
@@ -238,6 +246,16 @@ class TestUser:
             headers=_create_token_auth_header(user.get_token()))
         assert response.status == '401 UNAUTHORIZED'
 
+    def test_put_request_by_admin_succeeds_for_another_user(
+            self, admin, user, client):
+        response = client.put(
+            '/users/{id}'.format(id=user.id),
+            data=json.dumps({'email': 'john@example.com'}),
+            content_type='application/json',
+            headers=_create_token_auth_header(admin.get_token()))
+        assert response.status == '200 OK'
+        assert user.email == 'john@example.com'
+
     @pytest.mark.parametrize('attribute', ('username', 'email'))
     def test_put_request_fails_if_attribute_exists(
             self, attribute, users, client):
@@ -298,6 +316,14 @@ class TestUser:
             '/users/{id}'.format(id=user2.id),
             headers=_create_token_auth_header(user.get_token()))
         assert response.status == '401 UNAUTHORIZED'
+
+    def test_delete_request_by_admin_succeeds_for_another_user(
+            self, admin, user, client):
+        response = client.delete(
+            '/users/{id}'.format(id=user.id),
+            headers=_create_token_auth_header(admin.get_token()))
+        assert response.status == '204 NO CONTENT'
+        assert User.query.get(user.id) is None
 
 
 class TestToken:
