@@ -25,6 +25,7 @@ def register_extensions(app):
     muckr.extensions.database.init_app(app)
     muckr.extensions.migrate.init_app(app, muckr.extensions.database)
     muckr.extensions.bcrypt.init_app(app)
+    muckr.extensions.cors.init_app(app)
 
 
 def register_blueprints(app):
