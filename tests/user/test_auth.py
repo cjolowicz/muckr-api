@@ -4,8 +4,6 @@ import pytest
 
 from muckr.user.auth import verify_password, basic_auth_error
 
-from tests.user.factories import UserFactory
-
 
 @pytest.mark.parametrize('username, password, result', [
     ('user0', 'example', True),
@@ -13,10 +11,7 @@ from tests.user.factories import UserFactory
     ('user0', 'invalid', False),
     ('invalid', 'invalid', False),
 ])
-def test_verify_password(database, username, password, result):
-    user = UserFactory.create()
-    database.session.commit()
-
+def test_verify_password(user, username, password, result):
     assert verify_password(username, password) == result
     if result:
         assert flask.g.current_user.id == user.id
