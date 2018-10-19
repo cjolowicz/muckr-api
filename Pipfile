@@ -10,10 +10,10 @@ flask-sqlalchemy = "*"
 environs = "*"
 flask-migrate = "*"
 flask-bcrypt = "*"
-"psycopg2" = "*"
 marshmallow = "*"
 flask-httpauth = "*"
 marshmallow-jsonapi = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 pytest = "*"
