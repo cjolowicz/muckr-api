@@ -1,12 +1,14 @@
 '''Test user models.'''
 from datetime import datetime, timedelta
 
+from muckr.user.models import User
+
 from tests.user.factories import UserFactory
 
 
 class TestUser:
-    def test_user_is_created(self, database):
-        user = UserFactory(username='john', email='john@example.com')
+    def test_user_is_created(self):
+        user = UserFactory.build(username='john', email='john@example.com')
 
         assert user.id is None
         assert user.username == 'john'
@@ -16,9 +18,12 @@ class TestUser:
         assert user.token_expiration is None
         assert str(user) == '<User john>'
 
-        database.session.commit()
+    def test_user_is_saved_to_database(self, user):
+        dbuser = User.query.get(user.id)
 
-        assert user.id == 1
+        assert dbuser.username == user.username
+        assert dbuser.email == user.email
+        assert dbuser.password_hash == user.password_hash
 
     def test_set_password_modifies_password(self, user):
         user.set_password('secret')
