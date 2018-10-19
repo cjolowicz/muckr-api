@@ -1,3 +1,4 @@
+'''Configuration for the test app.'''
 BCRYPT_LOG_ROUNDS = 4
 SECRET_KEY = 'lzlD6LdPmLI6rX-4eEMUeLsIcnkXaDDQYqrAIKahsdY'
 SQLALCHEMY_DATABASE_URI = 'sqlite://'

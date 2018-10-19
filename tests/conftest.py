@@ -1,3 +1,4 @@
+'''Defines fixtures available to all tests.'''
 import pytest
 
 import muckr.app

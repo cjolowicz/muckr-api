@@ -1,3 +1,4 @@
+'''Test user views.'''
 import pytest
 import json
 

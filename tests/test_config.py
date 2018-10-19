@@ -1,3 +1,4 @@
+'''Test config.'''
 import os
 
 import environs

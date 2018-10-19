@@ -1,3 +1,6 @@
+'''Test main views.'''
+
+
 class TestViews:
     def test_index(self, client):
         response = client.get('/')
