@@ -38,9 +38,7 @@ This package defines a web service using the
 
 ## Development
 
-First, make sure you have `python3.7` in your `PATH`. The recommended
-method to install recent Python versions locally is
-[pyenv](https://github.com/pyenv/pyenv).
+First, make sure you have `python3.7` in your `PATH`.
 
 ```sh
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
@@ -74,15 +72,13 @@ make test
 
 ## Running
 
-To start up a development instance of the web server in the
-virtualenv, invoke the following command inside the virtualenv:
+To start up a development instance of the web server:
 
 ```shell
 make flask-run
 ```
 
-To start up a development instance of the web server using `heroku
-local`, invoke the following command:
+Alternatively, use `heroku local`:
 
 ```shell
 make heroku-local
