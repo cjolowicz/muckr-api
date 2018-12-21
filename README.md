@@ -15,7 +15,11 @@ Web service for muckr
 
 ## Installation
 
-Install this package with `pip install muckr-service`.
+To install this package,
+
+```sh
+pip install muckr-service
+```
 
 ## Contents
 
