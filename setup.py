@@ -1,11 +1,8 @@
-import re
 import setuptools
 
 
-with open('muckr/__init__.py') as file:
-    version, = re.findall(
-        "^__version__ = '([^']+)'",
-        file.read())
+with open('VERSION') as file:
+    version = file.read()
 
 with open('README.md') as file:
     long_description = file.read()
