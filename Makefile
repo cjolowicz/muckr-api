@@ -25,6 +25,15 @@ test:
 	python -m flake8 muckr tests setup.py wsgi.py migrations
 	python -m pytest tests --verbose --cov=muckr
 
+clean:
+	for dir in muckr tests ; \
+	do \
+	    find "$$dir" \
+	        -name '*.pyc' -print0 -or \
+	        -name '__pycache__' -print0 -or \
+	        -false | xargs -0 rm -vrf ; \
+	done
+
 distclean:
 	git clean -fxd
 
