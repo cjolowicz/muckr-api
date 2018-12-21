@@ -25,14 +25,6 @@ These will create development snapshots with a .dev0 suffix.
   - Use \`./$program final' to promote a development snapshot to
     a final release, without the .devN suffix.
 
-Development snapshots must be created on the develop branch. Final
-releases must be invoked on the master branch.
-
-Make sure to also push the tag to GitLab:
-
-    git push
-    git push --tags
-
 options:
     -h, --help    Display this message.
     -f, --force   Permit {major,minor,patch} from development snapshot."
