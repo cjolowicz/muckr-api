@@ -8,6 +8,7 @@ Web service for muckr
 - [Contents](#contents)
 - [Development](#development)
 - [Testing](#testing)
+- [Configuration](#configuration)
 - [Running](#running)
 - [Requirements](#requirements)
 - [Continous Integration](#continous-integration)
@@ -74,6 +75,16 @@ Run the test suite as follows:
 ```sh
 make test
 ```
+
+## Configuration
+
+The app is configured via the following environment variables:
+
+- `DATABASE_URL`
+- `SECRET_KEY`
+
+Alternatively, provide an env file. This is a file named `.env`, where
+each line contains an assignment of the form `VAR=VAL`.
 
 ## Running
 
