@@ -50,5 +50,5 @@ test:
 env-secretkey:
 	echo SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
 
-clean:
+distclean:
 	git clean -fxd
