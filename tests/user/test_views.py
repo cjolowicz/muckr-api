@@ -294,13 +294,13 @@ class TestPutUser:
     ])
     def test_put_request_fails_if_attribute_is_invalid(
             self, user, client, attribute, value):
-        response = client.post(
-            '/users',
+        response = client.put(
+            '/users/{id}'.format(id=user.id),
             data=json.dumps({attribute: value}),
             content_type='application/json',
             headers=_create_token_auth_header(user.get_token()))
         assert response.status == '422 UNPROCESSABLE ENTITY'
-        assert 'username' in response.get_json()['details']
+        assert attribute in response.get_json()['details']
 
 
 class TestDeleteUser:
