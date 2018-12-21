@@ -96,8 +96,8 @@ Requirements are declared in the files
 
 Requirements for production are pinned to specific versions in the
 files [requirements/base.txt](requirements/base.txt) and
-[requirements/dev.txt](requirements/dev.txt). This files are generated
-using the following command:
+[requirements/dev.txt](requirements/dev.txt). These files are
+generated using the following command:
 
 ```sh
 make requirements
