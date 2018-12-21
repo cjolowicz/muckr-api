@@ -56,7 +56,13 @@ coverage==4.5.2 \
     --hash=sha256:da969da069a82bbb5300b59161d8d7c8d423bc4ccd3b410a9b4d8932aeefc14b \
     --hash=sha256:ed02c7539705696ecb7dc9d476d861f3904a8d2b7e894bd418994920935d36bb \
     --hash=sha256:ee5b8abc35b549012e03a7b1e86c09491457dba6c94112a2482b18589cc2bdb9 \
-    # via pytest-cov
+    # via coveralls, pytest-cov
+coveralls==1.5.1 \
+    --hash=sha256:ab638e88d38916a6cedbf80a9cd8992d5fa55c77ab755e262e00b36792b7cd6d \
+    --hash=sha256:b2388747e2529fa4c669fb1e3e2756e4e07b6ee56c7d9fce05f35ccccc913aa0
+docopt==0.6.2 \
+    --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491 \
+    # via coveralls
 factory-boy==2.11.1 \
     --hash=sha256:6f25cc4761ac109efd503f096e2ad99421b1159f01a29dbb917359dcd68e08ca \
     --hash=sha256:d552cb872b310ae78bd7429bf318e42e1e903b1a109e899a523293dfa762ea4f
@@ -119,7 +125,7 @@ python-dateutil==2.7.5 \
 requests==2.21.0 \
     --hash=sha256:502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e \
     --hash=sha256:7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b \
-    # via httpie
+    # via coveralls, httpie
 six==1.12.0 \
     --hash=sha256:3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c \
     --hash=sha256:d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73 \
