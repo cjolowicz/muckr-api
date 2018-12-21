@@ -28,13 +28,14 @@ This package defines a web service using the
   [muckr.config](muckr/config.py).
 - Error handling is implemented in [muckr.errors](muckr/errors.py).
 - The User model is defined in
-  [muckr.user.models](muckr/user/models.py). User authentication s
-  implemented in [muckr.user.auth](muckr/user/auth.py). The related
-  views are implemented in [muckr.user.views](muckr/user/views.py) and
-  attached to the `user` blueprint.
+  [muckr.user.models](muckr/user/models.py).
+- User authentication s implemented in
+  [muckr.user.auth](muckr/user/auth.py).
+- The user-related views are implemented in
+  [muckr.user.views](muckr/user/views.py).
 - The main views are defined in
-  [muckr.main.views](muckr/main/views.py) and attached to the `main`
-  blueprint. This is currently a placeholder.
+  [muckr.main.views](muckr/main/views.py). This is currently a
+  placeholder.
 
 ## Development
 
