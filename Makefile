@@ -25,6 +25,9 @@ test:
 	python -m flake8 muckr tests setup.py wsgi.py migrations
 	python -m pytest tests --verbose --cov=muckr
 
+distclean:
+	git clean -fxd
+
 flask-run:
 	env FLASK_ENV=development flask run
 
@@ -49,6 +52,3 @@ travis-script: test
 
 env-secretkey:
 	echo SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
-
-distclean:
-	git clean -fxd
