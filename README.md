@@ -5,8 +5,8 @@
 
 Web service for muckr
 
-- [Installation](#installation)
 - [Contents](#contents)
+- [Installation](#installation)
 - [Development](#development)
 - [Testing](#testing)
 - [Configuration](#configuration)
@@ -14,14 +14,6 @@ Web service for muckr
 - [Requirements](#requirements)
 - [Continous Integration](#continous-integration)
 - [Deployment](#deployment)
-
-## Installation
-
-To install this package,
-
-```sh
-pip install muckr-service
-```
 
 ## Contents
 
@@ -42,6 +34,14 @@ This package defines a web service using the
 - The main views are defined in
   [muckr.main.views](muckr/main/views.py). This is currently a
   placeholder.
+
+## Installation
+
+To install this package,
+
+```sh
+pip install muckr-service
+```
 
 ## Development
 
