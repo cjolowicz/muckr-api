@@ -12,6 +12,8 @@ with open('requirements/dev.in') as file:
 setup(
     name='muckr-service',
     version='0.1.0',
+    author='Claudio Jolowicz',
+    author_email='mail@claudiojolowicz.com',
     description='Web service for muckr',
     long_description=long_description,
     long_description_content_type='text/markdown',
