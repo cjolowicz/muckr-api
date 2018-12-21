@@ -1,33 +1,51 @@
+PYTHON=python3.7
 app=muckr-service
 
+all:
+
+virtualenv:
+	virtualenv --python=$(PYTHON) venv
+
+requirements/%.txt: requirements/%.in
+	pip install pip-tools
+	python -m piptools compile \
+	    --verbose \
+	    --upgrade \
+	    --generate-hashes \
+	    --output-file=$@ $<
+
+requirements: requirements/base.txt requirements/dev.txt
+
+install:
+	pip install \
+	    --requirement requirements/base.txt \
+	    --requirement requirements/dev.txt
+
 flask-run:
-	pipenv run env FLASK_ENV=development flask run
+	env FLASK_ENV=development flask run
 
 flask-shell:
-	pipenv run flask shell
+	flask shell
 
 heroku-local:
-	pipenv run heroku local
+	heroku local
 
 heroku-secretkey:
-	pipenv run heroku config:set --app=$(app) SECRET_KEY=$$(pipenv run python -c 'import secrets; print(secrets.token_urlsafe())')
+	heroku config:set --app=$(app) SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())')
 
 heroku-logs:
-	pipenv run heroku logs --app=$(app)
+	heroku logs --app=$(app)
 
-travis-install:
-	pip install pipenv
-	pipenv install --dev --three
-	pipenv install -e .
+travis-install: install
 
 travis-script: test
 
 test:
-	pipenv run python -m flake8
-	pipenv run python -m pytest tests --verbose --cov=muckr
+	python -m flake8 muckr tests setup.py wsgi.py migrations
+	python -m pytest tests --verbose --cov=muckr
 
 env-secretkey:
-	echo SECRET_KEY=$$(pipenv run python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
+	echo SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
 
 clean:
 	git clean -fxd

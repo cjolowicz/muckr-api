@@ -1,0 +1,11 @@
+environs
+flask
+flask-bcrypt
+flask-cors
+flask-httpauth
+flask-migrate
+flask-sqlalchemy
+gunicorn
+marshmallow
+marshmallow-jsonapi
+psycopg2-binary

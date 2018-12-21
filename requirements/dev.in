@@ -1,0 +1,6 @@
+factory-boy
+flake8
+httpie
+pip-tools
+pytest
+pytest-cov
