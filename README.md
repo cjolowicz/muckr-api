@@ -20,14 +20,14 @@ Web service for muckr
 This package defines a web service using the
 [Flask](http://flask.pocoo.org/) microframework.
 
-- The app factory function is [muckr.app.create_app](muckr/app.py).
+- The app is defined in [muckr.app](muckr/app.py).
 - Flask extensions are in [muckr.extensions](muckr/extensions.py).
-- The application configuration is read from the environment, in
+- The configuration is read from the environment, in
   [muckr.config](muckr/config.py).
 - Error handling is implemented in [muckr.errors](muckr/errors.py).
-- The User model is defined in
+- The user model is defined in
   [muckr.user.models](muckr/user/models.py).
-- User authentication s implemented in
+- User authentication is implemented in
   [muckr.user.auth](muckr/user/auth.py).
 - The user-related views are implemented in
   [muckr.user.views](muckr/user/views.py).
