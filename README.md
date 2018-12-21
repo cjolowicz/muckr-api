@@ -5,6 +5,8 @@
 
 Web service for muckr
 
+This project has a [changelog](CHANGELOG.md).
+
 - [Contents](#contents)
 - [Installation](#installation)
 - [Development](#development)
