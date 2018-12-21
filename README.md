@@ -22,16 +22,19 @@ Install this package with `pip install muckr-service`.
 This package defines a web service using the
 [Flask](http://flask.pocoo.org/) microframework.
 
-- The app factory function is `muckr.app.create_app`.
-- Flask extensions are in `muckr.extensions`.
-- The application configuration is read from the environment, in `muckr.config`.
-- Error handling is implemented in `muckr.errors`.
-- The User model is defined in `muckr.user.models`. User
-  authentication s implemented in `muckr.user.auth`. The related views
-  are implemented in `muckr.user.views` and attached to the `user`
-  blueprint.
-- The main views are defined in `muckr.main.views` and attached to the
-  `main` blueprint. This is currently a placeholder.
+- The app factory function is [muckr.app.create_app](muckr/app.py).
+- Flask extensions are in [muckr.extensions](muckr/extensions.py).
+- The application configuration is read from the environment, in
+  [muckr.config](muckr/config.py).
+- Error handling is implemented in [muckr.errors](muckr/errors.py).
+- The User model is defined in
+  [muckr.user.models](muckr/user/models.py). User authentication s
+  implemented in [muckr.user.auth](muckr/user/auth.py). The related
+  views are implemented in [muckr.user.views](muckr/user/views.py) and
+  attached to the `user` blueprint.
+- The main views are defined in
+  [muckr.main.views](muckr/main/views.py) and attached to the `main`
+  blueprint. This is currently a placeholder.
 
 ## Development
 
