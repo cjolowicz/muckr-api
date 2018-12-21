@@ -1,3 +1,4 @@
+coveralls
 factory-boy
 flake8
 httpie
