@@ -12,7 +12,7 @@ Web service for muckr
 - [Configuration](#configuration)
 - [Running](#running)
 - [Requirements](#requirements)
-- [Continous Integration](#continous-integration)
+- [Continuous Integration](#continuous-integration)
 - [Deployment](#deployment)
 
 ## Contents
@@ -124,7 +124,7 @@ make -B requirements
 
 ## Continuous Integration
 
-Continous integration is provided by
+Continuous integration is provided by
 [Travis CI](https://travis-ci.org). The Travis CI job runs the test
 suite.
 
