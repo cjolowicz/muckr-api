@@ -58,6 +58,7 @@ heroku-db-upgrade:
 travis-install: install
 
 travis-script: test
+	coveralls
 
 env-secretkey:
 	echo SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
