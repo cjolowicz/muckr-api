@@ -17,6 +17,7 @@ setup(
     description='Web service for muckr',
     long_description=long_description,
     long_description_content_type='text/markdown',
+    url='https://github.com/cjolowicz/muckr-service',
     packages=find_packages(),
     zip_safe=False,
     install_requires=install_requires,
