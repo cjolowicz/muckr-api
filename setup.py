@@ -19,7 +19,6 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url='https://github.com/cjolowicz/muckr-service',
     packages=setuptools.find_packages(),
-    zip_safe=False,
     install_requires=install_requires,
     extras_require=extras_require,
 )
