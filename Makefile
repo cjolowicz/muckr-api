@@ -21,6 +21,10 @@ install:
 	    --requirement requirements/base.txt \
 	    --requirement requirements/dev.txt
 
+test:
+	python -m flake8 muckr tests setup.py wsgi.py migrations
+	python -m pytest tests --verbose --cov=muckr
+
 flask-run:
 	env FLASK_ENV=development flask run
 
@@ -42,10 +46,6 @@ heroku-db-upgrade:
 travis-install: install
 
 travis-script: test
-
-test:
-	python -m flake8 muckr tests setup.py wsgi.py migrations
-	python -m pytest tests --verbose --cov=muckr
 
 env-secretkey:
 	echo SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
