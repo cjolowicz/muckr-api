@@ -36,12 +36,16 @@ class TestUser:
         assert user.check_password('secret')
         assert not user.check_password('wrong')
 
-    def test_get_token_returns_valid_token(self, user):
+    def test_get_token_generates_valid_token(self, user):
         token = user.get_token()
         assert user.token == token
         assert user.token_expiration < datetime.utcnow() + timedelta(3600)
         assert len(token) == 64
         assert all(char in '0123456789abcdef' for char in token)
+
+    def test_get_token_returns_existing_token(self, user):
+        token = user.get_token()
+        assert user.get_token() == token
 
     def test_revoke_token_expires_token(self, user):
         token = user.get_token()
