@@ -113,8 +113,8 @@ make -B requirements
 ## Continuous Integration
 
 Continous integration is provided by
-[Travis CI](https://travis-ci.org). The Travis CI job installs the
-pinned development requirements and runs the test suite.
+[Travis CI](https://travis-ci.org). The Travis CI job runs the test
+suite.
 
 ## Deployment
 
