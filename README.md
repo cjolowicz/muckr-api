@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/cjolowicz/muckr-service.svg?branch=master)](https://travis-ci.org/cjolowicz/muckr-service)
-[![Coverage Status](https://coveralls.io/repos/github/cjolowicz/muckr-service/badge.svg?branch=master)](https://coveralls.io/github/cjolowicz/muckr-service?branch=master)
+[![Build Status](https://img.shields.io/travis/cjolowicz/muckr-service.svg?style=flat-square)](https://travis-ci.org/cjolowicz/muckr-service)
+[![Coverage Status](https://img.shields.io/coveralls/cjolowicz/muckr-service.svg?style=flat-square)](https://coveralls.io/github/cjolowicz/muckr-service?branch=master)
 
 # muckr-service
 
