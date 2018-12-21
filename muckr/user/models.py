@@ -2,8 +2,8 @@
 import secrets
 from datetime import datetime, timedelta
 
+from marshmallow import Schema, fields
 from marshmallow.validate import Length
-from marshmallow_jsonapi import Schema, fields
 
 from muckr.extensions import bcrypt
 from muckr.extensions import database as db
@@ -58,8 +58,4 @@ class UserSchema(Schema):
     password = fields.Function(load_only=True, required=True)
 
     class Meta:
-        type_ = 'users'
-        self_url = '/users/{id}'
-        self_url_kwargs = {'id': '<id>'}
-        self_url_many = '/users'
         strict = True
