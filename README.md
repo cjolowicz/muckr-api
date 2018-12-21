@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/cjolowicz/muckr-service.svg?branch=master)](https://travis-ci.org/cjolowicz/muckr-service)
+[![Coverage Status](https://coveralls.io/repos/github/cjolowicz/muckr-service/badge.svg?branch=master)](https://coveralls.io/github/cjolowicz/muckr-service?branch=master)
 
 # muckr-service
 
