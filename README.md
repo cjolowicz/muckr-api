@@ -134,3 +134,15 @@ The app is deployed to [Heroku](https://heroku.com) automatically on
 every change to `master` that passes CI.
 
 - https://muckr-service.herokuapp.com/
+
+To generate the secret key for Heroku,
+
+```sh
+make heroku-secretkey
+```
+
+To migrate the database on Heroku,
+
+```sh
+make heroku-db-upgrade
+```
