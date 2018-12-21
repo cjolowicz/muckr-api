@@ -36,6 +36,9 @@ heroku-secretkey:
 heroku-logs:
 	heroku logs --app=$(app)
 
+heroku-db-upgrade:
+	heroku run --app=$(app) muckr-service flask db upgrade
+
 travis-install: install
 
 travis-script: test
