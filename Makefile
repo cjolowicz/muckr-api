@@ -37,20 +37,8 @@ clean:
 distclean:
 	git clean -fxd
 
-flask-run:
-	flask run
-
-flask-shell:
-	flask shell
-
-heroku-local:
-	heroku local
-
 heroku-secretkey:
 	heroku config:set --app=$(app) SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())')
-
-heroku-logs:
-	heroku logs --app=$(app)
 
 heroku-db-upgrade:
 	heroku run --app=$(app) muckr-service flask db upgrade

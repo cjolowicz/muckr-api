@@ -96,13 +96,13 @@ named `.env`, where each line contains an assignment of the form
 To start up a development instance of the web server:
 
 ```shell
-make flask-run
+flask run
 ```
 
-Alternatively, use `heroku local`:
+Alternatively:
 
 ```shell
-make heroku-local
+heroku local
 ```
 
 ## Requirements
