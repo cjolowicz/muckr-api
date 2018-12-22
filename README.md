@@ -87,8 +87,9 @@ The app is configured via the following environment variables:
 - `DATABASE_URL`
 - `SECRET_KEY`
 
-Alternatively, provide an env file. This is a file named `.env`, where
-each line contains an assignment of the form `VAR=VAL`.
+Alternatively, provide an [env file](.env.sample). This is a file
+named `.env`, where each line contains an assignment of the form
+`VAR=VAL`.
 
 ## Running
 

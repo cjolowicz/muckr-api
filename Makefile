@@ -38,7 +38,7 @@ distclean:
 	git clean -fxd
 
 flask-run:
-	env FLASK_ENV=development flask run
+	flask run
 
 flask-shell:
 	flask shell
