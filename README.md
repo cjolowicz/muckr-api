@@ -96,13 +96,9 @@ named `.env`, where each line contains an assignment of the form
 To start up a development instance of the web server:
 
 ```shell
+flask db upgrade
+flask create-admin
 flask run
-```
-
-Alternatively:
-
-```shell
-heroku local
 ```
 
 ## Requirements

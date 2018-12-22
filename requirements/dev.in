@@ -1,4 +1,5 @@
 bumpversion
+click
 coveralls
 factory-boy
 flake8

@@ -6,6 +6,7 @@ import flask
 import muckr
 import muckr.extensions
 import muckr.errors
+import muckr.commands
 import muckr.main.views
 import muckr.user.views
 
@@ -21,6 +22,7 @@ def create_app(config_object='muckr.config'):
     register_blueprints(app)
     register_errorhandlers(app)
     register_shellcontext(app)
+    register_commands(app)
 
     return app
 
@@ -55,3 +57,7 @@ def register_shellcontext(app):
             'muckr.extensions.database',
             'muckr.user.models.User',
         ])
+
+
+def register_commands(app):
+    app.cli.add_command(muckr.commands.create_admin)

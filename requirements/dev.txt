@@ -25,8 +25,7 @@ chardet==3.0.4 \
     # via requests
 click==7.0 \
     --hash=sha256:2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13 \
-    --hash=sha256:5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7 \
-    # via pip-tools
+    --hash=sha256:5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7
 coverage==4.5.2 \
     --hash=sha256:09e47c529ff77bf042ecfe858fb55c3e3eb97aac2c87f0349ab5a7efd6b3939f \
     --hash=sha256:0a1f9b0eb3aa15c990c328535655847b3420231af299386cfe5efc98f9c250fe \
