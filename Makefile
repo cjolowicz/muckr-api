@@ -40,6 +40,9 @@ distclean:
 heroku-secretkey:
 	heroku config:set --app=$(app) SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())')
 
+heroku-adminpassword:
+	heroku config:set --app=$(app) ADMIN_PASSWORD=$$(python -c 'import secrets; print(secrets.token_urlsafe())')
+
 heroku-db-upgrade:
 	heroku run --app=$(app) muckr-service flask db upgrade
 
@@ -50,3 +53,6 @@ travis-script: test
 
 env-secretkey:
 	echo SECRET_KEY=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
+
+env-adminpassword:
+	echo ADMIN_PASSWORD=$$(python -c 'import secrets; print(secrets.token_urlsafe())') >> .env
