@@ -23,8 +23,9 @@ class TestConfig:
             import muckr.config # noqa
 
     def test_config_reads_environment_variables(self):
-        os.environ['SECRET_KEY'] = 'secret-key'
+        os.environ['ADMIN_PASSWORD'] = 'password'
         os.environ['DATABASE_URL'] = 'sqlite://'
+        os.environ['SECRET_KEY'] = 'secret-key'
 
         import muckr.config
         assert muckr.config.SECRET_KEY == 'secret-key'
