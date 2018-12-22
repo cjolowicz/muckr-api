@@ -178,10 +178,10 @@ every change to `master` that passes CI.
 
 - https://muckr-service.herokuapp.com/
 
-To generate the secret key for Heroku,
+To generate the secrets for Heroku,
 
 ```sh
-make heroku-secretkey
+make heroku-secretkey heroku-adminpassword
 ```
 
 To migrate the database on Heroku,
