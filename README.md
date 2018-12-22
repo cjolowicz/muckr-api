@@ -84,8 +84,12 @@ make test
 
 The app is configured via the following environment variables:
 
-- `DATABASE_URL`
-- `SECRET_KEY`
+- `ADMIN_EMAIL` (default: `admin@localhost`)
+- `ADMIN_PASSWORD` (required)
+- `ADMIN_USERNAME` (default: `admin`)
+- `BCRYPT_LOG_ROUNDS` (default: 12)
+- `DATABASE_URL` (required)
+- `SECRET_KEY` (required)
 
 Alternatively, provide an [env file](.env.sample). This is a file
 named `.env`, where each line contains an assignment of the form
