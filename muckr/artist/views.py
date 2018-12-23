@@ -53,7 +53,7 @@ def create_artist():
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_create(Artist, data, ['name'])
+    check_unique_on_create(Artist.query, data, ['name'])
 
     artist = Artist(**data)
 
@@ -83,7 +83,7 @@ def update_artist(id):
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_update(Artist, artist, data, ['name'])
+    check_unique_on_update(Artist.query, artist, data, ['name'])
 
     for key, value in data.items():
         setattr(artist, key, value)

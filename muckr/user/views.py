@@ -46,7 +46,7 @@ def create_user():
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_create(User, data, ['username', 'email'])
+    check_unique_on_create(User.query, data, ['username', 'email'])
 
     password = data.pop('password', None)
     user = User(**data)
@@ -78,7 +78,7 @@ def update_user(id):
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_update(User, user, data, ['username', 'email'])
+    check_unique_on_update(User.query, user, data, ['username', 'email'])
 
     password = data.pop('password', None)
     if password is not None:
