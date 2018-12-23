@@ -6,7 +6,7 @@ from muckr.errors import error_response
 from muckr.extensions import database
 from muckr.user.auth import basic_auth, token_auth
 from muckr.user.models import User, UserSchema
-from muckr.utils import jsonify
+from muckr.utils import jsonify, check_unique_on_create, check_unique_on_update
 
 
 blueprint = flask.Blueprint('user', __name__)
@@ -46,11 +46,12 @@ def create_user():
     except ValidationError as error:
         return error_response(422, details=error.messages)
 
-    for key in ['username', 'email']:
-        condition = {key: data[key]}
-        if User.query.filter_by(**condition).first():
-            message = 'please use a different {key}'.format(key=key)
-            return error_response(400, message=message, details={key: message})
+    response = check_unique_on_create(User, data, [
+        'username',
+        'email'
+    ])
+    if response:
+        return response
 
     password = data.pop('password', None)
     user = User(**data)
@@ -82,13 +83,12 @@ def update_user(id):
     except ValidationError as error:
         return error_response(422, details=error.messages)
 
-    for key in ['username', 'email']:
-        if key in data and data[key] != getattr(user, key):
-            condition = {key: data[key]}
-            if User.query.filter_by(**condition).first():
-                message = 'please use a different {key}'.format(key=key)
-                return error_response(400, message=message,
-                                      details={key: message})
+    response = check_unique_on_update(User, user, data, [
+        'username',
+        'email',
+    ])
+    if response:
+        return response
 
     password = data.pop('password', None)
     if password is not None:
