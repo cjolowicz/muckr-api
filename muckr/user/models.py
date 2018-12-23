@@ -19,6 +19,7 @@ class User(db.Model):
     token = db.Column(db.String(64), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     is_admin = db.Column(db.Boolean, default=False)
+    artists = db.relationship('Artist', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
