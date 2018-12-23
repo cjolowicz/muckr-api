@@ -1,19 +1,8 @@
 '''Factories to help in user tests.'''
 from factory import PostGenerationMethodCall, Sequence
-from factory.alchemy import SQLAlchemyModelFactory
 
-from muckr.extensions import database
 from muckr.user.models import User
-
-
-class BaseFactory(SQLAlchemyModelFactory):
-    '''Base factory.'''
-
-    class Meta:
-        '''Factory configuration.'''
-
-        abstract = True
-        sqlalchemy_session = database.session
+from tests.factories import BaseFactory
 
 
 class UserFactory(BaseFactory):
