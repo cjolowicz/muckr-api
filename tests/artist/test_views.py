@@ -106,14 +106,14 @@ class TestGetArtist:
 
 
 class TestPostArtist:
-    def test_post_request_creates_artist(self, client, admin):
+    def test_post_request_creates_artist(self, client, user):
         artist = ArtistFactory.build()
         sent = artist_schema.dump(artist).data
         response = client.post(
             '/artists',
             data=json.dumps(sent),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(user.get_token()))
 
         assert response.status == '201 CREATED'
 
@@ -128,6 +128,7 @@ class TestPostArtist:
         assert artist.id == recv['id']
         assert artist.name == recv['name']
         assert artist.name == sent['name']
+        assert artist.user.id == user.id
 
     def test_post_request_fails_without_authentication(self, artist, client):
         artist = ArtistFactory.build()
@@ -138,18 +139,7 @@ class TestPostArtist:
             content_type='application/json')
         assert response.status == '401 UNAUTHORIZED'
 
-    def test_post_request_fails_without_admin_status(
-            self, artist, user, client):
-        artist = ArtistFactory.build()
-        data = artist_schema.dump(artist).data
-        response = client.post(
-            '/artists',
-            data=json.dumps(data),
-            content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
-        assert response.status == '401 UNAUTHORIZED'
-
-    def test_post_request_fails_if_name_exists(self, artist, admin, client):
+    def test_post_request_fails_if_name_exists(self, artist, client):
         existing_artist = artist
         artist = ArtistFactory.build(name=existing_artist.name)
         data = artist_schema.dump(artist).data
@@ -157,18 +147,18 @@ class TestPostArtist:
             '/artists',
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
         assert response.status == '400 BAD REQUEST'
         assert 'name' in response.get_json()['details']
 
-    def test_post_request_fails_if_name_is_invalid(self, admin, client):
+    def test_post_request_fails_if_name_is_invalid(self, user, client):
         artist = ArtistFactory.build(name='')
         data = artist_schema.dump(artist).data
         response = client.post(
             '/artists',
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(user.get_token()))
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert 'name' in response.get_json()['details']
 

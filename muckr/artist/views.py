@@ -43,9 +43,6 @@ def get_artist(id):
 @blueprint.route('/artists', methods=['POST'])
 @token_auth.login_required
 def create_artist():
-    if not flask.g.current_user.is_admin:
-        raise APIError(401)
-
     json = flask.request.get_json() or {}
 
     try:
@@ -53,9 +50,10 @@ def create_artist():
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_create(Artist.query, data, ['name'])
+    check_unique_on_create(flask.g.current_user.artists, data, ['name'])
 
     artist = Artist(**data)
+    artist.user = flask.g.current_user
 
     database.session.add(artist)
     database.session.commit()
