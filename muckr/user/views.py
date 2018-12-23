@@ -6,17 +6,12 @@ from muckr.errors import error_response
 from muckr.extensions import database
 from muckr.user.auth import basic_auth, token_auth
 from muckr.user.models import User, UserSchema
+from muckr.utils import jsonify
 
 
 blueprint = flask.Blueprint('user', __name__)
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
-
-
-def _jsonify(data):
-    response = flask.jsonify(data)
-    response.mimetype = 'application/json'
-    return response
 
 
 @blueprint.route('/users', methods=['GET'])
@@ -28,7 +23,7 @@ def get_users():
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
     users = User.query.paginate(page, per_page, False)
     data, errors = users_schema.dump(users.items)
-    return _jsonify(data)
+    return jsonify(data)
 
 
 @blueprint.route('/users/<int:id>', methods=['GET'])
@@ -40,7 +35,7 @@ def get_user(id):
         return error_response(401)
 
     data, errors = user_schema.dump(user)
-    return _jsonify(data)
+    return jsonify(data)
 
 
 @blueprint.route('/users', methods=['POST'])
@@ -67,7 +62,7 @@ def create_user():
 
     data, errors = user_schema.dump(user)
 
-    response = _jsonify(data)
+    response = jsonify(data)
     response.status_code = 201
     response.headers['Location'] = flask.url_for('user.get_user', id=user.id)
     return response
@@ -105,7 +100,7 @@ def update_user(id):
     database.session.commit()
 
     data, errors = UserSchema().dump(user)
-    return _jsonify(data)
+    return jsonify(data)
 
 
 @blueprint.route('/users/<int:id>', methods=['DELETE'])
@@ -119,7 +114,7 @@ def delete_user(id):
     database.session.delete(user)
     database.session.commit()
 
-    return _jsonify({}), 204
+    return jsonify({}), 204
 
 
 @blueprint.route('/tokens', methods=['POST'])
@@ -127,7 +122,7 @@ def delete_user(id):
 def create_token():
     token = flask.g.current_user.get_token()
     database.session.commit()
-    return _jsonify({'token': token}), 201
+    return jsonify({'token': token}), 201
 
 
 @blueprint.route('/tokens', methods=['DELETE'])
@@ -135,4 +130,4 @@ def create_token():
 def delete_token():
     flask.g.current_user.revoke_token()
     database.session.commit()
-    return _jsonify({}), 204
+    return jsonify({}), 204
