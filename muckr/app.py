@@ -40,6 +40,7 @@ def register_blueprints(app):
 
 
 def register_errorhandlers(app):
+    app.errorhandler(muckr.errors.APIError)(muckr.errors.APIError.handle)
     for status_code in [401, 404, 500]:
         app.errorhandler(status_code)(muckr.errors.handle_error)
 

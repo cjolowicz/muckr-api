@@ -5,19 +5,26 @@ from flask import jsonify
 from muckr.extensions import database
 
 
-def error_response(status_code, message=None, details=None):
-    status = HTTP_STATUS_CODES.get(status_code, 'Unknown error')
+class APIError(Exception):
+    def __init__(self, status_code, message=None, details=None):
+        super().__init__()
 
-    payload = {'error': status}
-    if message:
-        payload['message'] = message
-    if details:
-        payload['details'] = details
+        error = HTTP_STATUS_CODES.get(status_code, 'Unknown error')
 
-    response = jsonify(payload)
-    response.status_code = status_code
-    response.mimetype = 'application/json'
-    return response
+        self.status_code = status_code
+        self.payload = {'error': error}
+
+        if message is not None:
+            self.payload['message'] = message
+
+        if details is not None:
+            self.payload['details'] = details
+
+    def handle(self):
+        response = jsonify(self.payload)
+        response.status_code = self.status_code
+        response.mimetype = 'application/json'
+        return response
 
 
 def handle_error(error):
@@ -25,4 +32,4 @@ def handle_error(error):
     status_code = getattr(error, 'code', 500)
     if status_code == 500:
         database.session.rollback()
-    return error_response(status_code)
+    return APIError(status_code).handle()

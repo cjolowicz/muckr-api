@@ -2,7 +2,7 @@
 import flask
 from marshmallow import ValidationError
 
-from muckr.errors import error_response
+from muckr.errors import APIError
 from muckr.extensions import database
 from muckr.user.auth import basic_auth, token_auth
 from muckr.user.models import User, UserSchema
@@ -18,7 +18,7 @@ users_schema = UserSchema(many=True)
 @token_auth.login_required
 def get_users():
     if not flask.g.current_user.is_admin:
-        return error_response(401)
+        raise APIError(401)
     page = flask.request.args.get('page', 1, type=int)
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
     users = User.query.paginate(page, per_page, False)
@@ -32,7 +32,7 @@ def get_user(id):
     user = User.query.get_or_404(id)
     if user.id != flask.g.current_user.id and \
             not flask.g.current_user.is_admin:
-        return error_response(401)
+        raise APIError(401)
 
     data, errors = user_schema.dump(user)
     return jsonify(data)
@@ -44,14 +44,9 @@ def create_user():
     try:
         data, errors = user_schema.load(json)
     except ValidationError as error:
-        return error_response(422, details=error.messages)
+        raise APIError(422, details=error.messages)
 
-    response = check_unique_on_create(User, data, [
-        'username',
-        'email'
-    ])
-    if response:
-        return response
+    check_unique_on_create(User, data, ['username', 'email'])
 
     password = data.pop('password', None)
     user = User(**data)
@@ -75,20 +70,15 @@ def update_user(id):
     user = User.query.get_or_404(id)
     if user.id != flask.g.current_user.id and \
             not flask.g.current_user.is_admin:
-        return error_response(401)
+        raise APIError(401)
 
     json = flask.request.get_json() or {}
     try:
         data, errors = UserSchema(partial=True).load(json)
     except ValidationError as error:
-        return error_response(422, details=error.messages)
+        raise APIError(422, details=error.messages)
 
-    response = check_unique_on_update(User, user, data, [
-        'username',
-        'email',
-    ])
-    if response:
-        return response
+    check_unique_on_update(User, user, data, ['username', 'email'])
 
     password = data.pop('password', None)
     if password is not None:
@@ -109,7 +99,7 @@ def delete_user(id):
     user = User.query.get_or_404(id)
     if user.id != flask.g.current_user.id and \
             not flask.g.current_user.is_admin:
-        return error_response(401)
+        raise APIError(401)
 
     database.session.delete(user)
     database.session.commit()

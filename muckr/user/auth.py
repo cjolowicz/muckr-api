@@ -3,7 +3,7 @@ import flask
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 
 from muckr.user.models import User
-from muckr.errors import error_response
+from muckr.errors import APIError
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
@@ -20,7 +20,7 @@ def verify_password(username, password):
 
 @basic_auth.error_handler
 def basic_auth_error():
-    return error_response(401)
+    return APIError(401).handle()
 
 
 @token_auth.verify_token
@@ -31,4 +31,4 @@ def verify_token(token):
 
 @token_auth.error_handler
 def token_auth_error():
-    return error_response(401)
+    return APIError(401).handle()
