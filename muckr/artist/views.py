@@ -28,10 +28,9 @@ def get_artists():
 @blueprint.route('/artists/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_artist(id):
-    if not flask.g.current_user.is_admin:
-        raise APIError(401)
-
     artist = Artist.query.get_or_404(id)
+    if artist.user.id != flask.g.current_user.id:
+        raise APIError(404)
     data, errors = artist_schema.dump(artist)
 
     return jsonify(data)
