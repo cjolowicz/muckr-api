@@ -91,17 +91,34 @@ The app is configured via the following environment variables:
 - `DATABASE_URL` (required)
 - `SECRET_KEY` (required)
 
-Alternatively, provide an [env file](.env.sample). This is a file
-named `.env`, where each line contains an assignment of the form
-`VAR=VAL`.
+The database server is configured via the following environment variables:
+
+- `POSTGRES_USER` (default: `postgres`)
+- `POSTGRES_PASSWORD` (required)
+- `POSTGRES_DB` (default: `postgres`)
+
+Also, use these environment variables for Flask:
+
+- `FLASK_APP=wsgi.py`
+- `FLASK_ENV=development`
+
+A sample [env file](.env.sample) is provided. This is a file named
+`.env`, where each line contains an assignment of the form `VAR=VAL`.
 
 ## Running
 
-To start up a development instance of the web server:
+To start up the database server:
 
-```shell
+```sh
+docker swarm init
+docker stack deploy -c postgres.yml postgres
 flask db upgrade
 flask create-admin
+```
+
+To start up a development instance of the web server:
+
+```sh
 flask run
 ```
 
