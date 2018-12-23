@@ -7,6 +7,7 @@ import muckr
 import muckr.extensions
 import muckr.errors
 import muckr.commands
+import muckr.artist.views
 import muckr.main.views
 import muckr.user.views
 
@@ -35,6 +36,7 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
+    app.register_blueprint(muckr.artist.views.blueprint)
     app.register_blueprint(muckr.main.views.blueprint)
     app.register_blueprint(muckr.user.views.blueprint)
 
