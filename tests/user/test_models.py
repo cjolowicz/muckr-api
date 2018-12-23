@@ -30,6 +30,9 @@ class TestUser:
         assert dbuser.password_hash == user.password_hash
         assert dbuser.is_admin is False
 
+    def test_user_has_artists(self, user):
+        assert user.artists.count() == 0
+
     def test_set_password_modifies_password(self, user):
         user.set_password('secret')
 
