@@ -13,31 +13,35 @@ def _create_token_auth_header(token):
 
 
 class TestGetArtists:
-    def test_get_request_returns_list_of_artists(self, artist, admin, client):
+    def test_get_request_returns_list_of_artists(self, artist, client):
         artists = [artist]
         response = client.get(
             '/artists',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
 
         assert response.status == '200 OK'
         assert response.get_json() == artists_schema.dump(artists).data
 
     def test_get_request_returns_first_page_of_artists_by_default(
-            self, artists, admin, client):
+            self, client, user, database):
+        artists = ArtistFactory.create_batch(25, user=user)
+        database.session.commit()
         response = client.get(
             '/artists',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(user.get_token()))
 
         assert response.status == '200 OK'
         assert response.get_json() == artists_schema.dump(artists[:10]).data
 
     @pytest.mark.parametrize('page', [1, 2, 3, 4])
     def test_get_request_returns_requested_page_of_artists(
-            self, artists, admin, client, page):
+            self, client, user, database, page):
+        artists = ArtistFactory.create_batch(25, user=user)
+        database.session.commit()
         response = client.get(
             '/artists',
             query_string={'page': page},
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(user.get_token()))
 
         per_page = 10
         offset = per_page * (page - 1)
@@ -49,11 +53,13 @@ class TestGetArtists:
     @pytest.mark.parametrize('page', [1, 2, 3, 4])
     @pytest.mark.parametrize('per_page', [1, 2, 5, 10, 20, 50])
     def test_get_request_returns_requested_number_of_artists(
-            self, artists, admin, client, page, per_page):
+            self, client, user, database, page, per_page):
+        artists = ArtistFactory.create_batch(25, user=user)
+        database.session.commit()
         response = client.get(
             '/artists',
             query_string={'page': page, 'per_page': per_page},
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(user.get_token()))
 
         offset = per_page * (page - 1)
         window = artists[offset:offset+per_page]
@@ -62,15 +68,8 @@ class TestGetArtists:
         assert response.get_json() == artists_schema.dump(window).data
 
     def test_get_request_for_artists_fails_without_authentication(
-            self, artists, client):
+            self, client):
         response = client.get('/artists')
-        assert response.status == '401 UNAUTHORIZED'
-
-    def test_get_request_for_artists_fails_without_admin_status(
-            self, artists, user, client):
-        response = client.get(
-            '/artists',
-            headers=_create_token_auth_header(user.get_token()))
         assert response.status == '401 UNAUTHORIZED'
 
 

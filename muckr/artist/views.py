@@ -17,12 +17,9 @@ artists_schema = ArtistSchema(many=True)
 @blueprint.route('/artists', methods=['GET'])
 @token_auth.login_required
 def get_artists():
-    if not flask.g.current_user.is_admin:
-        raise APIError(401)
-
     page = flask.request.args.get('page', 1, type=int)
     per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
-    artists = Artist.query.paginate(page, per_page, False)
+    artists = flask.g.current_user.artists.paginate(page, per_page, False)
     data, errors = artists_schema.dump(artists.items)
 
     return jsonify(data)
