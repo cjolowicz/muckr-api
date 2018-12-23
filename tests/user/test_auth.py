@@ -13,14 +13,16 @@ from muckr.user.auth import (
 
 
 @pytest.mark.parametrize('username, password, result', [
-    ('user0', 'example', True),
+    (None, 'example', True),
     ('invalid', 'example', False),
-    ('user0', 'invalid', False),
+    (None, 'invalid', False),
     ('invalid', 'invalid', False),
 ])
 def test_verify_password(user, username, password, result):
+    if username is None:
+        username = user.username
     assert verify_password(username, password) == result
-    if result:
+    if username == user.username:
         assert flask.g.current_user.id == user.id
     else:
         assert 'current_user' not in flask.g
