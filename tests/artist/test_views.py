@@ -145,14 +145,14 @@ class TestPostArtist:
         assert response.status == '401 UNAUTHORIZED'
 
     def test_post_request_fails_if_name_exists(self, artist, client):
-        existing_artist = artist
-        artist = ArtistFactory.build(name=existing_artist.name)
+        name, user = artist.name, artist.user
+        artist = ArtistFactory.build(name=name)
         data = artist_schema.dump(artist).data
         response = client.post(
             '/artists',
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(user.get_token()))
         assert response.status == '400 BAD REQUEST'
         assert 'name' in response.get_json()['details']
 
