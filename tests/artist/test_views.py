@@ -261,23 +261,40 @@ class TestPutArtist:
 
 
 class TestDeleteArtist:
-    def test_delete_request_removes_artist(self, artist, admin, client):
+    def test_delete_request_removes_artist(self, artist, client):
         response = client.delete(
             '/artists/{id}'.format(id=artist.id),
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
 
         assert response.status == '204 NO CONTENT'
         assert response.data == b''
         assert Artist.query.get(artist.id) is None
 
+    def test_delete_request_returns_404_if_artist_not_found(
+            self, artist, client):
+        response = client.delete(
+            '/artists/2',
+            headers=_create_token_auth_header(artist.user.get_token()))
+
+        assert response.status == '404 NOT FOUND'
+        assert response.get_json() == {
+            'error': 'Not Found',
+        }
+
+    def test_delete_request_returns_404_for_artist_of_another_user(
+            self, client, database):
+        artist1, artist2 = ArtistFactory.create_batch(2)
+        database.session.commit()
+        response = client.delete(
+            '/artists/{id}'.format(id=artist1.id),
+            headers=_create_token_auth_header(artist2.user.get_token()))
+
+        assert response.status == '404 NOT FOUND'
+        assert response.get_json() == {
+            'error': 'Not Found',
+        }
+
     def test_delete_request_fails_without_authentication(self, artist, client):
         response = client.delete(
             '/artists/{id}'.format(id=artist.id))
-        assert response.status == '401 UNAUTHORIZED'
-
-    def test_delete_request_fails_without_admin_status(
-            self, artist, user, client):
-        response = client.delete(
-            '/artists/{id}'.format(id=artist.id),
-            headers=_create_token_auth_header(user.get_token()))
         assert response.status == '401 UNAUTHORIZED'
