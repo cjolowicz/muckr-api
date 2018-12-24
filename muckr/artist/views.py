@@ -66,10 +66,10 @@ def create_artist():
 @blueprint.route('/artists/<int:id>', methods=['PUT'])
 @token_auth.login_required
 def update_artist(id):
-    if not flask.g.current_user.is_admin:
-        raise APIError(401)
-
     artist = Artist.query.get_or_404(id)
+    if artist.user.id != flask.g.current_user.id:
+        raise APIError(404)
+
     json = flask.request.get_json() or {}
 
     try:
@@ -77,7 +77,8 @@ def update_artist(id):
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_update(Artist.query, artist, data, ['name'])
+    check_unique_on_update(
+        flask.g.current_user.artists, artist, data, ['name'])
 
     for key, value in data.items():
         setattr(artist, key, value)

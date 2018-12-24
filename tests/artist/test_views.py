@@ -169,41 +169,55 @@ class TestPostArtist:
 
 
 class TestPutArtist:
-    def test_put_request_modifies_name(
-            self, client, artist, admin):
+    def test_put_request_modifies_name(self, client, artist):
         original = artist_schema.dump(artist).data
         data = {'name': 'john'}
         response = client.put(
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
 
         assert response.status == '200 OK'
         assert artist.id == original['id']
         assert artist.name == data['name']
 
-    def test_put_request_does_not_modify_id(
-            self, client, artist, admin):
+    def test_put_request_returns_404_for_artist_of_another_user(
+            self, client, database):
+        artist1, artist2 = ArtistFactory.create_batch(2)
+        database.session.commit()
+        data = {'name': 'john'}
+        response = client.put(
+            '/artists/{id}'.format(id=artist1.id),
+            data=json.dumps(data),
+            content_type='application/json',
+            headers=_create_token_auth_header(artist2.user.get_token()))
+
+        assert response.status == '404 NOT FOUND'
+        assert response.get_json() == {
+            'error': 'Not Found',
+        }
+
+    def test_put_request_does_not_modify_id(self, client, artist):
         original = artist_schema.dump(artist).data
         data = {'id': 123}
         response = client.put(
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
 
         assert response.status == '200 OK'
         assert artist.id == original['id']
         assert artist.name == original['name']
 
-    def test_put_request_returns_modified_artist(self, artist, admin, client):
+    def test_put_request_returns_modified_artist(self, artist, client):
         original_id = artist.id
         response = client.put(
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': 'john'}),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
         data = response.get_json()
         artist = Artist.query.get(data['id'])
 
@@ -217,45 +231,45 @@ class TestPutArtist:
             content_type='application/json')
         assert response.status == '401 UNAUTHORIZED'
 
-    def test_put_request_fails_without_admin_status(
-            self, artist, user, client):
+    def test_put_request_fails_if_name_exists(self, client, user, database):
+        artist1, artist2 = ArtistFactory.create_batch(2, user=user)
+        database.session.commit()
         response = client.put(
-            '/artists/{id}'.format(id=artist.id),
-            data=json.dumps({'name': 'john'}),
+            '/artists/{id}'.format(id=artist1.id),
+            data=json.dumps({'name': artist2.name}),
             content_type='application/json',
             headers=_create_token_auth_header(user.get_token()))
-        assert response.status == '401 UNAUTHORIZED'
-
-    def test_put_request_fails_if_name_exists(
-            self, artists, admin, client):
-        artist, artist2 = artists[:2]
-        data = {'name': artist2.name}
-        response = client.put(
-            '/artists/{id}'.format(id=artist.id),
-            data=json.dumps(data),
-            content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
         assert response.status == '400 BAD REQUEST'
         assert 'name' in response.get_json()['details']
 
-    def test_put_request_succeeds_if_name_is_unchanged(
-            self, artist, admin, client):
+    def test_put_request_succeeds_if_name_exists_for_another_user(
+            self, client, database):
+        artist1, artist2 = ArtistFactory.create_batch(2)
+        database.session.commit()
+        response = client.put(
+            '/artists/{id}'.format(id=artist1.id),
+            data=json.dumps({'name': artist2.name}),
+            content_type='application/json',
+            headers=_create_token_auth_header(artist1.user.get_token()))
+        assert response.status == '200 OK'
+        assert Artist.query.get(artist1.id).name == artist2.name
+
+    def test_put_request_succeeds_if_name_is_unchanged(self, artist, client):
         name = artist.name
         response = client.put(
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': name}),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
         assert response.status == '200 OK'
         assert Artist.query.get(artist.id).name == name
 
-    def test_put_request_fails_if_name_is_invalid(
-            self, artist, admin, client):
+    def test_put_request_fails_if_name_is_invalid(self, artist, client):
         response = client.put(
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': ''}),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()))
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert 'name' in response.get_json()['details']
 
