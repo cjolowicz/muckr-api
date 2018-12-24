@@ -23,7 +23,7 @@ install:
 
 test:
 	python -m flake8 muckr tests setup.py wsgi.py migrations
-	python -m pytest tests --verbose --cov=muckr --cov-report=term-missing
+	env FLASK_DEBUG=0 python -m pytest tests --verbose --cov=muckr --cov-report=term-missing
 
 clean:
 	for dir in muckr tests ; \
