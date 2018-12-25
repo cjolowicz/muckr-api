@@ -69,7 +69,7 @@ def create_artist():
 @token_auth.login_required
 def update_artist(id):
     artist = Artist.query.get_or_404(id)
-    if artist.user.id != flask.g.current_user.id:
+    if artist.user.id != flask.g.current_user.id and not flask.g.current_user.is_admin:
         raise APIError(404)
 
     json = flask.request.get_json() or {}

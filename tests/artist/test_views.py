@@ -211,6 +211,20 @@ class TestPutArtist:
         assert response.status == "404 NOT FOUND"
         assert response.get_json() == {"error": "Not Found"}
 
+    def test_put_request_succeeds_for_artist_of_another_user_if_admin(
+        self, client, artist, admin
+    ):
+        data = {"name": "john"}
+        response = client.put(
+            "/artists/{id}".format(id=artist.id),
+            data=json.dumps(data),
+            content_type="application/json",
+            headers=_create_token_auth_header(admin.get_token()),
+        )
+
+        assert response.status == "200 OK"
+        assert response.get_json() == artist_schema.dump(artist).data
+
     def test_put_request_does_not_modify_id(self, client, artist):
         original = artist_schema.dump(artist).data
         data = {"id": 123}
