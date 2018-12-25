@@ -68,22 +68,16 @@ class TestUser:
         assert user.username == dbuser.username
         assert user.email == dbuser.email
 
-    @pytest.mark.parametrize('token', [
-        None,
-        '',
-        '0' * 64,
-        ''.join(random.choices('0123456789abcdef', k=64)),
-    ])
+    @pytest.mark.parametrize(
+        'token', [None, '', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+    )
     def test_check_token_returns_none_if_token_is_invalid(self, user, token):
         user.get_token()
         assert User.check_token(token) is None
 
-    @pytest.mark.parametrize('token', [
-        None,
-        '',
-        '0' * 64,
-        ''.join(random.choices('0123456789abcdef', k=64)),
-    ])
+    @pytest.mark.parametrize(
+        'token', [None, '', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+    )
     def test_check_token_returns_none_if_user_has_no_token(self, user, token):
         assert User.check_token(token) is None
 
@@ -92,8 +86,7 @@ class TestUser:
         user.revoke_token()
         assert User.check_token(token) is None
 
-    def test_check_token_succeeds_for_new_token_after_old_token_was_revoked(
-            self, user):
+    def test_check_token_succeeds_for_new_token_after_old_token_was_revoked(self, user):
         token = user.get_token()
         user.revoke_token()
         token = user.get_token()

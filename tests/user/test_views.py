@@ -12,12 +12,13 @@ from tests.user.factories import UserFactory
 
 
 def _create_basic_auth_header(username, password):
-    payload = b':'.join((
-        username.encode('utf-8'),
-        password.encode('utf-8')))
+    payload = b':'.join((username.encode('utf-8'), password.encode('utf-8')))
 
-    return {'Authorization': 'Basic {base64}'.format(
-        base64=base64.b64encode(payload).decode('utf-8'))}
+    return {
+        'Authorization': 'Basic {base64}'.format(
+            base64=base64.b64encode(payload).decode('utf-8')
+        )
+    }
 
 
 def _create_token_auth_header(token):
@@ -28,34 +29,37 @@ class TestGetUsers:
     def test_get_request_returns_list_of_users(self, user, admin, client):
         users = [user, admin]
         response = client.get(
-            '/users',
-            headers=_create_token_auth_header(admin.get_token()))
+            '/users', headers=_create_token_auth_header(admin.get_token())
+        )
 
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(users).data
 
     def test_get_request_returns_first_page_of_users_by_default(
-            self, users, admin, client):
+        self, users, admin, client
+    ):
         users.append(admin)
         response = client.get(
-            '/users',
-            headers=_create_token_auth_header(admin.get_token()))
+            '/users', headers=_create_token_auth_header(admin.get_token())
+        )
 
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(users[:10]).data
 
     @pytest.mark.parametrize('page', [1, 2, 3, 4])
     def test_get_request_returns_requested_page_of_users(
-            self, users, admin, client, page):
+        self, users, admin, client, page
+    ):
         users.append(admin)
         response = client.get(
             '/users',
             query_string={'page': page},
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(admin.get_token()),
+        )
 
         per_page = 10
         offset = per_page * (page - 1)
-        window = users[offset:offset+per_page]
+        window = users[offset : offset + per_page]
 
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(window).data
@@ -63,29 +67,29 @@ class TestGetUsers:
     @pytest.mark.parametrize('page', [1, 2, 3, 4])
     @pytest.mark.parametrize('per_page', [1, 2, 5, 10, 20, 50])
     def test_get_request_returns_requested_number_of_users(
-            self, users, admin, client, page, per_page):
+        self, users, admin, client, page, per_page
+    ):
         users.append(admin)
         response = client.get(
             '/users',
             query_string={'page': page, 'per_page': per_page},
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(admin.get_token()),
+        )
 
         offset = per_page * (page - 1)
-        window = users[offset:offset+per_page]
+        window = users[offset : offset + per_page]
 
         assert response.status == '200 OK'
         assert response.get_json() == users_schema.dump(window).data
 
-    def test_get_request_for_users_fails_without_authentication(
-            self, users, client):
+    def test_get_request_for_users_fails_without_authentication(self, users, client):
         response = client.get('/users')
         assert response.status == '401 UNAUTHORIZED'
 
-    def test_get_request_for_users_fails_without_admin_status(
-            self, users, client):
+    def test_get_request_for_users_fails_without_admin_status(self, users, client):
         response = client.get(
-            '/users',
-            headers=_create_token_auth_header(users[0].get_token()))
+            '/users', headers=_create_token_auth_header(users[0].get_token())
+        )
         assert response.status == '401 UNAUTHORIZED'
 
 
@@ -93,7 +97,8 @@ class TestGetUser:
     def test_get_request_returns_user(self, user, client):
         response = client.get(
             '/users/{id}'.format(id=user.id),
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
 
         assert response.status == '200 OK'
         assert response.get_json() == user_schema.dump(user).data
@@ -106,26 +111,25 @@ class TestGetUser:
         user, user2 = users[:2]
         response = client.get(
             '/users/{id}'.format(id=user2.id),
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '401 UNAUTHORIZED'
 
-    def test_get_request_by_admin_succeeds_for_another_user(
-            self, admin, user, client):
+    def test_get_request_by_admin_succeeds_for_another_user(self, admin, user, client):
         response = client.get(
             '/users/{id}'.format(id=user.id),
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(admin.get_token()),
+        )
         assert response.status == '200 OK'
         assert response.get_json() == user_schema.dump(user).data
 
     def test_get_request_returns_404(self, user, client):
         response = client.get(
-            '/users/2',
-            headers=_create_token_auth_header(user.get_token()))
+            '/users/2', headers=_create_token_auth_header(user.get_token())
+        )
 
         assert response.status == '404 NOT FOUND'
-        assert response.get_json() == {
-            'error': 'Not Found',
-        }
+        assert response.get_json() == {'error': 'Not Found'}
 
 
 class TestPostUser:
@@ -134,8 +138,9 @@ class TestPostUser:
         sent = user_schema.dump(user).data
         sent['password'] = 'secret'
 
-        response = client.post('/users', data=json.dumps(sent),
-                               content_type='application/json')
+        response = client.post(
+            '/users', data=json.dumps(sent), content_type='application/json'
+        )
 
         assert response.status == '201 CREATED'
 
@@ -155,54 +160,43 @@ class TestPostUser:
         assert user.check_password(sent['password'])
 
     @pytest.mark.parametrize('attribute', ('username', 'email'))
-    def test_post_request_fails_if_attribute_exists(
-            self, attribute, user, client):
+    def test_post_request_fails_if_attribute_exists(self, attribute, user, client):
         user, existing_user = UserFactory.build(), user
         data = user_schema.dump(user).data
         data[attribute] = getattr(existing_user, attribute)
         data['password'] = 'secret'
-        response = client.post('/users', data=json.dumps(data),
-                               content_type='application/json')
+        response = client.post(
+            '/users', data=json.dumps(data), content_type='application/json'
+        )
         assert response.status == '400 BAD REQUEST'
         assert attribute in response.get_json()['details']
 
-    @pytest.mark.parametrize('attribute,value', [
-        ('username', ''),
-        ('email', ''),
-        ('email', 'foo'),
-    ])
-    def test_post_request_fails_if_attribute_is_invalid(
-            self, client, attribute, value):
+    @pytest.mark.parametrize(
+        'attribute,value', [('username', ''), ('email', ''), ('email', 'foo')]
+    )
+    def test_post_request_fails_if_attribute_is_invalid(self, client, attribute, value):
         user = UserFactory.build()
         data = user_schema.dump(user).data
         data[attribute] = value
         data['password'] = 'secret'
-        response = client.post('/users', data=json.dumps(data),
-                               content_type='application/json')
+        response = client.post(
+            '/users', data=json.dumps(data), content_type='application/json'
+        )
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert attribute in response.get_json()['details']
 
 
 class TestPutUser:
-    @pytest.mark.parametrize('data', [
-        {
-            'username': 'john',
-            'email': 'john@example.com',
-            'password': 'new-secret',
-        },
-        {
-            'username': 'john',
-        },
-        {
-            'email': 'john@example.com',
-        },
-        {
-            'password': 'new-secret',
-        },
-        {
-            'id': 123,
-        },
-    ])
+    @pytest.mark.parametrize(
+        'data',
+        [
+            {'username': 'john', 'email': 'john@example.com', 'password': 'new-secret'},
+            {'username': 'john'},
+            {'email': 'john@example.com'},
+            {'password': 'new-secret'},
+            {'id': 123},
+        ],
+    )
     def test_put_request_modifies_attributes(self, client, user, data):
         original = user_schema.dump(user).data
         original['password'] = 'example'
@@ -210,7 +204,8 @@ class TestPutUser:
             '/users/{id}'.format(id=user.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
 
         assert response.status == '200 OK'
 
@@ -227,7 +222,8 @@ class TestPutUser:
             '/users/{id}'.format(id=user.id),
             data=json.dumps({'email': 'john@example.com'}),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         data = response.get_json()
         user = User.query.get(data['id'])
 
@@ -240,7 +236,8 @@ class TestPutUser:
         response = client.put(
             '/users/{id}'.format(id=user.id),
             data=json.dumps({'email': 'john@example.com'}),
-            content_type='application/json')
+            content_type='application/json',
+        )
         assert response.status == '401 UNAUTHORIZED'
 
     def test_put_request_fails_for_another_user(self, users, client):
@@ -249,56 +246,59 @@ class TestPutUser:
             '/users/{id}'.format(id=user2.id),
             data=json.dumps({'email': 'john@example.com'}),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '401 UNAUTHORIZED'
 
-    def test_put_request_by_admin_succeeds_for_another_user(
-            self, admin, user, client):
+    def test_put_request_by_admin_succeeds_for_another_user(self, admin, user, client):
         response = client.put(
             '/users/{id}'.format(id=user.id),
             data=json.dumps({'email': 'john@example.com'}),
             content_type='application/json',
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(admin.get_token()),
+        )
         assert response.status == '200 OK'
         assert user.email == 'john@example.com'
 
     @pytest.mark.parametrize('attribute', ('username', 'email'))
-    def test_put_request_fails_if_attribute_exists(
-            self, attribute, users, client):
+    def test_put_request_fails_if_attribute_exists(self, attribute, users, client):
         user, user2 = users[:2]
         data = {attribute: getattr(user2, attribute)}
         response = client.put(
             '/users/{id}'.format(id=user.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '400 BAD REQUEST'
         assert attribute in response.get_json()['details']
 
     @pytest.mark.parametrize('attribute', ('username', 'email'))
     def test_put_request_succeeds_if_attribute_is_unchanged(
-            self, attribute, user, client):
+        self, attribute, user, client
+    ):
         value = getattr(user, attribute)
         response = client.put(
             '/users/{id}'.format(id=user.id),
             data=json.dumps({attribute: value}),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '200 OK'
         assert getattr(User.query.get(user.id), attribute) == value
 
-    @pytest.mark.parametrize('attribute,value', [
-        ('username', ''),
-        ('email', ''),
-        ('email', 'foo'),
-    ])
+    @pytest.mark.parametrize(
+        'attribute,value', [('username', ''), ('email', ''), ('email', 'foo')]
+    )
     def test_put_request_fails_if_attribute_is_invalid(
-            self, user, client, attribute, value):
+        self, user, client, attribute, value
+    ):
         response = client.put(
             '/users/{id}'.format(id=user.id),
             data=json.dumps({attribute: value}),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert attribute in response.get_json()['details']
 
@@ -307,29 +307,32 @@ class TestDeleteUser:
     def test_delete_request_removes_user(self, user, client):
         response = client.delete(
             '/users/{id}'.format(id=user.id),
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
 
         assert response.status == '204 NO CONTENT'
         assert response.data == b''
         assert User.query.get(user.id) is None
 
     def test_delete_request_fails_without_authentication(self, user, client):
-        response = client.delete(
-            '/users/{id}'.format(id=user.id))
+        response = client.delete('/users/{id}'.format(id=user.id))
         assert response.status == '401 UNAUTHORIZED'
 
     def test_delete_request_fails_for_another_user(self, users, client):
         user, user2 = users[:2]
         response = client.delete(
             '/users/{id}'.format(id=user2.id),
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '401 UNAUTHORIZED'
 
     def test_delete_request_by_admin_succeeds_for_another_user(
-            self, admin, user, client):
+        self, admin, user, client
+    ):
         response = client.delete(
             '/users/{id}'.format(id=user.id),
-            headers=_create_token_auth_header(admin.get_token()))
+            headers=_create_token_auth_header(admin.get_token()),
+        )
         assert response.status == '204 NO CONTENT'
         assert User.query.get(user.id) is None
 
@@ -340,7 +343,8 @@ class TestPostToken:
             '/tokens',
             data=json.dumps({}),
             content_type='application/json',
-            headers=_create_basic_auth_header(user.username, 'example'))
+            headers=_create_basic_auth_header(user.username, 'example'),
+        )
 
         database.session.refresh(user)
 
@@ -348,12 +352,10 @@ class TestPostToken:
         assert response.get_json()['token'] == user.token
         assert user.check_token(user.token) is user
 
-    def test_post_request_fails_without_authentication(
-            self, user, client, database):
+    def test_post_request_fails_without_authentication(self, user, client, database):
         response = client.post(
-            '/tokens',
-            data=json.dumps({}),
-            content_type='application/json')
+            '/tokens', data=json.dumps({}), content_type='application/json'
+        )
 
         database.session.refresh(user)
 
@@ -368,29 +370,23 @@ class TestDeleteToken:
             '/tokens',
             data=json.dumps({}),
             content_type='application/json',
-            headers=_create_basic_auth_header(user.username, 'example'))
+            headers=_create_basic_auth_header(user.username, 'example'),
+        )
 
         token = response.get_json()['token']
 
-        response = client.delete(
-            '/tokens',
-            headers=_create_token_auth_header(token))
+        response = client.delete('/tokens', headers=_create_token_auth_header(token))
 
         assert response.status == '204 NO CONTENT'
         assert response.data == b''
         assert user.check_token(token) is None
 
-    @pytest.mark.parametrize('token', [
-        '',
-        '0' * 64,
-        ''.join(random.choices('0123456789abcdef', k=64)),
-    ])
-    def test_delete_request_fails_without_authentication(
-            self, user, client, token):
+    @pytest.mark.parametrize(
+        'token', ['', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+    )
+    def test_delete_request_fails_without_authentication(self, user, client, token):
         user.get_token()
-        response = client.delete(
-            '/tokens',
-            headers=_create_token_auth_header(token))
+        response = client.delete('/tokens', headers=_create_token_auth_header(token))
 
         assert response.status == '401 UNAUTHORIZED'
         assert user.check_token(user.token) is not None

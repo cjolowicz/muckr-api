@@ -12,12 +12,15 @@ from muckr.user.auth import (
 )
 
 
-@pytest.mark.parametrize('username, password, result', [
-    (None, 'example', True),
-    ('invalid', 'example', False),
-    (None, 'invalid', False),
-    ('invalid', 'invalid', False),
-])
+@pytest.mark.parametrize(
+    'username, password, result',
+    [
+        (None, 'example', True),
+        ('invalid', 'example', False),
+        (None, 'invalid', False),
+        ('invalid', 'invalid', False),
+    ],
+)
 def test_verify_password(user, username, password, result):
     if username is None:
         username = user.username
@@ -39,12 +42,9 @@ def test_verify_token_succeeds_with_valid_token(user):
     assert verify_token(token)
 
 
-@pytest.mark.parametrize('token', [
-    None,
-    '',
-    '0' * 64,
-    ''.join(random.choices('0123456789abcdef', k=64)),
-])
+@pytest.mark.parametrize(
+    'token', [None, '', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+)
 def test_verify_token_fails_with_invalid_token(user, token):
     assert not verify_token(token)
     user.get_token()

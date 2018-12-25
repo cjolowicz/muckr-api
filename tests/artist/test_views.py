@@ -16,36 +16,39 @@ class TestGetArtists:
     def test_get_request_returns_list_of_artists(self, artist, client):
         artists = [artist]
         response = client.get(
-            '/artists',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            '/artists', headers=_create_token_auth_header(artist.user.get_token())
+        )
 
         assert response.status == '200 OK'
         assert response.get_json() == artists_schema.dump(artists).data
 
     def test_get_request_returns_first_page_of_artists_by_default(
-            self, client, user, database):
+        self, client, user, database
+    ):
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
         response = client.get(
-            '/artists',
-            headers=_create_token_auth_header(user.get_token()))
+            '/artists', headers=_create_token_auth_header(user.get_token())
+        )
 
         assert response.status == '200 OK'
         assert response.get_json() == artists_schema.dump(artists[:10]).data
 
     @pytest.mark.parametrize('page', [1, 2, 3, 4])
     def test_get_request_returns_requested_page_of_artists(
-            self, client, user, database, page):
+        self, client, user, database, page
+    ):
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
         response = client.get(
             '/artists',
             query_string={'page': page},
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
 
         per_page = 10
         offset = per_page * (page - 1)
-        window = artists[offset:offset+per_page]
+        window = artists[offset : offset + per_page]
 
         assert response.status == '200 OK'
         assert response.get_json() == artists_schema.dump(window).data
@@ -53,22 +56,23 @@ class TestGetArtists:
     @pytest.mark.parametrize('page', [1, 2, 3, 4])
     @pytest.mark.parametrize('per_page', [1, 2, 5, 10, 20, 50])
     def test_get_request_returns_requested_number_of_artists(
-            self, client, user, database, page, per_page):
+        self, client, user, database, page, per_page
+    ):
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
         response = client.get(
             '/artists',
             query_string={'page': page, 'per_page': per_page},
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
 
         offset = per_page * (page - 1)
-        window = artists[offset:offset+per_page]
+        window = artists[offset : offset + per_page]
 
         assert response.status == '200 OK'
         assert response.get_json() == artists_schema.dump(window).data
 
-    def test_get_request_for_artists_fails_without_authentication(
-            self, client):
+    def test_get_request_for_artists_fails_without_authentication(self, client):
         response = client.get('/artists')
         assert response.status == '401 UNAUTHORIZED'
 
@@ -77,7 +81,8 @@ class TestGetArtist:
     def test_get_request_returns_artist(self, artist, client):
         response = client.get(
             '/artists/{id}'.format(id=artist.id),
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
 
         assert response.status == '200 OK'
         assert response.get_json() == artist_schema.dump(artist).data
@@ -88,26 +93,22 @@ class TestGetArtist:
 
     def test_get_request_returns_404_if_artist_not_found(self, artist, client):
         response = client.get(
-            '/artists/2',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            '/artists/2', headers=_create_token_auth_header(artist.user.get_token())
+        )
 
         assert response.status == '404 NOT FOUND'
-        assert response.get_json() == {
-            'error': 'Not Found',
-        }
+        assert response.get_json() == {'error': 'Not Found'}
 
-    def test_get_request_returns_404_for_artist_of_another_user(
-            self, client, database):
+    def test_get_request_returns_404_for_artist_of_another_user(self, client, database):
         artist1, artist2 = ArtistFactory.create_batch(2)
         database.session.commit()
         response = client.get(
             '/artists/{id}'.format(id=artist1.id),
-            headers=_create_token_auth_header(artist2.user.get_token()))
+            headers=_create_token_auth_header(artist2.user.get_token()),
+        )
 
         assert response.status == '404 NOT FOUND'
-        assert response.get_json() == {
-            'error': 'Not Found',
-        }
+        assert response.get_json() == {'error': 'Not Found'}
 
 
 class TestPostArtist:
@@ -118,7 +119,8 @@ class TestPostArtist:
             '/artists',
             data=json.dumps(sent),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
 
         assert response.status == '201 CREATED'
 
@@ -139,9 +141,8 @@ class TestPostArtist:
         artist = ArtistFactory.build()
         data = artist_schema.dump(artist).data
         response = client.post(
-            '/artists',
-            data=json.dumps(data),
-            content_type='application/json')
+            '/artists', data=json.dumps(data), content_type='application/json'
+        )
         assert response.status == '401 UNAUTHORIZED'
 
     def test_post_request_fails_if_name_exists(self, artist, client):
@@ -152,7 +153,8 @@ class TestPostArtist:
             '/artists',
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '400 BAD REQUEST'
         assert 'name' in response.get_json()['details']
 
@@ -163,7 +165,8 @@ class TestPostArtist:
             '/artists',
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert 'name' in response.get_json()['details']
 
@@ -176,14 +179,14 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
 
         assert response.status == '200 OK'
         assert artist.id == original['id']
         assert artist.name == data['name']
 
-    def test_put_request_returns_404_for_artist_of_another_user(
-            self, client, database):
+    def test_put_request_returns_404_for_artist_of_another_user(self, client, database):
         artist1, artist2 = ArtistFactory.create_batch(2)
         database.session.commit()
         data = {'name': 'john'}
@@ -191,12 +194,11 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist1.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(artist2.user.get_token()))
+            headers=_create_token_auth_header(artist2.user.get_token()),
+        )
 
         assert response.status == '404 NOT FOUND'
-        assert response.get_json() == {
-            'error': 'Not Found',
-        }
+        assert response.get_json() == {'error': 'Not Found'}
 
     def test_put_request_does_not_modify_id(self, client, artist):
         original = artist_schema.dump(artist).data
@@ -205,7 +207,8 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps(data),
             content_type='application/json',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
 
         assert response.status == '200 OK'
         assert artist.id == original['id']
@@ -217,7 +220,8 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': 'john'}),
             content_type='application/json',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
         data = response.get_json()
         artist = Artist.query.get(data['id'])
 
@@ -228,7 +232,8 @@ class TestPutArtist:
         response = client.put(
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': 'john'}),
-            content_type='application/json')
+            content_type='application/json',
+        )
         assert response.status == '401 UNAUTHORIZED'
 
     def test_put_request_fails_if_name_exists(self, client, user, database):
@@ -238,19 +243,22 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist1.id),
             data=json.dumps({'name': artist2.name}),
             content_type='application/json',
-            headers=_create_token_auth_header(user.get_token()))
+            headers=_create_token_auth_header(user.get_token()),
+        )
         assert response.status == '400 BAD REQUEST'
         assert 'name' in response.get_json()['details']
 
     def test_put_request_succeeds_if_name_exists_for_another_user(
-            self, client, database):
+        self, client, database
+    ):
         artist1, artist2 = ArtistFactory.create_batch(2)
         database.session.commit()
         response = client.put(
             '/artists/{id}'.format(id=artist1.id),
             data=json.dumps({'name': artist2.name}),
             content_type='application/json',
-            headers=_create_token_auth_header(artist1.user.get_token()))
+            headers=_create_token_auth_header(artist1.user.get_token()),
+        )
         assert response.status == '200 OK'
         assert Artist.query.get(artist1.id).name == artist2.name
 
@@ -260,7 +268,8 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': name}),
             content_type='application/json',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
         assert response.status == '200 OK'
         assert Artist.query.get(artist.id).name == name
 
@@ -269,7 +278,8 @@ class TestPutArtist:
             '/artists/{id}'.format(id=artist.id),
             data=json.dumps({'name': ''}),
             content_type='application/json',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
         assert response.status == '422 UNPROCESSABLE ENTITY'
         assert 'name' in response.get_json()['details']
 
@@ -278,37 +288,34 @@ class TestDeleteArtist:
     def test_delete_request_removes_artist(self, artist, client):
         response = client.delete(
             '/artists/{id}'.format(id=artist.id),
-            headers=_create_token_auth_header(artist.user.get_token()))
+            headers=_create_token_auth_header(artist.user.get_token()),
+        )
 
         assert response.status == '204 NO CONTENT'
         assert response.data == b''
         assert Artist.query.get(artist.id) is None
 
-    def test_delete_request_returns_404_if_artist_not_found(
-            self, artist, client):
+    def test_delete_request_returns_404_if_artist_not_found(self, artist, client):
         response = client.delete(
-            '/artists/2',
-            headers=_create_token_auth_header(artist.user.get_token()))
+            '/artists/2', headers=_create_token_auth_header(artist.user.get_token())
+        )
 
         assert response.status == '404 NOT FOUND'
-        assert response.get_json() == {
-            'error': 'Not Found',
-        }
+        assert response.get_json() == {'error': 'Not Found'}
 
     def test_delete_request_returns_404_for_artist_of_another_user(
-            self, client, database):
+        self, client, database
+    ):
         artist1, artist2 = ArtistFactory.create_batch(2)
         database.session.commit()
         response = client.delete(
             '/artists/{id}'.format(id=artist1.id),
-            headers=_create_token_auth_header(artist2.user.get_token()))
+            headers=_create_token_auth_header(artist2.user.get_token()),
+        )
 
         assert response.status == '404 NOT FOUND'
-        assert response.get_json() == {
-            'error': 'Not Found',
-        }
+        assert response.get_json() == {'error': 'Not Found'}
 
     def test_delete_request_fails_without_authentication(self, artist, client):
-        response = client.delete(
-            '/artists/{id}'.format(id=artist.id))
+        response = client.delete('/artists/{id}'.format(id=artist.id))
         assert response.status == '401 UNAUTHORIZED'
