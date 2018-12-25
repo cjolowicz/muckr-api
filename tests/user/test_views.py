@@ -1,5 +1,4 @@
 """Test user views."""
-import base64
 import random
 
 import json
@@ -9,27 +8,14 @@ from muckr.user.models import User
 from muckr.user.views import user_schema, users_schema
 
 from tests.user.factories import UserFactory
-
-
-def _create_basic_auth_header(username, password):
-    payload = b":".join((username.encode("utf-8"), password.encode("utf-8")))
-
-    return {
-        "Authorization": "Basic {base64}".format(
-            base64=base64.b64encode(payload).decode("utf-8")
-        )
-    }
-
-
-def _create_token_auth_header(token):
-    return {"Authorization": "Bearer {token}".format(token=token)}
+from tests.utils import create_basic_auth_header, create_token_auth_header
 
 
 class TestGetUsers:
     def test_get_request_returns_list_of_users(self, user, admin, client):
         users = [user, admin]
         response = client.get(
-            "/users", headers=_create_token_auth_header(admin.get_token())
+            "/users", headers=create_token_auth_header(admin.get_token())
         )
 
         assert response.status == "200 OK"
@@ -40,7 +26,7 @@ class TestGetUsers:
     ):
         users.append(admin)
         response = client.get(
-            "/users", headers=_create_token_auth_header(admin.get_token())
+            "/users", headers=create_token_auth_header(admin.get_token())
         )
 
         assert response.status == "200 OK"
@@ -54,7 +40,7 @@ class TestGetUsers:
         response = client.get(
             "/users",
             query_string={"page": page},
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
 
         per_page = 10
@@ -73,7 +59,7 @@ class TestGetUsers:
         response = client.get(
             "/users",
             query_string={"page": page, "per_page": per_page},
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
 
         offset = per_page * (page - 1)
@@ -88,7 +74,7 @@ class TestGetUsers:
 
     def test_get_request_for_users_fails_without_admin_status(self, users, client):
         response = client.get(
-            "/users", headers=_create_token_auth_header(users[0].get_token())
+            "/users", headers=create_token_auth_header(users[0].get_token())
         )
         assert response.status == "401 UNAUTHORIZED"
 
@@ -97,7 +83,7 @@ class TestGetUser:
     def test_get_request_returns_user(self, user, client):
         response = client.get(
             "/users/{id}".format(id=user.id),
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         assert response.status == "200 OK"
@@ -111,21 +97,21 @@ class TestGetUser:
         user, user2 = users[:2]
         response = client.get(
             "/users/{id}".format(id=user2.id),
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "401 UNAUTHORIZED"
 
     def test_get_request_by_admin_succeeds_for_another_user(self, admin, user, client):
         response = client.get(
             "/users/{id}".format(id=user.id),
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
         assert response.status == "200 OK"
         assert response.get_json() == user_schema.dump(user)
 
     def test_get_request_returns_404(self, user, client):
         response = client.get(
-            "/users/2", headers=_create_token_auth_header(user.get_token())
+            "/users/2", headers=create_token_auth_header(user.get_token())
         )
 
         assert response.status == "404 NOT FOUND"
@@ -205,7 +191,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         assert response.status == "200 OK"
@@ -224,7 +210,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps({"id": 123}),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         assert response.status == "422 UNPROCESSABLE ENTITY"
@@ -236,7 +222,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps({"email": "john@example.com"}),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         data = response.get_json()
         user = User.query.get(data["id"])
@@ -260,7 +246,7 @@ class TestPutUser:
             "/users/{id}".format(id=user2.id),
             data=json.dumps({"email": "john@example.com"}),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "401 UNAUTHORIZED"
 
@@ -269,7 +255,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps({"email": "john@example.com"}),
             content_type="application/json",
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
         assert response.status == "200 OK"
         assert user.email == "john@example.com"
@@ -282,7 +268,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "400 BAD REQUEST"
         assert attribute in response.get_json()["details"]
@@ -296,7 +282,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps({attribute: value}),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "200 OK"
         assert getattr(User.query.get(user.id), attribute) == value
@@ -311,7 +297,7 @@ class TestPutUser:
             "/users/{id}".format(id=user.id),
             data=json.dumps({attribute: value}),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "422 UNPROCESSABLE ENTITY"
         assert attribute in response.get_json()["details"]
@@ -321,7 +307,7 @@ class TestDeleteUser:
     def test_delete_request_removes_user(self, user, client):
         response = client.delete(
             "/users/{id}".format(id=user.id),
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         assert response.status == "204 NO CONTENT"
@@ -336,7 +322,7 @@ class TestDeleteUser:
         user, user2 = users[:2]
         response = client.delete(
             "/users/{id}".format(id=user2.id),
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "401 UNAUTHORIZED"
 
@@ -345,7 +331,7 @@ class TestDeleteUser:
     ):
         response = client.delete(
             "/users/{id}".format(id=user.id),
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
         assert response.status == "204 NO CONTENT"
         assert User.query.get(user.id) is None
@@ -357,7 +343,7 @@ class TestPostToken:
             "/tokens",
             data=json.dumps({}),
             content_type="application/json",
-            headers=_create_basic_auth_header(user.username, "example"),
+            headers=create_basic_auth_header(user.username, "example"),
         )
 
         database.session.refresh(user)
@@ -384,12 +370,12 @@ class TestDeleteToken:
             "/tokens",
             data=json.dumps({}),
             content_type="application/json",
-            headers=_create_basic_auth_header(user.username, "example"),
+            headers=create_basic_auth_header(user.username, "example"),
         )
 
         token = response.get_json()["token"]
 
-        response = client.delete("/tokens", headers=_create_token_auth_header(token))
+        response = client.delete("/tokens", headers=create_token_auth_header(token))
 
         assert response.status == "204 NO CONTENT"
         assert response.data == b""
@@ -400,7 +386,7 @@ class TestDeleteToken:
     )
     def test_delete_request_fails_without_authentication(self, user, client, token):
         user.get_token()
-        response = client.delete("/tokens", headers=_create_token_auth_header(token))
+        response = client.delete("/tokens", headers=create_token_auth_header(token))
 
         assert response.status == "401 UNAUTHORIZED"
         assert user.check_token(user.token) is not None

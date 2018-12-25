@@ -6,17 +6,14 @@ from muckr.artist.models import Artist
 from muckr.artist.views import artist_schema, artists_schema
 
 from tests.artist.factories import ArtistFactory
-
-
-def _create_token_auth_header(token):
-    return {"Authorization": "Bearer {token}".format(token=token)}
+from tests.utils import create_token_auth_header
 
 
 class TestGetArtists:
     def test_get_request_returns_list_of_artists(self, artist, client):
         artists = [artist]
         response = client.get(
-            "/artists", headers=_create_token_auth_header(artist.user.get_token())
+            "/artists", headers=create_token_auth_header(artist.user.get_token())
         )
 
         assert response.status == "200 OK"
@@ -28,7 +25,7 @@ class TestGetArtists:
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
         response = client.get(
-            "/artists", headers=_create_token_auth_header(user.get_token())
+            "/artists", headers=create_token_auth_header(user.get_token())
         )
 
         assert response.status == "200 OK"
@@ -43,7 +40,7 @@ class TestGetArtists:
         response = client.get(
             "/artists",
             query_string={"page": page},
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         per_page = 10
@@ -63,7 +60,7 @@ class TestGetArtists:
         response = client.get(
             "/artists",
             query_string={"page": page, "per_page": per_page},
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         offset = per_page * (page - 1)
@@ -81,7 +78,7 @@ class TestGetArtist:
     def test_get_request_returns_artist(self, artist, client):
         response = client.get(
             "/artists/{id}".format(id=artist.id),
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
 
         assert response.status == "200 OK"
@@ -93,7 +90,7 @@ class TestGetArtist:
 
     def test_get_request_returns_404_if_artist_not_found(self, artist, client):
         response = client.get(
-            "/artists/2", headers=_create_token_auth_header(artist.user.get_token())
+            "/artists/2", headers=create_token_auth_header(artist.user.get_token())
         )
 
         assert response.status == "404 NOT FOUND"
@@ -104,7 +101,7 @@ class TestGetArtist:
         database.session.commit()
         response = client.get(
             "/artists/{id}".format(id=artist1.id),
-            headers=_create_token_auth_header(artist2.user.get_token()),
+            headers=create_token_auth_header(artist2.user.get_token()),
         )
 
         assert response.status == "404 NOT FOUND"
@@ -115,7 +112,7 @@ class TestGetArtist:
     ):
         response = client.get(
             "/artists/{id}".format(id=artist.id),
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
 
         assert response.status == "200 OK"
@@ -131,7 +128,7 @@ class TestPostArtist:
             "/artists",
             data=json.dumps(sent),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
 
         assert response.status == "201 CREATED"
@@ -166,7 +163,7 @@ class TestPostArtist:
             "/artists",
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "400 BAD REQUEST"
         assert "name" in response.get_json()["details"]
@@ -178,7 +175,7 @@ class TestPostArtist:
             "/artists",
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "422 UNPROCESSABLE ENTITY"
         assert "name" in response.get_json()["details"]
@@ -192,7 +189,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist.id),
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
 
         assert response.status == "200 OK"
@@ -207,7 +204,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist1.id),
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(artist2.user.get_token()),
+            headers=create_token_auth_header(artist2.user.get_token()),
         )
 
         assert response.status == "404 NOT FOUND"
@@ -221,7 +218,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist.id),
             data=json.dumps(data),
             content_type="application/json",
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
 
         assert response.status == "200 OK"
@@ -232,7 +229,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist.id),
             data=json.dumps({"id": 123}),
             content_type="application/json",
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
 
         assert response.status == "422 UNPROCESSABLE ENTITY"
@@ -244,7 +241,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist.id),
             data=json.dumps({"name": "john"}),
             content_type="application/json",
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
         data = response.get_json()
         artist = Artist.query.get(data["id"])
@@ -267,7 +264,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist1.id),
             data=json.dumps({"name": artist2.name}),
             content_type="application/json",
-            headers=_create_token_auth_header(user.get_token()),
+            headers=create_token_auth_header(user.get_token()),
         )
         assert response.status == "400 BAD REQUEST"
         assert "name" in response.get_json()["details"]
@@ -281,7 +278,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist1.id),
             data=json.dumps({"name": artist2.name}),
             content_type="application/json",
-            headers=_create_token_auth_header(artist1.user.get_token()),
+            headers=create_token_auth_header(artist1.user.get_token()),
         )
         assert response.status == "200 OK"
         assert Artist.query.get(artist1.id).name == artist2.name
@@ -292,7 +289,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist.id),
             data=json.dumps({"name": name}),
             content_type="application/json",
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
         assert response.status == "200 OK"
         assert Artist.query.get(artist.id).name == name
@@ -302,7 +299,7 @@ class TestPutArtist:
             "/artists/{id}".format(id=artist.id),
             data=json.dumps({"name": ""}),
             content_type="application/json",
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
         assert response.status == "422 UNPROCESSABLE ENTITY"
         assert "name" in response.get_json()["details"]
@@ -312,7 +309,7 @@ class TestDeleteArtist:
     def test_delete_request_removes_artist(self, artist, client):
         response = client.delete(
             "/artists/{id}".format(id=artist.id),
-            headers=_create_token_auth_header(artist.user.get_token()),
+            headers=create_token_auth_header(artist.user.get_token()),
         )
 
         assert response.status == "204 NO CONTENT"
@@ -321,7 +318,7 @@ class TestDeleteArtist:
 
     def test_delete_request_returns_404_if_artist_not_found(self, artist, client):
         response = client.delete(
-            "/artists/2", headers=_create_token_auth_header(artist.user.get_token())
+            "/artists/2", headers=create_token_auth_header(artist.user.get_token())
         )
 
         assert response.status == "404 NOT FOUND"
@@ -334,7 +331,7 @@ class TestDeleteArtist:
         database.session.commit()
         response = client.delete(
             "/artists/{id}".format(id=artist1.id),
-            headers=_create_token_auth_header(artist2.user.get_token()),
+            headers=create_token_auth_header(artist2.user.get_token()),
         )
 
         assert response.status == "404 NOT FOUND"
@@ -345,7 +342,7 @@ class TestDeleteArtist:
     ):
         response = client.delete(
             "/artists/{id}".format(id=artist.id),
-            headers=_create_token_auth_header(admin.get_token()),
+            headers=create_token_auth_header(admin.get_token()),
         )
 
         assert response.status == "204 NO CONTENT"
