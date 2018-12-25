@@ -341,6 +341,18 @@ class TestDeleteArtist:
         assert response.status == "404 NOT FOUND"
         assert response.get_json() == {"error": "Not Found"}
 
+    def test_delete_request_succeeds_for_artist_of_another_user_if_admin(
+        self, client, artist, admin, database
+    ):
+        response = client.delete(
+            "/artists/{id}".format(id=artist.id),
+            headers=_create_token_auth_header(admin.get_token()),
+        )
+
+        assert response.status == "204 NO CONTENT"
+        assert response.data == b""
+        assert Artist.query.get(artist.id) is None
+
     def test_delete_request_fails_without_authentication(self, artist, client):
         response = client.delete("/artists/{id}".format(id=artist.id))
         assert response.status == "401 UNAUTHORIZED"
