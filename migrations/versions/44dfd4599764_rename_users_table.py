@@ -20,29 +20,13 @@ def upgrade():
         sa.PrimaryKeyConstraint('id'),
     )
 
-    op.create_index(
-        op.f('ix_users_email'),
-        'users',
-        ['email'],
-        unique=True,
-    )
+    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
 
-    op.create_index(
-        op.f('ix_users_username'),
-        'users',
-        ['username'],
-        unique=True,
-    )
+    op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
 
-    op.drop_index(
-        'ix_user_email',
-        table_name='user',
-    )
+    op.drop_index('ix_user_email', table_name='user')
 
-    op.drop_index(
-        'ix_user_username',
-        table_name='user',
-    )
+    op.drop_index('ix_user_username', table_name='user')
 
     op.drop_table('user')
 
@@ -57,28 +41,12 @@ def downgrade():
         sa.PrimaryKeyConstraint('id'),
     )
 
-    op.create_index(
-        'ix_user_username',
-        'user',
-        ['username'],
-        unique=1,
-    )
+    op.create_index('ix_user_username', 'user', ['username'], unique=1)
 
-    op.create_index(
-        'ix_user_email',
-        'user',
-        ['email'],
-        unique=1,
-    )
+    op.create_index('ix_user_email', 'user', ['email'], unique=1)
 
-    op.drop_index(
-        op.f('ix_users_username'),
-        table_name='users',
-    )
+    op.drop_index(op.f('ix_users_username'), table_name='users')
 
-    op.drop_index(
-        op.f('ix_users_email'),
-        table_name='users',
-    )
+    op.drop_index(op.f('ix_users_email'), table_name='users')
 
     op.drop_table('users')
