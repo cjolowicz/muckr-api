@@ -1,1 +1,1 @@
-'''Tests for the app.'''
+"""Tests for the app."""

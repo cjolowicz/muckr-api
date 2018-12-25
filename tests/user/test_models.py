@@ -1,4 +1,4 @@
-'''Test user models.'''
+"""Test user models."""
 import random
 from datetime import datetime, timedelta
 
@@ -11,16 +11,16 @@ from tests.user.factories import UserFactory
 
 class TestUser:
     def test_user_is_created(self):
-        user = UserFactory.build(username='john', email='john@example.com')
+        user = UserFactory.build(username="john", email="john@example.com")
 
         assert user.id is None
-        assert user.username == 'john'
-        assert user.email == 'john@example.com'
-        assert user.check_password('example')
+        assert user.username == "john"
+        assert user.email == "john@example.com"
+        assert user.check_password("example")
         assert user.token is None
         assert user.token_expiration is None
         assert user.is_admin is None
-        assert str(user) == '<User john>'
+        assert str(user) == "<User john>"
 
     def test_user_is_saved_to_database(self, user):
         dbuser = User.query.get(user.id)
@@ -34,17 +34,17 @@ class TestUser:
         assert user.artists.count() == 0
 
     def test_set_password_modifies_password(self, user):
-        user.set_password('secret')
+        user.set_password("secret")
 
-        assert user.check_password('secret')
-        assert not user.check_password('wrong')
+        assert user.check_password("secret")
+        assert not user.check_password("wrong")
 
     def test_get_token_generates_valid_token(self, user):
         token = user.get_token()
         assert user.token == token
         assert user.token_expiration < datetime.utcnow() + timedelta(3600)
         assert len(token) == 64
-        assert all(char in '0123456789abcdef' for char in token)
+        assert all(char in "0123456789abcdef" for char in token)
 
     def test_get_token_returns_existing_token(self, user):
         token = user.get_token()
@@ -69,14 +69,14 @@ class TestUser:
         assert user.email == dbuser.email
 
     @pytest.mark.parametrize(
-        'token', [None, '', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+        "token", [None, "", "0" * 64, "".join(random.choices("0123456789abcdef", k=64))]
     )
     def test_check_token_returns_none_if_token_is_invalid(self, user, token):
         user.get_token()
         assert User.check_token(token) is None
 
     @pytest.mark.parametrize(
-        'token', [None, '', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+        "token", [None, "", "0" * 64, "".join(random.choices("0123456789abcdef", k=64))]
     )
     def test_check_token_returns_none_if_user_has_no_token(self, user, token):
         assert User.check_token(token) is None

@@ -1,4 +1,4 @@
-'''Test artist models.'''
+"""Test artist models."""
 from muckr.artist.models import Artist
 from muckr.user.models import User
 from tests.artist.factories import ArtistFactory
@@ -6,12 +6,12 @@ from tests.artist.factories import ArtistFactory
 
 class TestArtist:
     def test_artist_is_created(self):
-        artist = ArtistFactory.build(name='john')
+        artist = ArtistFactory.build(name="john")
 
         assert artist.id is None
-        assert artist.name == 'john'
+        assert artist.name == "john"
         assert artist.user.id is None
-        assert str(artist) == '<Artist john>'
+        assert str(artist) == "<Artist john>"
 
     def test_artist_is_saved_to_database(self, artist):
         dbartist = Artist.query.get(artist.id)

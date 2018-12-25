@@ -1,9 +1,9 @@
-'''Configuration for the test app.'''
-ADMIN_USERNAME = 'admin'
-ADMIN_EMAIL = 'admin@localhost'
-ADMIN_PASSWORD = '9V0aGfEGAkQTfn8GICqHjAqCzodsUL6IVp02GmtKML8'
+"""Configuration for the test app."""
+ADMIN_USERNAME = "admin"
+ADMIN_EMAIL = "admin@localhost"
+ADMIN_PASSWORD = "9V0aGfEGAkQTfn8GICqHjAqCzodsUL6IVp02GmtKML8"
 BCRYPT_LOG_ROUNDS = 4
-SECRET_KEY = 'lzlD6LdPmLI6rX-4eEMUeLsIcnkXaDDQYqrAIKahsdY'
-SQLALCHEMY_DATABASE_URI = 'sqlite://'
+SECRET_KEY = "lzlD6LdPmLI6rX-4eEMUeLsIcnkXaDDQYqrAIKahsdY"
+SQLALCHEMY_DATABASE_URI = "sqlite://"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 TESTING = True

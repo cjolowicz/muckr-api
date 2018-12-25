@@ -1,4 +1,4 @@
-'''Defines fixtures available to artist tests.'''
+"""Defines fixtures available to artist tests."""
 import pytest
 
 from tests.artist.factories import ArtistFactory

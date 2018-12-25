@@ -1,4 +1,4 @@
-'''Factories to help in artist tests.'''
+"""Factories to help in artist tests."""
 from factory import Sequence, SubFactory
 
 from muckr.artist.models import Artist
@@ -7,12 +7,12 @@ from tests.user.factories import UserFactory
 
 
 class ArtistFactory(BaseFactory):
-    '''Artist factory.'''
+    """Artist factory."""
 
-    name = Sequence(lambda n: 'artist{0}'.format(n))
+    name = Sequence(lambda n: "artist{0}".format(n))
     user = SubFactory(UserFactory)
 
     class Meta:
-        '''Factory configuration.'''
+        """Factory configuration."""
 
         model = Artist

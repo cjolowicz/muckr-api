@@ -1,4 +1,4 @@
-'''Defines fixtures available to user tests.'''
+"""Defines fixtures available to user tests."""
 import pytest
 
 from tests.user.factories import UserFactory
@@ -13,7 +13,7 @@ def user(database):
 
 @pytest.fixture
 def admin(database):
-    user = UserFactory.create(username='admin')
+    user = UserFactory.create(username="admin")
     user.is_admin = True
     database.session.commit()
     return user

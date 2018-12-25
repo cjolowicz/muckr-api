@@ -1,4 +1,4 @@
-'''Test user authentication.'''
+"""Test user authentication."""
 import random
 
 import flask
@@ -13,12 +13,12 @@ from muckr.user.auth import (
 
 
 @pytest.mark.parametrize(
-    'username, password, result',
+    "username, password, result",
     [
-        (None, 'example', True),
-        ('invalid', 'example', False),
-        (None, 'invalid', False),
-        ('invalid', 'invalid', False),
+        (None, "example", True),
+        ("invalid", "example", False),
+        (None, "invalid", False),
+        ("invalid", "invalid", False),
     ],
 )
 def test_verify_password(user, username, password, result):
@@ -28,13 +28,13 @@ def test_verify_password(user, username, password, result):
     if username == user.username:
         assert flask.g.current_user.id == user.id
     else:
-        assert 'current_user' not in flask.g
+        assert "current_user" not in flask.g
 
 
-@pytest.mark.usefixtures('app')
+@pytest.mark.usefixtures("app")
 def test_basic_auth_error():
     assert basic_auth_error().status_code == 401
-    assert 'error' in basic_auth_error().get_json()
+    assert "error" in basic_auth_error().get_json()
 
 
 def test_verify_token_succeeds_with_valid_token(user):
@@ -43,7 +43,7 @@ def test_verify_token_succeeds_with_valid_token(user):
 
 
 @pytest.mark.parametrize(
-    'token', [None, '', '0' * 64, ''.join(random.choices('0123456789abcdef', k=64))]
+    "token", [None, "", "0" * 64, "".join(random.choices("0123456789abcdef", k=64))]
 )
 def test_verify_token_fails_with_invalid_token(user, token):
     assert not verify_token(token)
@@ -51,7 +51,7 @@ def test_verify_token_fails_with_invalid_token(user, token):
     assert not verify_token(token)
 
 
-@pytest.mark.usefixtures('app')
+@pytest.mark.usefixtures("app")
 def test_token_auth_error():
     assert token_auth_error().status_code == 401
-    assert 'error' in token_auth_error().get_json()
+    assert "error" in token_auth_error().get_json()

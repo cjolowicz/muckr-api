@@ -1,1 +1,1 @@
-'''User tests.'''
+"""User tests."""

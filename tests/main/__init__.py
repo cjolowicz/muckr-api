@@ -1,1 +1,1 @@
-'''Tests for the application root.'''
+"""Tests for the application root."""

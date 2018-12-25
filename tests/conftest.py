@@ -1,4 +1,4 @@
-'''Defines fixtures available to all tests.'''
+"""Defines fixtures available to all tests."""
 import pytest
 
 import muckr.app
@@ -7,7 +7,7 @@ import muckr.extensions
 
 @pytest.fixture
 def app():
-    app = muckr.app.create_app('tests.config')
+    app = muckr.app.create_app("tests.config")
     context = app.test_request_context()
     context.push()
 
