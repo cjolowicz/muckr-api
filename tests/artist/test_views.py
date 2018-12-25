@@ -20,7 +20,7 @@ class TestGetArtists:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(artists).data
+        assert response.get_json() == artists_schema.dump(artists)
 
     def test_get_request_returns_first_page_of_artists_by_default(
         self, client, user, database
@@ -32,7 +32,7 @@ class TestGetArtists:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(artists[:10]).data
+        assert response.get_json() == artists_schema.dump(artists[:10])
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
     def test_get_request_returns_requested_page_of_artists(
@@ -51,7 +51,7 @@ class TestGetArtists:
         window = artists[offset : offset + per_page]
 
         assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(window).data
+        assert response.get_json() == artists_schema.dump(window)
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
     @pytest.mark.parametrize("per_page", [1, 2, 5, 10, 20, 50])
@@ -70,7 +70,7 @@ class TestGetArtists:
         window = artists[offset : offset + per_page]
 
         assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(window).data
+        assert response.get_json() == artists_schema.dump(window)
 
     def test_get_request_for_artists_fails_without_authentication(self, client):
         response = client.get("/artists")
@@ -85,7 +85,7 @@ class TestGetArtist:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == artist_schema.dump(artist).data
+        assert response.get_json() == artist_schema.dump(artist)
 
     def test_get_request_fails_without_authentication(self, artist, client):
         response = client.get("/artists/{id}".format(id=artist.id))
@@ -119,13 +119,14 @@ class TestGetArtist:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == artist_schema.dump(artist).data
+        assert response.get_json() == artist_schema.dump(artist)
 
 
 class TestPostArtist:
     def test_post_request_creates_artist(self, client, user):
         artist = ArtistFactory.build()
-        sent = artist_schema.dump(artist).data
+        sent = artist_schema.dump(artist)
+        del sent["id"]
         response = client.post(
             "/artists",
             data=json.dumps(sent),
@@ -150,7 +151,7 @@ class TestPostArtist:
 
     def test_post_request_fails_without_authentication(self, artist, client):
         artist = ArtistFactory.build()
-        data = artist_schema.dump(artist).data
+        data = artist_schema.dump(artist)
         response = client.post(
             "/artists", data=json.dumps(data), content_type="application/json"
         )
@@ -159,7 +160,8 @@ class TestPostArtist:
     def test_post_request_fails_if_name_exists(self, artist, client):
         name, user = artist.name, artist.user
         artist = ArtistFactory.build(name=name)
-        data = artist_schema.dump(artist).data
+        data = artist_schema.dump(artist)
+        del data["id"]
         response = client.post(
             "/artists",
             data=json.dumps(data),
@@ -171,7 +173,7 @@ class TestPostArtist:
 
     def test_post_request_fails_if_name_is_invalid(self, user, client):
         artist = ArtistFactory.build(name="")
-        data = artist_schema.dump(artist).data
+        data = artist_schema.dump(artist)
         response = client.post(
             "/artists",
             data=json.dumps(data),
@@ -184,7 +186,7 @@ class TestPostArtist:
 
 class TestPutArtist:
     def test_put_request_modifies_name(self, client, artist):
-        original = artist_schema.dump(artist).data
+        original = artist_schema.dump(artist)
         data = {"name": "john"}
         response = client.put(
             "/artists/{id}".format(id=artist.id),
@@ -223,21 +225,18 @@ class TestPutArtist:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == artist_schema.dump(artist).data
+        assert response.get_json() == artist_schema.dump(artist)
 
-    def test_put_request_does_not_modify_id(self, client, artist):
-        original = artist_schema.dump(artist).data
-        data = {"id": 123}
+    def test_put_request_fails_if_id_is_passed(self, client, artist):
         response = client.put(
             "/artists/{id}".format(id=artist.id),
-            data=json.dumps(data),
+            data=json.dumps({"id": 123}),
             content_type="application/json",
             headers=_create_token_auth_header(artist.user.get_token()),
         )
 
-        assert response.status == "200 OK"
-        assert artist.id == original["id"]
-        assert artist.name == original["name"]
+        assert response.status == "422 UNPROCESSABLE ENTITY"
+        assert "id" in response.get_json()["details"]
 
     def test_put_request_returns_modified_artist(self, artist, client):
         original_id = artist.id

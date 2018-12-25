@@ -23,7 +23,7 @@ artists_schema = ArtistSchema(many=True)
 @token_auth.login_required
 def get_artists():
     artists = paginate(flask.g.current_user.artists)
-    data, errors = artists_schema.dump(artists.items)
+    data = artists_schema.dump(artists.items)
 
     return jsonify(data)
 
@@ -34,7 +34,7 @@ def get_artist(id):
     artist = Artist.query.get_or_404(id)
     if artist.user.id != flask.g.current_user.id and not flask.g.current_user.is_admin:
         raise APIError(404)
-    data, errors = artist_schema.dump(artist)
+    data = artist_schema.dump(artist)
 
     return jsonify(data)
 
@@ -45,7 +45,7 @@ def create_artist():
     json = flask.request.get_json() or {}
 
     try:
-        data, errors = artist_schema.load(json)
+        data = artist_schema.load(json)
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
@@ -57,7 +57,7 @@ def create_artist():
     database.session.add(artist)
     database.session.commit()
 
-    data, errors = artist_schema.dump(artist)
+    data = artist_schema.dump(artist)
 
     response = jsonify(data)
     response.status_code = 201
@@ -75,7 +75,7 @@ def update_artist(id):
     json = flask.request.get_json() or {}
 
     try:
-        data, errors = ArtistSchema(partial=True).load(json)
+        data = ArtistSchema(partial=True).load(json)
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
@@ -86,7 +86,7 @@ def update_artist(id):
 
     database.session.commit()
 
-    data, errors = ArtistSchema().dump(artist)
+    data = ArtistSchema().dump(artist)
     return jsonify(data)
 
 

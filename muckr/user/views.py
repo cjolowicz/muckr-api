@@ -25,7 +25,7 @@ def get_users():
     if not flask.g.current_user.is_admin:
         raise APIError(401)
     users = paginate(User.query)
-    data, errors = users_schema.dump(users.items)
+    data = users_schema.dump(users.items)
     return jsonify(data)
 
 
@@ -36,7 +36,7 @@ def get_user(id):
     if user.id != flask.g.current_user.id and not flask.g.current_user.is_admin:
         raise APIError(401)
 
-    data, errors = user_schema.dump(user)
+    data = user_schema.dump(user)
     return jsonify(data)
 
 
@@ -44,7 +44,7 @@ def get_user(id):
 def create_user():
     json = flask.request.get_json() or {}
     try:
-        data, errors = user_schema.load(json)
+        data = user_schema.load(json)
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
@@ -58,7 +58,7 @@ def create_user():
     database.session.add(user)
     database.session.commit()
 
-    data, errors = user_schema.dump(user)
+    data = user_schema.dump(user)
 
     response = jsonify(data)
     response.status_code = 201
@@ -75,7 +75,7 @@ def update_user(id):
 
     json = flask.request.get_json() or {}
     try:
-        data, errors = UserSchema(partial=True).load(json)
+        data = UserSchema(partial=True).load(json)
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
@@ -90,7 +90,7 @@ def update_user(id):
 
     database.session.commit()
 
-    data, errors = UserSchema().dump(user)
+    data = UserSchema().dump(user)
     return jsonify(data)
 
 

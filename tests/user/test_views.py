@@ -33,7 +33,7 @@ class TestGetUsers:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == users_schema.dump(users).data
+        assert response.get_json() == users_schema.dump(users)
 
     def test_get_request_returns_first_page_of_users_by_default(
         self, users, admin, client
@@ -44,7 +44,7 @@ class TestGetUsers:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == users_schema.dump(users[:10]).data
+        assert response.get_json() == users_schema.dump(users[:10])
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
     def test_get_request_returns_requested_page_of_users(
@@ -62,7 +62,7 @@ class TestGetUsers:
         window = users[offset : offset + per_page]
 
         assert response.status == "200 OK"
-        assert response.get_json() == users_schema.dump(window).data
+        assert response.get_json() == users_schema.dump(window)
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
     @pytest.mark.parametrize("per_page", [1, 2, 5, 10, 20, 50])
@@ -80,7 +80,7 @@ class TestGetUsers:
         window = users[offset : offset + per_page]
 
         assert response.status == "200 OK"
-        assert response.get_json() == users_schema.dump(window).data
+        assert response.get_json() == users_schema.dump(window)
 
     def test_get_request_for_users_fails_without_authentication(self, users, client):
         response = client.get("/users")
@@ -101,7 +101,7 @@ class TestGetUser:
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == user_schema.dump(user).data
+        assert response.get_json() == user_schema.dump(user)
 
     def test_get_request_fails_without_authentication(self, user, client):
         response = client.get("/users/{id}".format(id=user.id))
@@ -121,7 +121,7 @@ class TestGetUser:
             headers=_create_token_auth_header(admin.get_token()),
         )
         assert response.status == "200 OK"
-        assert response.get_json() == user_schema.dump(user).data
+        assert response.get_json() == user_schema.dump(user)
 
     def test_get_request_returns_404(self, user, client):
         response = client.get(
@@ -135,8 +135,9 @@ class TestGetUser:
 class TestPostUser:
     def test_post_request_creates_user(self, client):
         user = UserFactory.build()
-        sent = user_schema.dump(user).data
+        sent = user_schema.dump(user)
         sent["password"] = "secret"
+        del sent["id"]
 
         response = client.post(
             "/users", data=json.dumps(sent), content_type="application/json"
@@ -162,9 +163,10 @@ class TestPostUser:
     @pytest.mark.parametrize("attribute", ("username", "email"))
     def test_post_request_fails_if_attribute_exists(self, attribute, user, client):
         user, existing_user = UserFactory.build(), user
-        data = user_schema.dump(user).data
+        data = user_schema.dump(user)
         data[attribute] = getattr(existing_user, attribute)
         data["password"] = "secret"
+        del data["id"]
         response = client.post(
             "/users", data=json.dumps(data), content_type="application/json"
         )
@@ -176,7 +178,7 @@ class TestPostUser:
     )
     def test_post_request_fails_if_attribute_is_invalid(self, client, attribute, value):
         user = UserFactory.build()
-        data = user_schema.dump(user).data
+        data = user_schema.dump(user)
         data[attribute] = value
         data["password"] = "secret"
         response = client.post(
@@ -194,11 +196,10 @@ class TestPutUser:
             {"username": "john"},
             {"email": "john@example.com"},
             {"password": "new-secret"},
-            {"id": 123},
         ],
     )
     def test_put_request_modifies_attributes(self, client, user, data):
-        original = user_schema.dump(user).data
+        original = user_schema.dump(user)
         original["password"] = "example"
         response = client.put(
             "/users/{id}".format(id=user.id),
@@ -215,6 +216,19 @@ class TestPutUser:
                 assert user.check_password(value)
             else:
                 assert getattr(user, key) == value
+
+    def test_put_request_fails_if_id_is_passed(self, client, user):
+        original = user_schema.dump(user)
+        original["password"] = "example"
+        response = client.put(
+            "/users/{id}".format(id=user.id),
+            data=json.dumps({"id": 123}),
+            content_type="application/json",
+            headers=_create_token_auth_header(user.get_token()),
+        )
+
+        assert response.status == "422 UNPROCESSABLE ENTITY"
+        assert "id" in response.get_json()["details"]
 
     def test_put_request_returns_modified_user(self, user, client):
         original_id = user.id

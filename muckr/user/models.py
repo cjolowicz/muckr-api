@@ -60,6 +60,3 @@ class UserSchema(Schema):
     username = fields.Str(required=True, validate=Length(min=1))
     email = fields.Email(required=True)
     password = fields.Str(load_only=True, required=True)
-
-    class Meta:
-        strict = True

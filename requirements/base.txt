@@ -130,9 +130,9 @@ markupsafe==1.1.0 \
     --hash=sha256:f82e347a72f955b7017a39708a3667f106e6ad4d10b25f237396a7115d8ed5fd \
     --hash=sha256:fb7c206e01ad85ce57feeaaa0bf784b97fa3cad0d4a5737bc5295785f5c613a1 \
     # via jinja2, mako
-marshmallow==2.16.3 \
-    --hash=sha256:a2052f62b18f6dad520f465e437f63ab8812423975d48b9ebd30a735466e782a \
-    --hash=sha256:e1b79eb3b815b49918c64114dda691b8767b48a1f66dd1d8c0cd5842b74257c2
+marshmallow==3.0.0rc1 \
+    --hash=sha256:7adba78acbce1a812185ab8139d2c80223387d751f8c558d53eceb8aecf7cae5 \
+    --hash=sha256:9aa50624253e654ae97a22854e37287042911c15fb23932be357e56df33c2d51
 psycopg2-binary==2.7.6.1 \
     --hash=sha256:036bcb198a7cc4ce0fe43344f8c2c9a8155aefa411633f426c8c6ed58a6c0426 \
     --hash=sha256:1d770fcc02cdf628aebac7404d56b28a7e9ebec8cfc0e63260bd54d6edfa16d4 \

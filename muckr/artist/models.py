@@ -19,6 +19,3 @@ class Artist(db.Model):
 class ArtistSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.Str(required=True, validate=Length(min=1, max=128))
-
-    class Meta:
-        strict = True
