@@ -1,4 +1,4 @@
-"""artists belong to users"""
+"""Create foreign key artists.user_id."""
 
 from alembic import op
 import sqlalchemy as sa

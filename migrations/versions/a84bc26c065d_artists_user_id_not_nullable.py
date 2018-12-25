@@ -1,4 +1,4 @@
-"""artists.user_id not nullable"""
+"""Make column artists.user_id NOT NULL."""
 
 from alembic import op
 import sqlalchemy as sa

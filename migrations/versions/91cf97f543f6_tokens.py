@@ -1,4 +1,4 @@
-"""tokens"""
+"""Create columns users.tokens and users.token_expiration."""
 
 from alembic import op
 import sqlalchemy as sa

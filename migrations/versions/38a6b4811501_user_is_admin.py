@@ -1,4 +1,4 @@
-"""user.is_admin"""
+"""Create column users.is_admin."""
 
 from alembic import op
 import sqlalchemy as sa

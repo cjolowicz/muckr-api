@@ -1,4 +1,4 @@
-"""artists"""
+"""Create table artists."""
 
 from alembic import op
 import sqlalchemy as sa

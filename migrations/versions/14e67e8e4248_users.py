@@ -1,4 +1,4 @@
-"""users"""
+"""Create table user."""
 
 from alembic import op
 import sqlalchemy as sa

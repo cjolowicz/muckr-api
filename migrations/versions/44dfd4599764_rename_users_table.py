@@ -1,4 +1,4 @@
-"""Rename users table."""
+"""Rename table user to users."""
 
 from alembic import op
 import sqlalchemy as sa
