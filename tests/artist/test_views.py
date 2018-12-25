@@ -11,13 +11,12 @@ from tests.utils import create_token_auth_header
 
 class TestGetArtists:
     def test_get_request_returns_list_of_artists(self, artist, client):
-        artists = [artist]
         response = client.get(
             "/artists", headers=create_token_auth_header(artist.user.get_token())
         )
 
         assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(artists)
+        assert response.get_json() == artists_schema.dump([artist])
 
     def test_get_request_returns_first_page_of_artists_by_default(
         self, client, user, database
