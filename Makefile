@@ -21,6 +21,9 @@ install:
 	    --requirement requirements/base.txt \
 	    --requirement requirements/dev.txt
 
+black:
+	black muckr tests setup.py wsgi.py migrations
+
 test:
 	python -m flake8 muckr tests setup.py wsgi.py migrations
 	env FLASK_DEBUG=0 python -m pytest tests --cov=muckr --cov-report=term-missing
