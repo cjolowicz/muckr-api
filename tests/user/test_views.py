@@ -18,7 +18,7 @@ class TestGetUsers:
             "/users", headers=create_token_auth_header(admin.get_token())
         )
 
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert response.get_json() == users_schema.dump(users)
 
     def test_get_request_returns_first_page_of_users_by_default(
@@ -29,7 +29,7 @@ class TestGetUsers:
             "/users", headers=create_token_auth_header(admin.get_token())
         )
 
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert response.get_json() == users_schema.dump(users[:10])
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
@@ -47,7 +47,7 @@ class TestGetUsers:
         offset = per_page * (page - 1)
         window = users[offset : offset + per_page]
 
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert response.get_json() == users_schema.dump(window)
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
@@ -65,18 +65,18 @@ class TestGetUsers:
         offset = per_page * (page - 1)
         window = users[offset : offset + per_page]
 
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert response.get_json() == users_schema.dump(window)
 
     def test_get_request_for_users_fails_without_authentication(self, users, client):
         response = client.get("/users")
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_get_request_for_users_fails_without_admin_status(self, users, client):
         response = client.get(
             "/users", headers=create_token_auth_header(users[0].get_token())
         )
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
 
 class TestGetUser:
@@ -86,12 +86,12 @@ class TestGetUser:
             headers=create_token_auth_header(user.get_token()),
         )
 
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert response.get_json() == user_schema.dump(user)
 
     def test_get_request_fails_without_authentication(self, user, client):
         response = client.get("/users/{id}".format(id=user.id))
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_get_request_fails_for_another_user(self, users, client):
         user, user2 = users[:2]
@@ -99,14 +99,14 @@ class TestGetUser:
             "/users/{id}".format(id=user2.id),
             headers=create_token_auth_header(user.get_token()),
         )
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_get_request_by_admin_succeeds_for_another_user(self, admin, user, client):
         response = client.get(
             "/users/{id}".format(id=user.id),
             headers=create_token_auth_header(admin.get_token()),
         )
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert response.get_json() == user_schema.dump(user)
 
     def test_get_request_returns_404(self, user, client):
@@ -114,7 +114,7 @@ class TestGetUser:
             "/users/2", headers=create_token_auth_header(user.get_token())
         )
 
-        assert response.status == "404 NOT FOUND"
+        assert response.status_code == 404
         assert response.get_json() == {"error": "Not Found"}
 
 
@@ -129,7 +129,7 @@ class TestPostUser:
             "/users", data=json.dumps(sent), content_type="application/json"
         )
 
-        assert response.status == "201 CREATED"
+        assert response.status_code == 201
 
         recv = response.get_json()
 
@@ -156,7 +156,7 @@ class TestPostUser:
         response = client.post(
             "/users", data=json.dumps(data), content_type="application/json"
         )
-        assert response.status == "400 BAD REQUEST"
+        assert response.status_code == 400
         assert attribute in response.get_json()["details"]
 
     @pytest.mark.parametrize(
@@ -170,7 +170,7 @@ class TestPostUser:
         response = client.post(
             "/users", data=json.dumps(data), content_type="application/json"
         )
-        assert response.status == "422 UNPROCESSABLE ENTITY"
+        assert response.status_code == 422
         assert attribute in response.get_json()["details"]
 
 
@@ -194,7 +194,7 @@ class TestPutUser:
             headers=create_token_auth_header(user.get_token()),
         )
 
-        assert response.status == "200 OK"
+        assert response.status_code == 200
 
         for key in ["id", "username", "email", "password"]:
             value = data[key] if key in data and key != "id" else original[key]
@@ -213,7 +213,7 @@ class TestPutUser:
             headers=create_token_auth_header(user.get_token()),
         )
 
-        assert response.status == "422 UNPROCESSABLE ENTITY"
+        assert response.status_code == 422
         assert "id" in response.get_json()["details"]
 
     def test_put_request_returns_modified_user(self, user, client):
@@ -238,7 +238,7 @@ class TestPutUser:
             data=json.dumps({"email": "john@example.com"}),
             content_type="application/json",
         )
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_put_request_fails_for_another_user(self, users, client):
         user, user2 = users[:2]
@@ -248,7 +248,7 @@ class TestPutUser:
             content_type="application/json",
             headers=create_token_auth_header(user.get_token()),
         )
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_put_request_by_admin_succeeds_for_another_user(self, admin, user, client):
         response = client.put(
@@ -257,7 +257,7 @@ class TestPutUser:
             content_type="application/json",
             headers=create_token_auth_header(admin.get_token()),
         )
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert user.email == "john@example.com"
 
     @pytest.mark.parametrize("attribute", ("username", "email"))
@@ -270,7 +270,7 @@ class TestPutUser:
             content_type="application/json",
             headers=create_token_auth_header(user.get_token()),
         )
-        assert response.status == "400 BAD REQUEST"
+        assert response.status_code == 400
         assert attribute in response.get_json()["details"]
 
     @pytest.mark.parametrize("attribute", ("username", "email"))
@@ -284,7 +284,7 @@ class TestPutUser:
             content_type="application/json",
             headers=create_token_auth_header(user.get_token()),
         )
-        assert response.status == "200 OK"
+        assert response.status_code == 200
         assert getattr(User.query.get(user.id), attribute) == value
 
     @pytest.mark.parametrize(
@@ -299,7 +299,7 @@ class TestPutUser:
             content_type="application/json",
             headers=create_token_auth_header(user.get_token()),
         )
-        assert response.status == "422 UNPROCESSABLE ENTITY"
+        assert response.status_code == 422
         assert attribute in response.get_json()["details"]
 
 
@@ -310,13 +310,13 @@ class TestDeleteUser:
             headers=create_token_auth_header(user.get_token()),
         )
 
-        assert response.status == "204 NO CONTENT"
+        assert response.status_code == 204
         assert response.data == b""
         assert User.query.get(user.id) is None
 
     def test_delete_request_fails_without_authentication(self, user, client):
         response = client.delete("/users/{id}".format(id=user.id))
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_delete_request_fails_for_another_user(self, users, client):
         user, user2 = users[:2]
@@ -324,7 +324,7 @@ class TestDeleteUser:
             "/users/{id}".format(id=user2.id),
             headers=create_token_auth_header(user.get_token()),
         )
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
 
     def test_delete_request_by_admin_succeeds_for_another_user(
         self, admin, user, client
@@ -333,7 +333,7 @@ class TestDeleteUser:
             "/users/{id}".format(id=user.id),
             headers=create_token_auth_header(admin.get_token()),
         )
-        assert response.status == "204 NO CONTENT"
+        assert response.status_code == 204
         assert User.query.get(user.id) is None
 
 
@@ -348,7 +348,7 @@ class TestPostToken:
 
         database.session.refresh(user)
 
-        assert response.status == "201 CREATED"
+        assert response.status_code == 201
         assert response.get_json()["token"] == user.token
         assert user.check_token(user.token) is user
 
@@ -359,7 +359,7 @@ class TestPostToken:
 
         database.session.refresh(user)
 
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
         assert "error" in response.get_json()
         assert user.token is None
 
@@ -377,7 +377,7 @@ class TestDeleteToken:
 
         response = client.delete("/tokens", headers=create_token_auth_header(token))
 
-        assert response.status == "204 NO CONTENT"
+        assert response.status_code == 204
         assert response.data == b""
         assert user.check_token(token) is None
 
@@ -388,5 +388,5 @@ class TestDeleteToken:
         user.get_token()
         response = client.delete("/tokens", headers=create_token_auth_header(token))
 
-        assert response.status == "401 UNAUTHORIZED"
+        assert response.status_code == 401
         assert user.check_token(user.token) is not None
