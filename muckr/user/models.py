@@ -59,7 +59,7 @@ class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.Str(required=True, validate=Length(min=1))
     email = fields.Email(required=True)
-    password = fields.Function(load_only=True, required=True)
+    password = fields.Str(load_only=True, required=True)
 
     class Meta:
         strict = True
