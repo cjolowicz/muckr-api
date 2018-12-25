@@ -44,7 +44,7 @@ heroku-adminpassword:
 	heroku config:set --app=$(app) ADMIN_PASSWORD=$$(python -c 'import secrets; print(secrets.token_urlsafe())')
 
 heroku-db-upgrade:
-	heroku run --app=$(app) muckr-service flask db upgrade
+	heroku run --app=$(app) flask db upgrade
 
 travis-install: install
 
