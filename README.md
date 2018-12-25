@@ -70,6 +70,12 @@ Install the development requirements as follows:
 make install
 ```
 
+Reformat your changes before committing:
+
+```sh
+make black
+```
+
 ## Testing
 
 The test suite is located under [tests](tests) and uses
