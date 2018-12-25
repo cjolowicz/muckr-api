@@ -1,4 +1,4 @@
-'''The app module, containing the app factory function.'''
+"""The app module, containing the app factory function."""
 import importlib
 
 import flask
@@ -12,11 +12,11 @@ import muckr.main.views
 import muckr.user.views
 
 
-def create_app(config_object='muckr.config'):
+def create_app(config_object="muckr.config"):
     app = flask.Flask(__name__)
     app.config.from_object(config_object)
 
-    app.logger.info('muckr-service {version}'.format(version=muckr.__version__))
+    app.logger.info("muckr-service {version}".format(version=muckr.__version__))
 
     register_extensions(app)
     register_blueprints(app)
@@ -47,7 +47,7 @@ def register_errorhandlers(app):
 
 
 def _import(name):
-    module, attribute = name.rsplit('.', 1)
+    module, attribute = name.rsplit(".", 1)
     value = getattr(importlib.import_module(module), attribute)
     return attribute, value
 
@@ -57,7 +57,7 @@ def register_shellcontext(app):
     def shell_context():
         return dict(
             _import(name)
-            for name in ['muckr.extensions.database', 'muckr.user.models.User']
+            for name in ["muckr.extensions.database", "muckr.user.models.User"]
         )
 
 

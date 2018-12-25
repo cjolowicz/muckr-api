@@ -1,4 +1,4 @@
-'''User authentication.'''
+"""User authentication."""
 import flask
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 

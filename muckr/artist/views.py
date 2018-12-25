@@ -1,4 +1,4 @@
-'''Artist views.'''
+"""Artist views."""
 import flask
 from marshmallow import ValidationError
 
@@ -14,12 +14,12 @@ from muckr.utils import (
 )
 
 
-blueprint = flask.Blueprint('artist', __name__)
+blueprint = flask.Blueprint("artist", __name__)
 artist_schema = ArtistSchema()
 artists_schema = ArtistSchema(many=True)
 
 
-@blueprint.route('/artists', methods=['GET'])
+@blueprint.route("/artists", methods=["GET"])
 @token_auth.login_required
 def get_artists():
     artists = paginate(flask.g.current_user.artists)
@@ -28,7 +28,7 @@ def get_artists():
     return jsonify(data)
 
 
-@blueprint.route('/artists/<int:id>', methods=['GET'])
+@blueprint.route("/artists/<int:id>", methods=["GET"])
 @token_auth.login_required
 def get_artist(id):
     artist = Artist.query.get_or_404(id)
@@ -39,7 +39,7 @@ def get_artist(id):
     return jsonify(data)
 
 
-@blueprint.route('/artists', methods=['POST'])
+@blueprint.route("/artists", methods=["POST"])
 @token_auth.login_required
 def create_artist():
     json = flask.request.get_json() or {}
@@ -49,7 +49,7 @@ def create_artist():
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_create(flask.g.current_user.artists, data, ['name'])
+    check_unique_on_create(flask.g.current_user.artists, data, ["name"])
 
     artist = Artist(**data)
     artist.user = flask.g.current_user
@@ -61,11 +61,11 @@ def create_artist():
 
     response = jsonify(data)
     response.status_code = 201
-    response.headers['Location'] = flask.url_for('artist.get_artist', id=artist.id)
+    response.headers["Location"] = flask.url_for("artist.get_artist", id=artist.id)
     return response
 
 
-@blueprint.route('/artists/<int:id>', methods=['PUT'])
+@blueprint.route("/artists/<int:id>", methods=["PUT"])
 @token_auth.login_required
 def update_artist(id):
     artist = Artist.query.get_or_404(id)
@@ -79,7 +79,7 @@ def update_artist(id):
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_update(flask.g.current_user.artists, artist, data, ['name'])
+    check_unique_on_update(flask.g.current_user.artists, artist, data, ["name"])
 
     for key, value in data.items():
         setattr(artist, key, value)
@@ -90,7 +90,7 @@ def update_artist(id):
     return jsonify(data)
 
 
-@blueprint.route('/artists/<int:id>', methods=['DELETE'])
+@blueprint.route("/artists/<int:id>", methods=["DELETE"])
 @token_auth.login_required
 def delete_artist(id):
     artist = Artist.query.get_or_404(id)

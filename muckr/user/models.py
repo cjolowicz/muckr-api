@@ -1,4 +1,4 @@
-'''User models.'''
+"""User models."""
 import secrets
 from datetime import datetime, timedelta
 
@@ -10,7 +10,7 @@ from muckr.extensions import database as db
 
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -19,14 +19,14 @@ class User(db.Model):
     token = db.Column(db.String(64), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     is_admin = db.Column(db.Boolean, default=False)
-    artists = db.relationship('Artist', backref='user', lazy='dynamic')
+    artists = db.relationship("Artist", backref="user", lazy="dynamic")
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return "<User {}>".format(self.username)
 
     def set_password(self, password):
         data = bcrypt.generate_password_hash(password)
-        self.password_hash = data.decode('utf-8')
+        self.password_hash = data.decode("utf-8")
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)

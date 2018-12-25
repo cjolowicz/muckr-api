@@ -1,4 +1,4 @@
-'''Common utilities'''
+"""Common utilities"""
 import flask
 
 from muckr.errors import APIError
@@ -6,14 +6,14 @@ from muckr.errors import APIError
 
 def jsonify(data):
     response = flask.jsonify(data)
-    response.mimetype = 'application/json'
+    response.mimetype = "application/json"
     return response
 
 
 def check_unique(query, key, value):
     condition = {key: value}
     if query.filter_by(**condition).first():
-        message = 'please use a different {key}'.format(key=key)
+        message = "please use a different {key}".format(key=key)
         raise APIError(400, message=message, details={key: message})
 
 
@@ -29,6 +29,6 @@ def check_unique_on_update(query, model, data, keys):
 
 
 def paginate(query):
-    page = flask.request.args.get('page', 1, type=int)
-    per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
+    page = flask.request.args.get("page", 1, type=int)
+    per_page = min(flask.request.args.get("per_page", 10, type=int), 100)
     return query.paginate(page, per_page, False)

@@ -1,4 +1,4 @@
-'''User views.'''
+"""User views."""
 import flask
 from marshmallow import ValidationError
 
@@ -14,12 +14,12 @@ from muckr.utils import (
 )
 
 
-blueprint = flask.Blueprint('user', __name__)
+blueprint = flask.Blueprint("user", __name__)
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
 
-@blueprint.route('/users', methods=['GET'])
+@blueprint.route("/users", methods=["GET"])
 @token_auth.login_required
 def get_users():
     if not flask.g.current_user.is_admin:
@@ -29,7 +29,7 @@ def get_users():
     return jsonify(data)
 
 
-@blueprint.route('/users/<int:id>', methods=['GET'])
+@blueprint.route("/users/<int:id>", methods=["GET"])
 @token_auth.login_required
 def get_user(id):
     user = User.query.get_or_404(id)
@@ -40,7 +40,7 @@ def get_user(id):
     return jsonify(data)
 
 
-@blueprint.route('/users', methods=['POST'])
+@blueprint.route("/users", methods=["POST"])
 def create_user():
     json = flask.request.get_json() or {}
     try:
@@ -48,9 +48,9 @@ def create_user():
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_create(User.query, data, ['username', 'email'])
+    check_unique_on_create(User.query, data, ["username", "email"])
 
-    password = data.pop('password', None)
+    password = data.pop("password", None)
     user = User(**data)
     if password is not None:
         user.set_password(password)
@@ -62,11 +62,11 @@ def create_user():
 
     response = jsonify(data)
     response.status_code = 201
-    response.headers['Location'] = flask.url_for('user.get_user', id=user.id)
+    response.headers["Location"] = flask.url_for("user.get_user", id=user.id)
     return response
 
 
-@blueprint.route('/users/<int:id>', methods=['PUT'])
+@blueprint.route("/users/<int:id>", methods=["PUT"])
 @token_auth.login_required
 def update_user(id):
     user = User.query.get_or_404(id)
@@ -79,9 +79,9 @@ def update_user(id):
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_update(User.query, user, data, ['username', 'email'])
+    check_unique_on_update(User.query, user, data, ["username", "email"])
 
-    password = data.pop('password', None)
+    password = data.pop("password", None)
     if password is not None:
         user.set_password(password)
 
@@ -94,7 +94,7 @@ def update_user(id):
     return jsonify(data)
 
 
-@blueprint.route('/users/<int:id>', methods=['DELETE'])
+@blueprint.route("/users/<int:id>", methods=["DELETE"])
 @token_auth.login_required
 def delete_user(id):
     user = User.query.get_or_404(id)
@@ -107,15 +107,15 @@ def delete_user(id):
     return jsonify({}), 204
 
 
-@blueprint.route('/tokens', methods=['POST'])
+@blueprint.route("/tokens", methods=["POST"])
 @basic_auth.login_required
 def create_token():
     token = flask.g.current_user.get_token()
     database.session.commit()
-    return jsonify({'token': token}), 201
+    return jsonify({"token": token}), 201
 
 
-@blueprint.route('/tokens', methods=['DELETE'])
+@blueprint.route("/tokens", methods=["DELETE"])
 @token_auth.login_required
 def delete_token():
     flask.g.current_user.revoke_token()
