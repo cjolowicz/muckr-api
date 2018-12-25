@@ -16,8 +16,7 @@ def create_app(config_object='muckr.config'):
     app = flask.Flask(__name__)
     app.config.from_object(config_object)
 
-    app.logger.info('muckr-service {version}'.format(
-        version=muckr.__version__))
+    app.logger.info('muckr-service {version}'.format(version=muckr.__version__))
 
     register_extensions(app)
     register_blueprints(app)
@@ -56,10 +55,10 @@ def _import(name):
 def register_shellcontext(app):
     @app.shell_context_processor
     def shell_context():
-        return dict(_import(name) for name in [
-            'muckr.extensions.database',
-            'muckr.user.models.User',
-        ])
+        return dict(
+            _import(name)
+            for name in ['muckr.extensions.database', 'muckr.user.models.User']
+        )
 
 
 def register_commands(app):

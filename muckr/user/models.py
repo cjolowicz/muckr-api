@@ -47,8 +47,11 @@ class User(db.Model):
     @staticmethod
     def check_token(token):
         user = User.query.filter_by(token=token).first()
-        if user is not None and user.token_expiration is not None and \
-                user.token_expiration > datetime.utcnow():
+        if (
+            user is not None
+            and user.token_expiration is not None
+            and user.token_expiration > datetime.utcnow()
+        ):
             return user
 
 

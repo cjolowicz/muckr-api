@@ -61,8 +61,7 @@ def create_artist():
 
     response = jsonify(data)
     response.status_code = 201
-    response.headers['Location'] = flask.url_for(
-        'artist.get_artist', id=artist.id)
+    response.headers['Location'] = flask.url_for('artist.get_artist', id=artist.id)
     return response
 
 
@@ -80,8 +79,7 @@ def update_artist(id):
     except ValidationError as error:
         raise APIError(422, details=error.messages)
 
-    check_unique_on_update(
-        flask.g.current_user.artists, artist, data, ['name'])
+    check_unique_on_update(flask.g.current_user.artists, artist, data, ['name'])
 
     for key, value in data.items():
         setattr(artist, key, value)
