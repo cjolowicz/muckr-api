@@ -6,7 +6,12 @@ from muckr.errors import APIError
 from muckr.extensions import database
 from muckr.user.auth import token_auth
 from muckr.artist.models import Artist, ArtistSchema
-from muckr.utils import jsonify, check_unique_on_create, check_unique_on_update
+from muckr.utils import (
+    check_unique_on_create,
+    check_unique_on_update,
+    jsonify,
+    paginate,
+)
 
 
 blueprint = flask.Blueprint('artist', __name__)
@@ -17,9 +22,7 @@ artists_schema = ArtistSchema(many=True)
 @blueprint.route('/artists', methods=['GET'])
 @token_auth.login_required
 def get_artists():
-    page = flask.request.args.get('page', 1, type=int)
-    per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
-    artists = flask.g.current_user.artists.paginate(page, per_page, False)
+    artists = paginate(flask.g.current_user.artists)
     data, errors = artists_schema.dump(artists.items)
 
     return jsonify(data)

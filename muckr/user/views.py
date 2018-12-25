@@ -6,7 +6,12 @@ from muckr.errors import APIError
 from muckr.extensions import database
 from muckr.user.auth import basic_auth, token_auth
 from muckr.user.models import User, UserSchema
-from muckr.utils import jsonify, check_unique_on_create, check_unique_on_update
+from muckr.utils import (
+    check_unique_on_create,
+    check_unique_on_update,
+    jsonify,
+    paginate,
+)
 
 
 blueprint = flask.Blueprint('user', __name__)
@@ -19,9 +24,7 @@ users_schema = UserSchema(many=True)
 def get_users():
     if not flask.g.current_user.is_admin:
         raise APIError(401)
-    page = flask.request.args.get('page', 1, type=int)
-    per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
-    users = User.query.paginate(page, per_page, False)
+    users = paginate(User.query)
     data, errors = users_schema.dump(users.items)
     return jsonify(data)
 

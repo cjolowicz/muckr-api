@@ -26,3 +26,9 @@ def check_unique_on_update(query, model, data, keys):
     for key in keys:
         if key in data and data[key] != getattr(model, key):
             check_unique(query, key, data[key])
+
+
+def paginate(query):
+    page = flask.request.args.get('page', 1, type=int)
+    per_page = min(flask.request.args.get('per_page', 10, type=int), 100)
+    return query.paginate(page, per_page, False)
