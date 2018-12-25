@@ -8,18 +8,17 @@ from muckr.user.models import User
 from muckr.user.views import user_schema, users_schema
 
 from tests.user.factories import UserFactory
-from tests.utils import create_basic_auth_header, create_token_auth_header
+from tests.utils import (
+    assert_get_request_returns_json,
+    create_basic_auth_header,
+    create_token_auth_header,
+)
 
 
 class TestGetUsers:
     def test_get_request_returns_list_of_users(self, user, admin, client):
-        users = [user, admin]
-        response = client.get(
-            "/users", headers=create_token_auth_header(admin.get_token())
-        )
-
-        assert response.status == "200 OK"
-        assert response.get_json() == users_schema.dump(users)
+        json = users_schema.dump([user, admin])
+        assert_get_request_returns_json(client, "/users", admin.get_token(), json)
 
     def test_get_request_returns_first_page_of_users_by_default(
         self, users, admin, client

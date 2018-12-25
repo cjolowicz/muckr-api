@@ -6,29 +6,24 @@ from muckr.artist.models import Artist
 from muckr.artist.views import artist_schema, artists_schema
 
 from tests.artist.factories import ArtistFactory
-from tests.utils import create_token_auth_header
+from tests.utils import create_token_auth_header, assert_get_request_returns_json
 
 
 class TestGetArtists:
-    def test_get_request_returns_list_of_artists(self, artist, client):
-        response = client.get(
-            "/artists", headers=create_token_auth_header(artist.user.get_token())
+    def test_get_request_returns_list_of_artists(self, client, artist):
+        json = artists_schema.dump([artist])
+        assert_get_request_returns_json(
+            client, "/artists", artist.user.get_token(), json
         )
-
-        assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump([artist])
 
     def test_get_request_returns_first_page_of_artists_by_default(
         self, client, user, database
     ):
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
-        response = client.get(
-            "/artists", headers=create_token_auth_header(user.get_token())
-        )
 
-        assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(artists[:10])
+        json = artists_schema.dump(artists[:10])
+        assert_get_request_returns_json(client, "/artists", user.get_token(), json)
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
     def test_get_request_returns_requested_page_of_artists(
@@ -36,18 +31,17 @@ class TestGetArtists:
     ):
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
-        response = client.get(
-            "/artists",
-            query_string={"page": page},
-            headers=create_token_auth_header(user.get_token()),
-        )
 
         per_page = 10
         offset = per_page * (page - 1)
         window = artists[offset : offset + per_page]
 
-        assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(window)
+        json = artists_schema.dump(window)
+        query_string = {"page": page}
+
+        assert_get_request_returns_json(
+            client, "/artists", user.get_token(), json, query_string=query_string
+        )
 
     @pytest.mark.parametrize("page", [1, 2, 3, 4])
     @pytest.mark.parametrize("per_page", [1, 2, 5, 10, 20, 50])
@@ -56,17 +50,16 @@ class TestGetArtists:
     ):
         artists = ArtistFactory.create_batch(25, user=user)
         database.session.commit()
-        response = client.get(
-            "/artists",
-            query_string={"page": page, "per_page": per_page},
-            headers=create_token_auth_header(user.get_token()),
-        )
 
         offset = per_page * (page - 1)
         window = artists[offset : offset + per_page]
 
-        assert response.status == "200 OK"
-        assert response.get_json() == artists_schema.dump(window)
+        json = artists_schema.dump(window)
+        query_string = {"page": page, "per_page": per_page}
+
+        assert_get_request_returns_json(
+            client, "/artists", user.get_token(), json, query_string=query_string
+        )
 
     def test_get_request_for_artists_fails_without_authentication(self, client):
         response = client.get("/artists")
@@ -75,13 +68,12 @@ class TestGetArtists:
 
 class TestGetArtist:
     def test_get_request_returns_artist(self, artist, client):
-        response = client.get(
+        assert_get_request_returns_json(
+            client,
             "/artists/{id}".format(id=artist.id),
-            headers=create_token_auth_header(artist.user.get_token()),
+            artist.user.get_token(),
+            artist_schema.dump(artist),
         )
-
-        assert response.status == "200 OK"
-        assert response.get_json() == artist_schema.dump(artist)
 
     def test_get_request_fails_without_authentication(self, artist, client):
         response = client.get("/artists/{id}".format(id=artist.id))
