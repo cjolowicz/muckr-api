@@ -1,9 +1,4 @@
-"""artists belong to users
-
-Revision ID: 97089ffc8c1f
-Revises: 457d6ca5ae88
-Create Date: 2018-12-23 14:49:28.347766
-"""
+"""artists belong to users"""
 
 from alembic import op
 import sqlalchemy as sa

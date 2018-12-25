@@ -1,9 +1,4 @@
-"""users
-
-Revision ID: 14e67e8e4248
-Revises:
-Create Date: 2018-10-15 22:15:29.598764
-"""
+"""users"""
 
 from alembic import op
 import sqlalchemy as sa

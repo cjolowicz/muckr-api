@@ -1,9 +1,4 @@
-"""artists
-
-Revision ID: 457d6ca5ae88
-Revises: 38a6b4811501
-Create Date: 2018-12-23 13:53:45.477425
-"""
+"""artists"""
 
 from alembic import op
 import sqlalchemy as sa

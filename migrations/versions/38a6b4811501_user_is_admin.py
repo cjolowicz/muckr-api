@@ -1,9 +1,4 @@
-"""user.is_admin
-
-Revision ID: 38a6b4811501
-Revises: 91cf97f543f6
-Create Date: 2018-10-19 18:51:28.728578
-"""
+"""user.is_admin"""
 
 from alembic import op
 import sqlalchemy as sa

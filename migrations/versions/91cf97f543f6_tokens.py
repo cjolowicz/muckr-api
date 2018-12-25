@@ -1,9 +1,4 @@
-"""tokens
-
-Revision ID: 91cf97f543f6
-Revises: 44dfd4599764
-Create Date: 2018-10-19 18:23:59.423989
-"""
+"""tokens"""
 
 from alembic import op
 import sqlalchemy as sa

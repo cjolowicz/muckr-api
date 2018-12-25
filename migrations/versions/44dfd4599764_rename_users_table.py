@@ -1,9 +1,4 @@
-"""Rename users table.
-
-Revision ID: 44dfd4599764
-Revises: 14e67e8e4248
-Create Date: 2018-10-18 15:09:23.624967
-"""
+"""Rename users table."""
 
 from alembic import op
 import sqlalchemy as sa
