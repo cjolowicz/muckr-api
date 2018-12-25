@@ -16,8 +16,14 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('users', sa.Column('is_admin', sa.Boolean(), nullable=True))
+    op.add_column(
+        'users',
+        sa.Column('is_admin', sa.Boolean(), nullable=True),
+    )
 
 
 def downgrade():
-    op.drop_column('users', 'is_admin')
+    op.drop_column(
+        'users',
+        'is_admin',
+    )

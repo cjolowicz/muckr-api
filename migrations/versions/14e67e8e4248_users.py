@@ -22,14 +22,33 @@ def upgrade():
         sa.Column('username', sa.String(length=64), nullable=True),
         sa.Column('email', sa.String(length=120), nullable=True),
         sa.Column('password_hash', sa.String(length=128), nullable=True),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
     )
-    op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
-    op.create_index(op.f('ix_user_username'), 'user', ['username'],
-                    unique=True)
+
+    op.create_index(
+        op.f('ix_user_email'),
+        'user',
+        ['email'],
+        unique=True,
+    )
+
+    op.create_index(
+        op.f('ix_user_username'),
+        'user',
+        ['username'],
+        unique=True,
+    )
 
 
 def downgrade():
-    op.drop_index(op.f('ix_user_username'), table_name='user')
-    op.drop_index(op.f('ix_user_email'), table_name='user')
+    op.drop_index(
+        op.f('ix_user_username'),
+        table_name='user',
+    )
+
+    op.drop_index(
+        op.f('ix_user_email'),
+        table_name='user',
+    )
+
     op.drop_table('user')

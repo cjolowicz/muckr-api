@@ -5,7 +5,7 @@ Revises: 97089ffc8c1f
 Create Date: 2018-12-25 11:14:06.151643
 """
 
-import alembic.op
+from alembic import op
 import sqlalchemy as sa
 
 
@@ -16,7 +16,7 @@ depends_on = None
 
 
 def upgrade():
-    alembic.op.alter_column(
+    op.alter_column(
         'artists',
         'user_id',
         existing_type=sa.INTEGER(),
@@ -25,7 +25,7 @@ def upgrade():
 
 
 def downgrade():
-    alembic.op.alter_column(
+    op.alter_column(
         'artists',
         'user_id',
         existing_type=sa.INTEGER(),

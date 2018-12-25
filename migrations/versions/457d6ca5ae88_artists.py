@@ -22,9 +22,19 @@ def upgrade():
         sa.Column('name', sa.String(length=128), nullable=True),
         sa.PrimaryKeyConstraint('id'),
     )
-    op.create_index(op.f('ix_artists_name'), 'artists', ['name'], unique=False)
+
+    op.create_index(
+        op.f('ix_artists_name'),
+        'artists',
+        ['name'],
+        unique=False,
+    )
 
 
 def downgrade():
-    op.drop_index(op.f('ix_artists_name'), table_name='artists')
+    op.drop_index(
+        op.f('ix_artists_name'),
+        table_name='artists',
+    )
+
     op.drop_table('artists')

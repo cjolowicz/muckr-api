@@ -16,10 +16,28 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('artists', sa.Column('user_id', sa.Integer(), nullable=True))
-    op.create_foreign_key(None, 'artists', 'users', ['user_id'], ['id'])
+    op.add_column(
+        'artists',
+        sa.Column('user_id', sa.Integer(), nullable=True),
+    )
+
+    op.create_foreign_key(
+        None,
+        'artists',
+        'users',
+        ['user_id'],
+        ['id'],
+    )
 
 
 def downgrade():
-    op.drop_constraint(None, 'artists', type_='foreignkey')
-    op.drop_column('artists', 'user_id')
+    op.drop_constraint(
+        None,
+        'artists',
+        type_='foreignkey',
+    )
+
+    op.drop_column(
+        'artists',
+        'user_id',
+    )
