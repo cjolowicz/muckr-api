@@ -110,6 +110,17 @@ class TestGetArtist:
         assert response.status == "404 NOT FOUND"
         assert response.get_json() == {"error": "Not Found"}
 
+    def test_get_request_succeeds_for_artist_of_another_user_if_admin(
+        self, client, artist, admin
+    ):
+        response = client.get(
+            "/artists/{id}".format(id=artist.id),
+            headers=_create_token_auth_header(admin.get_token()),
+        )
+
+        assert response.status == "200 OK"
+        assert response.get_json() == artist_schema.dump(artist).data
+
 
 class TestPostArtist:
     def test_post_request_creates_artist(self, client, user):
