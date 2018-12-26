@@ -38,6 +38,10 @@ This package defines a web service using the
 - The main views are defined in
   [muckr.main.views](muckr/main/views.py). This is currently a
   placeholder.
+- The artist model is defined in
+  [muckr.artist.models](muckr/artist/models.py).
+- The artist-related views are implemented in
+  [muckr.artist.views](muckr/artist/views.py).
 
 ## Installation
 
