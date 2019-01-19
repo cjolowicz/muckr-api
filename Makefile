@@ -3,7 +3,7 @@ app=muckr-service
 
 all:
 
-virtualenv:
+venv:
 	$(PYTHON) -m venv venv
 
 requirements/%.txt: requirements/%.in
