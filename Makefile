@@ -4,7 +4,7 @@ app=muckr-service
 all:
 
 virtualenv:
-	virtualenv --python=$(PYTHON) venv
+	$(PYTHON) -m venv venv
 
 requirements/%.txt: requirements/%.in
 	pip install pip-tools
