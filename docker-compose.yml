@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  muckr-service-nginx:
+    build: ./nginx
+    ports:
+      - 9000:80
+  muckr-service:
+    build: .
+    env_file: .env
+  postgres:
+    image: postgres:11.2-alpine
+    env_file: .env
+    volumes:
+      - database:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+volumes:
+  database:
