@@ -8,4 +8,4 @@ do
      sleep 1
 done
 
-exec gunicorn --bind 0.0.0.0:5000 wsgi:app
+exec gunicorn --bind 0.0.0.0:5000 --forwarded-allow-ips='*' wsgi:app
