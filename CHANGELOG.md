@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2019-05-05
+### Added
+- Add Dockerfile.
+- Add Docker Compose file.
+
+### Changed
+- Do not generate hashes for requirements.
+- Upgrade requirements.
+
 ## [0.2.0] - 2018-12-25
 ### Added
 - Add artist resource.
@@ -41,5 +50,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial version.
 
-[Unreleased]: https://github.com/cjolowicz/muckr-service/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/cjolowicz/muckr-service/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/cjolowicz/muckr-service/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/cjolowicz/muckr-service/compare/v0.1.0...v0.2.0
