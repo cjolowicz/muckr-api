@@ -11,7 +11,6 @@ requirements/%.txt: requirements/%.in
 	python -m piptools compile \
 	    --verbose \
 	    --upgrade \
-	    --generate-hashes \
 	    --output-file=$@ $<
 
 requirements: requirements/base.txt requirements/dev.txt
