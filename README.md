@@ -118,19 +118,28 @@ A sample [env file](.env.sample) is provided. This is a file named
 
 ## Running
 
-To start up the database server:
+The following command will start up the web service:
 
 ```sh
-docker swarm init
-docker stack deploy -c postgres.yml postgres
-flask db upgrade
-flask create-admin
+docker-compose up
 ```
 
-To start up a development instance of the web server:
+This comprises the following Docker containers:
+
+- `muckr-service_muckr-service`
+- `muckr-service_muckr-service-nginx`
+- `muckr-service_postgres`
+- `muckr-service_adminer`
+
+The database files are stored on a volume named `muckr-service_database`.
+
+The web service is accessible on port 9000 on the Docker host. The database
+management interface is accessible on port 8080 on the Docker host.
+
+You can use the following command to create the admin user:
 
 ```sh
-flask run
+docker-compose exec muckr-service flask create-admin
 ```
 
 ## Requirements
