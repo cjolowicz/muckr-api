@@ -10,13 +10,7 @@ This project has a [changelog](CHANGELOG.md).
 
 - [Contents](#contents)
 - [Installation](#installation)
-- [Development](#development)
-- [Testing](#testing)
 - [Configuration](#configuration)
-- [Running](#running)
-- [Requirements](#requirements)
-- [Releasing](#releasing)
-- [Continuous Integration](#continuous-integration)
 - [Deployment](#deployment)
 
 ## Contents
@@ -51,46 +45,6 @@ To install this package,
 pip install muckr-service
 ```
 
-## Development
-
-First, make sure you have `python3.7` in your `PATH`.
-
-```sh
-curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-pyenv install 3.7.1
-pyenv local 3.7.1
-```
-
-Create a virtualenv and activate it:
-
-```sh
-make virtualenv
-source venv/bin/activate
-```
-
-Install the development requirements as follows:
-
-```sh
-make install
-```
-
-Reformat your changes before committing:
-
-```sh
-make black
-```
-
-## Testing
-
-The test suite is located under [tests](tests) and uses
-[pytest](https://pypi.org/project/pytest/).
-
-Run the test suite as follows:
-
-```sh
-make test
-```
-
 ## Configuration
 
 The app is configured via the following environment variables:
@@ -115,73 +69,6 @@ Also, use these environment variables for Flask:
 
 A sample [env file](.env.sample) is provided. This is a file named
 `.env`, where each line contains an assignment of the form `VAR=VAL`.
-
-## Running
-
-The following command will start up the web service:
-
-```sh
-docker-compose up
-```
-
-This comprises the following Docker containers:
-
-- `muckr-service_muckr-service`
-- `muckr-service_muckr-service-nginx`
-- `muckr-service_postgres`
-- `muckr-service_adminer`
-
-The database files are stored on a volume named `muckr-service_database`.
-
-The web service is accessible on port 9000 on the Docker host. The database
-management interface is accessible on port 8080 on the Docker host.
-
-You can use the following command to create the admin user:
-
-```sh
-docker-compose exec muckr-service flask create-admin
-```
-
-## Requirements
-
-Requirements are declared in the files
-[requirements/base.in](requirements/base.in) and
-[requirements/dev.in](requirements/dev.in).
-
-Requirements for production are pinned to specific versions in the
-files [requirements/base.txt](requirements/base.txt) and
-[requirements/dev.txt](requirements/dev.txt). These files are
-generated using the following command:
-
-```sh
-make requirements
-```
-
-To force an upgrade of all requirements, invoke the following command:
-
-```sh
-make -B requirements
-```
-
-## Releasing
-
-This project adheres to
-[Semantic Versioning](https://semver.org/spec/v2.0.0.html) and
-[PEP 440](https://www.python.org/dev/peps/pep-0440).
-
-The [bumpversion](https://pypi.org/project/bumpversion/) tool is used
-to update the version number and add a Git tag to the repository.
-
-1. Run `make test`.
-2. Update [CHANGELOG.md](CHANGELOG.md).
-3. Bump version.
-4. Push to Github.
-
-## Continuous Integration
-
-Continuous integration is provided by
-[Travis CI](https://travis-ci.org). The Travis CI job runs the test
-suite.
 
 ## Deployment
 
