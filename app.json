@@ -1,0 +1,19 @@
+{
+  "name": "muckr-service",
+  "scripts": {},
+  "env": {
+    "ADMIN_PASSWORD": {
+      "generator": "secret"
+    },
+    "DATABASE_URL": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "generator": "secret"
+    }
+  },
+  "formation": {},
+  "addons": [],
+  "buildpacks": [],
+  "stack": "heroku-18"
+}
