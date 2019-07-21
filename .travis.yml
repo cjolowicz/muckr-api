@@ -5,7 +5,3 @@ python:
   - "3.7"
 install: make travis-install
 script: make travis-script
-branches:
-  only:
-    - master
-
