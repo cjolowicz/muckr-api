@@ -3,6 +3,7 @@
 /*.db
 /.coverage
 /.env
+/.env.*
 /.nox/
 /.pytest_cache/
 /.python-version
