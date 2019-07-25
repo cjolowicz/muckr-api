@@ -5,7 +5,7 @@ import nox
 
 nox.options.sessions = "lint", "tests"
 
-locations = "migrations", "muckr", "noxfile.py", "setup.py", "tests", "wsgi.py"
+locations = "migrations", "noxfile.py", "setup.py", "src", "tests", "wsgi.py"
 
 
 @nox.session(python="3.7")
@@ -23,14 +23,21 @@ def lint(session):
     session.run("flake8", *locations)
 
 
-@nox.session
+@nox.session(python="3.7")
 def tests(session):
     """Run the test suite."""
+    package = os.path.join(
+        session.virtualenv.location,
+        "lib",
+        session.virtualenv._resolved_interpreter,
+        "site-packages",
+        "muckr",
+    )
     session.install("-r", "requirements/base.txt")
     session.install("-r", "requirements/tests.txt")
     session.install(".")
     tests = session.posargs or ["tests/"]
-    session.run("pytest", "--cov=muckr", *tests)
+    session.run("pytest", f"--cov={package}", *tests)
 
 
 @nox.session(python="3.7")
