@@ -2,6 +2,7 @@
 /*.db
 /.coverage
 /.env
+/.nox/
 /.pytest_cache/
 /.python-version
 /venv/
