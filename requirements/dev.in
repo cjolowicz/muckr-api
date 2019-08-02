@@ -1,5 +1,4 @@
 bumpversion
-coveralls
 factory-boy
 httpie
 pytest

@@ -9,9 +9,7 @@ attrs==19.1.0             # via packaging, pytest
 bumpversion==0.5.3
 certifi==2019.6.16        # via requests
 chardet==3.0.4            # via requests
-coverage==4.5.4           # via coveralls, pytest-cov
-coveralls==1.8.2
-docopt==0.6.2             # via coveralls
+coverage==4.5.4           # via pytest-cov
 factory-boy==2.12.0
 faker==2.0.0              # via factory-boy
 httpie==1.0.2
@@ -27,7 +25,7 @@ pytest-cov==2.7.1
 pytest-mock==1.10.4
 pytest==5.0.1
 python-dateutil==2.8.0    # via faker
-requests==2.22.0          # via coveralls, httpie
+requests==2.22.0          # via httpie
 six==1.12.0               # via faker, packaging, python-dateutil
 text-unidecode==1.2       # via faker
 urllib3==1.25.3           # via requests
