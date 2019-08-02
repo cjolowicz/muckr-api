@@ -6,5 +6,5 @@ flask-httpauth
 flask-migrate
 flask-sqlalchemy
 gunicorn
-marshmallow==3.0.0rc1
+marshmallow>=3.0.0rc1
 psycopg2-binary
