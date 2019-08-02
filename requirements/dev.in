@@ -2,7 +2,6 @@ bumpversion
 coveralls
 factory-boy
 httpie
-pip-tools
 pytest
 pytest-cov
 pytest-mock
