@@ -17,23 +17,10 @@ pyenv install 3.7.1
 pyenv local 3.7.1
 ```
 
-Create a virtualenv and activate it:
-
-```sh
-make virtualenv
-source venv/bin/activate
-```
-
-Install the development requirements as follows:
-
-```sh
-make install
-```
-
 Reformat your changes before committing:
 
 ```sh
-make black
+nox -e black
 ```
 
 ## Testing
@@ -44,7 +31,7 @@ The test suite is located under [tests](tests) and uses
 Run the test suite as follows:
 
 ```sh
-make test
+nox
 ```
 
 ## Running
@@ -85,13 +72,7 @@ files [requirements/base.txt](requirements/base.txt) and
 generated using the following command:
 
 ```sh
-make requirements
-```
-
-To force an upgrade of all requirements, invoke the following command:
-
-```sh
-make -B requirements
+nox -e upgrade
 ```
 
 ## Releasing
@@ -103,7 +84,7 @@ This project adheres to
 The [bumpversion](https://pypi.org/project/bumpversion/) tool is used
 to update the version number and add a Git tag to the repository.
 
-1. Run `make test`.
+1. Run `nox`.
 2. Update [CHANGELOG.md](CHANGELOG.md).
 3. Bump version.
 4. Push to Github.
