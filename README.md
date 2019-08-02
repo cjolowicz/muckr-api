@@ -80,11 +80,12 @@ every change to `master` that passes CI.
 To generate the secrets for Heroku,
 
 ```sh
-make heroku-secretkey heroku-adminpassword
+heroku config:set --app=muckr-service SECRET_KEY=xxxxxx
+heroku config:set --app=muckr-service ADMIN_PASSWORD=xxxxxx
 ```
 
 To migrate the database on Heroku,
 
 ```sh
-make heroku-db-upgrade
+heroku run --app=muckr-service flask db upgrade
 ```
