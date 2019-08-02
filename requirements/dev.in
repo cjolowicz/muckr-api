@@ -1,8 +1,6 @@
 bumpversion
 coveralls
 factory-boy
-flake8
-flake8-bugbear
 httpie
 pip-tools
 pytest
