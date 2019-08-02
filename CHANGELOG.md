@@ -12,7 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use [nox](https://nox.thea.codes/) for test automation ([#17](../../pull/17))
 
 ### Removed
+- Remove extras_require from setup.py ([#20](../../pull/20))
 - Remove Makefile (replaced by nox).
+- Remove dev requirements:
+  - black
+  - click (moved to base requirements)
+  - coveralls
+  - flake8
+  - flake8-bugbear
+  - pip-tools
 
 ### Changed
 - Upgrade requirements:
@@ -29,24 +37,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - python-dotenv 0.10.3
   - sqlalchemy 1.3.6
   - werkzeug 0.15.5
-- Upgrade dev requirements:
-  - certifi 2019.6.16
+- Upgrade test requirements:
   - coverage 4.5.4
-  - coveralls 1.8.2
   - factory-boy 2.12.0
   - faker 2.0.0
-  - flake8 3.7.8
   - importlib-metadata 0.19
   - more-itertools 7.2.0
   - packaging 19.1
-  - pip-tools 4.0.0
   - pluggy 0.12.0
-  - pygments 2.4.2
   - pyparsing 2.4.2
   - pytest 5.0.1
-  - requests 2.22.0
   - six 1.12.0
-  - urllib3 1.25.3
   - wcwidth 0.1.7
   - zipp 0.5.2
 
