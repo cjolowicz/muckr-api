@@ -11,7 +11,7 @@ black==19.3b0
 bumpversion==0.5.3
 certifi==2019.6.16        # via requests
 chardet==3.0.4            # via requests
-click==7.0
+click==7.0                # via black, pip-tools
 coverage==4.5.4           # via coveralls, pytest-cov
 coveralls==1.8.2
 docopt==0.6.2             # via coveralls
