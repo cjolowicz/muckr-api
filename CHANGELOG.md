@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable CI for pull requests ([#13](../../pull/13))
 - Configure Heroku review apps using `app.json` ([#15](../../pull/15))
 - Configure coverage using `.coveragerc` ([#16](../../pull/16))
+- Use [nox](https://nox.thea.codes/) for test automation ([#17](../../pull/17))
+
+### Removed
+- Remove Makefile (replaced by nox).
 
 ## [0.3.0] - 2019-05-05
 ### Added
