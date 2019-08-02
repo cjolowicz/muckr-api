@@ -3,5 +3,8 @@ sudo: required
 dist: xenial
 python:
   - "3.7"
-install: make travis-install
-script: make travis-script
+install:
+  - pip install nox coveralls
+script:
+  - nox
+  - coveralls
