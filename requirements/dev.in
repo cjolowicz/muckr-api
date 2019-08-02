@@ -1,12 +1,2 @@
-black
 bumpversion
-click
-coveralls
-factory-boy
-flake8
-flake8-bugbear
 httpie
-pip-tools
-pytest
-pytest-cov
-pytest-mock
