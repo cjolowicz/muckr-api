@@ -27,7 +27,7 @@ def lint(session):
 def tests(session):
     """Run the test suite."""
     session.install("-r", "requirements/base.txt")
-    session.install("-r", "requirements/dev.txt")
+    session.install("-r", "requirements/tests.txt")
     session.install(".")
     tests = session.posargs or ["tests/"]
     session.run("pytest", "--cov=muckr", *tests)
@@ -37,7 +37,7 @@ def tests(session):
 def upgrade(session):
     """Upgrade the requirements."""
     session.install("pip-tools")
-    for requirements in ["base", "dev"]:
+    for requirements in ["base", "dev", "tests"]:
         basename = os.path.join("requirements", requirements)
         session.run(
             "pip-compile",

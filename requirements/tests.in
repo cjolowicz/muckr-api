@@ -1,0 +1,4 @@
+factory-boy
+pytest
+pytest-cov
+pytest-mock

@@ -1,6 +1,2 @@
 bumpversion
-factory-boy
 httpie
-pytest
-pytest-cov
-pytest-mock
