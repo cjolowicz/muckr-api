@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configure coverage using `.coveragerc` ([#16](../../pull/16))
 - Use [nox](https://nox.thea.codes/) for test automation ([#17](../../pull/17))
 
+### Changed
+- Switch to `src` layout ([#18](../../pull/18))
+
 ### Removed
 - Remove extras_require from setup.py ([#20](../../pull/20))
 - Remove Makefile (replaced by nox).
