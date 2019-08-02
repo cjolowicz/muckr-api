@@ -52,8 +52,8 @@ def create_user():
 
     password = data.pop("password", None)
     user = User(**data)
-    if password is not None:
-        user.set_password(password)
+    assert password is not None
+    user.set_password(password)
 
     database.session.add(user)
     database.session.commit()
