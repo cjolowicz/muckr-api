@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Documentation cleanup ([#23](../../pull/23))
 - Move flake8 configuration to .flake8 ([#26](../../pull/26))
+- Remove `VERSION` file ([#27](../../pull/27))
 - Upgrade Heroku runtime to Python 3.7.3 ([#28](../../pull/28))
 
 ## [0.4.1] - 2019-08-03
