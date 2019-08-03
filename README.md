@@ -30,6 +30,8 @@ This package defines a web service using the
 | [muckr.main.views](muckr/main/views.py)       | Defines the main views (placeholder)         |
 | [muckr.artist.models](muckr/artist/models.py) | Defines the artist model                     |
 | [muckr.artist.views](muckr/artist/views.py)   | Implements the artist-related views          |
+| [muckr.venue.models](muckr/venue/models.py)   | Defines the venue model                      |
+| [muckr.venue.views](muckr/venue/views.py)     | Implements the venue-related views           |
 
 ## Installation
 
