@@ -52,7 +52,7 @@ The Docker Compose file comprises the following Docker containers:
 Database files are stored on a volume named `database`.
 
 The web service is accessible on port 9000 on the Docker host. The database
-management interface is accessible on port 8080 on the Docker host.
+management interface is accessible on port 9001 on the Docker host.
 
 Use the following command to create the admin user:
 

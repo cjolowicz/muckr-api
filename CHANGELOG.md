@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Switch to `src` layout ([#18](../../pull/18))
+- Change adminer port to 9001 ([#11](../../pull/11))
 
 ### Removed
 - Remove extras_require from setup.py ([#20](../../pull/20))
