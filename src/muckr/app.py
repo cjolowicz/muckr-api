@@ -65,3 +65,4 @@ def register_shellcontext(app):
 
 def register_commands(app):
     app.cli.add_command(muckr.commands.create_admin)
+    app.cli.add_command(muckr.commands.client)
