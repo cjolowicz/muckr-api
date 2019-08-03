@@ -9,7 +9,6 @@ Web service for muckr
 - [Contents](#contents)
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Deployment](#deployment)
 
 ## Contents
 
@@ -70,23 +69,3 @@ Also, use these environment variables for Flask:
 
 A sample [env file](.env.sample) is provided. This is a file named
 `.env`, where each line contains an assignment of the form `VAR=VAL`.
-
-## Deployment
-
-The app is deployed to [Heroku](https://heroku.com) automatically on
-every change to `master` that passes CI.
-
-- https://muckr-service.herokuapp.com/
-
-To configure the secrets for Heroku,
-
-```sh
-heroku config:set --app=muckr-service SECRET_KEY=xxxxxx
-heroku config:set --app=muckr-service ADMIN_PASSWORD=xxxxxx
-```
-
-To migrate the database on Heroku,
-
-```sh
-heroku run --app=muckr-service flask db upgrade
-```
