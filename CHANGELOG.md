@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.4.0] - 2019-08-03
 ### Added
 - Add venues ([#19](../../pull/19)).
 - Enable CI for pull requests ([#13](../../pull/13))
@@ -17,20 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Switch to `src` layout ([#18](../../pull/18))
 - Change adminer port to 9001 ([#11](../../pull/11))
-
-### Removed
-- Remove extras_require from setup.py ([#20](../../pull/20))
-- Remove `http` script (replaced by command-line client).
-- Remove Makefile (replaced by nox).
-- Remove dev requirements:
-  - black
-  - click (moved to base requirements)
-  - coveralls
-  - flake8
-  - flake8-bugbear
-  - pip-tools
-
-### Changed
 - Upgrade requirements:
   - alembic 1.0.11
   - bcrypt 3.1.7
@@ -58,6 +45,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - six 1.12.0
   - wcwidth 0.1.7
   - zipp 0.5.2
+
+### Removed
+- Remove extras_require from setup.py ([#20](../../pull/20))
+- Remove `http` script (replaced by command-line client).
+- Remove Makefile (replaced by nox).
+- Remove dev requirements:
+  - black
+  - click (moved to base requirements)
+  - coveralls
+  - flake8
+  - flake8-bugbear
+  - pip-tools
 
 ## [0.3.0] - 2019-05-05
 ### Added
@@ -103,6 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial version.
 
-[Unreleased]: https://github.com/cjolowicz/muckr-service/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/cjolowicz/muckr-service/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/cjolowicz/muckr-service/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/cjolowicz/muckr-service/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/cjolowicz/muckr-service/compare/v0.1.0...v0.2.0
