@@ -35,10 +35,11 @@ This package defines a web service using the
 
 ## Installation
 
-To install this package,
+To install this package, clone the repository and run the following command at
+the top-level directory:
 
 ```sh
-pip install muckr-service
+pip install .
 ```
 
 ## Configuration
