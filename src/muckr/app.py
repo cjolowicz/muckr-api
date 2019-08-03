@@ -10,6 +10,7 @@ import muckr.commands
 import muckr.artist.views
 import muckr.main.views
 import muckr.user.views
+import muckr.venue.views
 
 
 def create_app(config_object="muckr.config"):
@@ -36,6 +37,7 @@ def register_extensions(app):
 
 def register_blueprints(app):
     app.register_blueprint(muckr.artist.views.blueprint)
+    app.register_blueprint(muckr.venue.views.blueprint)
     app.register_blueprint(muckr.main.views.blueprint)
     app.register_blueprint(muckr.user.views.blueprint)
 
