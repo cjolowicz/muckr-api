@@ -98,20 +98,20 @@ suite.
 
 ## Deployment
 
-The app is deployed to [Heroku](https://heroku.com) automatically on
-every change to `master` that passes CI.
+The app is deployed to a [Heroku](https://heroku.com) pipeline. Deployment to
+staging happens automatically on every change to `master` that passes CI.
+Deployment to production is done manually through the Heroku dashboard.
 
+- https://muckr-service-staging.herokuapp.com/
 - https://muckr-service.herokuapp.com/
 
-To configure the secrets for Heroku,
-
-```sh
-heroku config:set --app=muckr-service SECRET_KEY=xxxxxx
-heroku config:set --app=muckr-service ADMIN_PASSWORD=xxxxxx
-```
+Review apps are created automatically for Pull Requests using the
+[app.json](app.json) configuration file.
 
 To migrate the database on Heroku,
 
 ```sh
-heroku run --app=muckr-service flask db upgrade
+heroku run --app=muckr-service-staging flask db upgrade
 ```
+
+(Use `--app=muckr-service` to migrate the production database.)
