@@ -18,24 +18,18 @@ This project has a [changelog](CHANGELOG.md).
 This package defines a web service using the
 [Flask](http://flask.pocoo.org/) microframework.
 
-- The app is defined in [muckr.app](muckr/app.py).
-- Flask extensions are in [muckr.extensions](muckr/extensions.py).
-- The configuration is read from the environment, in
-  [muckr.config](muckr/config.py).
-- Error handling is implemented in [muckr.errors](muckr/errors.py).
-- The user model is defined in
-  [muckr.user.models](muckr/user/models.py).
-- User authentication is implemented in
-  [muckr.user.auth](muckr/user/auth.py).
-- The user-related views are implemented in
-  [muckr.user.views](muckr/user/views.py).
-- The main views are defined in
-  [muckr.main.views](muckr/main/views.py). This is currently a
-  placeholder.
-- The artist model is defined in
-  [muckr.artist.models](muckr/artist/models.py).
-- The artist-related views are implemented in
-  [muckr.artist.views](muckr/artist/views.py).
+| Module                                        | Description                                  |
+| ---                                           | ---                                          |
+| [muckr.app](muckr/app.py)                     | Defines the app                              |
+| [muckr.extensions](muckr/extensions.py)       | Flask extensions                             |
+| [muckr.config](muckr/config.py)               | Reads the configuration from the environment |
+| [muckr.errors](muckr/errors.py)               | Implements error handling                    |
+| [muckr.user.models](muckr/user/models.py)     | Defines the user model                       |
+| [muckr.user.auth](muckr/user/auth.py)         | Implements user authentication               |
+| [muckr.user.views](muckr/user/views.py)       | Implements the user-related views            |
+| [muckr.main.views](muckr/main/views.py)       | Defines the main views (placeholder)         |
+| [muckr.artist.models](muckr/artist/models.py) | Defines the artist model                     |
+| [muckr.artist.views](muckr/artist/views.py)   | Implements the artist-related views          |
 
 ## Installation
 
@@ -49,23 +43,29 @@ pip install muckr-service
 
 The app is configured via the following environment variables:
 
-- `ADMIN_EMAIL` (default: `admin@localhost`)
-- `ADMIN_PASSWORD` (required)
-- `ADMIN_USERNAME` (default: `admin`)
-- `BCRYPT_LOG_ROUNDS` (default: 12)
-- `DATABASE_URL` (required)
-- `SECRET_KEY` (required)
+| Environment Variable | Default           |
+| ---                  | ---               |
+| `ADMIN_EMAIL`        | `admin@localhost` |
+| `ADMIN_PASSWORD`     | *required*        |
+| `ADMIN_USERNAME`     | `admin`           |
+| `BCRYPT_LOG_ROUNDS`  | 12                |
+| `DATABASE_URL`       | *required*        |
+| `SECRET_KEY`         | *required*        |
 
 The database server is configured via the following environment variables:
 
-- `POSTGRES_USER` (default: `postgres`)
-- `POSTGRES_PASSWORD` (required)
-- `POSTGRES_DB` (default: `postgres`)
+| Environment Variable | Default    |
+| ---                  | ---        |
+| `POSTGRES_USER`      | `postgres` |
+| `POSTGRES_PASSWORD`  | *required* |
+| `POSTGRES_DB`        | `postgres` |
 
 Also, use these environment variables for Flask:
 
-- `FLASK_APP=wsgi.py`
-- `FLASK_ENV=development`
+| Environment Variable | Default       |
+| ---                  | ---           |
+| `FLASK_APP`          | `wsgi.py`     |
+| `FLASK_ENV`          | `development` |
 
 A sample [env file](.env.sample) is provided. This is a file named
 `.env`, where each line contains an assignment of the form `VAR=VAL`.
