@@ -78,7 +78,7 @@ every change to `master` that passes CI.
 
 - https://muckr-service.herokuapp.com/
 
-To generate the secrets for Heroku,
+To configure the secrets for Heroku,
 
 ```sh
 heroku config:set --app=muckr-service SECRET_KEY=xxxxxx
