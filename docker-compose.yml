@@ -1,10 +1,10 @@
 version: "3.7"
 services:
-  muckr-service-nginx:
+  muckr-api-nginx:
     build: ./nginx
     ports:
       - 9000:80
-  muckr-service:
+  muckr-api:
     build: .
     env_file: .env
   postgres:

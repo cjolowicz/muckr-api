@@ -1,5 +1,5 @@
 {
-  "name": "muckr-service",
+  "name": "muckr-api",
   "scripts": {},
   "env": {
     "ADMIN_PASSWORD": {

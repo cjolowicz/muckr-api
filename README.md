@@ -1,10 +1,10 @@
-[![Build Status](https://img.shields.io/travis/cjolowicz/muckr-service.svg?style=flat-square)](https://travis-ci.org/cjolowicz/muckr-service)
-[![Coverage Status](https://img.shields.io/coveralls/cjolowicz/muckr-service.svg?style=flat-square)](https://coveralls.io/github/cjolowicz/muckr-service?branch=master)
+[![Build Status](https://img.shields.io/travis/cjolowicz/muckr-api.svg?style=flat-square)](https://travis-ci.org/cjolowicz/muckr-api)
+[![Coverage Status](https://img.shields.io/coveralls/cjolowicz/muckr-api.svg?style=flat-square)](https://coveralls.io/github/cjolowicz/muckr-api?branch=master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/ambv/black)
 
-# muckr-service
+# muckr-api
 
-Web service for muckr
+muckr API
 
 - [Contents](#contents)
 - [Installation](#installation)
@@ -12,8 +12,8 @@ Web service for muckr
 
 ## Contents
 
-This package defines a web service using the
-[Flask](http://flask.pocoo.org/) microframework.
+This package defines an API using the [Flask](http://flask.pocoo.org/)
+microframework.
 
 | Module                                        | Description                                  |
 | ---                                           | ---                                          |

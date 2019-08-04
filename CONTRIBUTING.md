@@ -37,7 +37,7 @@ nox
 
 ## Running
 
-The following command will start up the web service:
+The following command will start up the API:
 
 ```sh
 docker-compose up
@@ -45,20 +45,20 @@ docker-compose up
 
 The Docker Compose file comprises the following Docker containers:
 
-- `muckr-service`
-- `muckr-service-nginx`
+- `muckr-api`
+- `muckr-api-nginx`
 - `postgres`
 - `adminer`
 
 Database files are stored on a volume named `database`.
 
-The web service is accessible on port 9000 on the Docker host. The database
-management interface is accessible on port 9001 on the Docker host.
+The API is accessible on port 9000 on the Docker host. The database management
+interface is accessible on port 9001 on the Docker host.
 
 Use the following command to create the admin user:
 
 ```sh
-docker-compose exec muckr-service flask create-admin
+docker-compose exec muckr-api flask create-admin
 ```
 
 ## Requirements
@@ -102,8 +102,8 @@ The app is deployed to a [Heroku](https://heroku.com) pipeline. Deployment to
 staging happens automatically on every change to `master` that passes CI.
 Deployment to production is done manually through the Heroku dashboard.
 
-- https://muckr-service-staging.herokuapp.com/
-- https://muckr-service.herokuapp.com/
+- https://muckr-api-staging.herokuapp.com/
+- https://muckr-api.herokuapp.com/
 
 Review apps are created automatically for Pull Requests using the
 [app.json](app.json) configuration file.
@@ -111,7 +111,7 @@ Review apps are created automatically for Pull Requests using the
 To migrate the database on Heroku,
 
 ```sh
-heroku run --app=muckr-service-staging flask db upgrade
+heroku run --app=muckr-api-staging flask db upgrade
 ```
 
-(Use `--app=muckr-service` to migrate the production database.)
+(Use `--app=muckr-api` to migrate the production database.)
