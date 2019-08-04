@@ -6,6 +6,7 @@
 - [Requirements](#requirements)
 - [Releasing](#releasing)
 - [Continuous Integration](#continuous-integration)
+- [Deployment](#deployment)
 
 ## Development
 
@@ -94,3 +95,23 @@ to update the version number and add a Git tag to the repository.
 Continuous integration is provided by
 [Travis CI](https://travis-ci.org). The Travis CI job runs the test
 suite.
+
+## Deployment
+
+The app is deployed to a [Heroku](https://heroku.com) pipeline. Deployment to
+staging happens automatically on every change to `master` that passes CI.
+Deployment to production is done manually through the Heroku dashboard.
+
+- https://muckr-service-staging.herokuapp.com/
+- https://muckr-service.herokuapp.com/
+
+Review apps are created automatically for Pull Requests using the
+[app.json](app.json) configuration file.
+
+To migrate the database on Heroku,
+
+```sh
+heroku run --app=muckr-service-staging flask db upgrade
+```
+
+(Use `--app=muckr-service` to migrate the production database.)
