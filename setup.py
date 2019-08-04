@@ -9,7 +9,7 @@ with open("requirements/base.in") as file:
 
 setuptools.setup(
     name="muckr-api",
-    version="0.4.2",
+    version="0.5.0",
     author="Claudio Jolowicz",
     author_email="mail@claudiojolowicz.com",
     description="muckr API",
