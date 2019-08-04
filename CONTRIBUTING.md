@@ -56,7 +56,7 @@ interface is accessible on port 9001 on the Docker host.
 Use the following command to create the admin user:
 
 ```sh
-docker-compose exec muckr-api flask create-admin
+docker-compose exec muckr-api muckr-api create-admin
 ```
 
 ## Releasing
@@ -91,10 +91,10 @@ Deployment to production is done manually through the Heroku dashboard.
 Review apps are created automatically for Pull Requests using the
 [app.json](app.json) configuration file.
 
-To migrate the database on Heroku,
+To migrate the production database on Heroku,
 
 ```sh
-heroku run --app=muckr-api-staging flask db upgrade
+heroku run muckr-api db upgrade --app=muckr-api
 ```
 
-(Use `--app=muckr-api` to migrate the production database.)
+(Use `--app=muckr-api-staging` to migrate the staging database.)
