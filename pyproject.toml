@@ -41,6 +41,9 @@ pytest-mock = "^1.10"
 httpie = ["httpie"]
 bumpversion = ["bumpversion"]
 
+[tool.poetry.scripts]
+muckr-api = "muckr_api.__main__:main"
+
 [build-system]
 requires = ["poetry==1.0.0b1"]
 build-backend = "poetry.masonry.api"
