@@ -9,7 +9,7 @@ with open("requirements/base.in") as file:
 
 setuptools.setup(
     name="muckr-service",
-    version="0.4.1",
+    version="0.4.2",
     author="Claudio Jolowicz",
     author_email="mail@claudiojolowicz.com",
     description="Web service for muckr",
