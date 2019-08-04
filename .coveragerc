@@ -5,7 +5,7 @@ source =
 
 [run]
 branch = true
-source = muckr
+source = muckr_api
 
 [report]
 show_missing = true

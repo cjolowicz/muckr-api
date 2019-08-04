@@ -2,8 +2,8 @@
 import json
 import pytest
 
-from muckr.venue.models import Venue
-from muckr.venue.views import venue_schema, venues_schema
+from muckr_api.venue.models import Venue
+from muckr_api.venue.views import venue_schema, venues_schema
 
 from tests.venue.factories import VenueFactory
 from tests.utils import create_token_auth_header

@@ -1,6 +1,6 @@
 """Test venue models."""
-from muckr.venue.models import Venue
-from muckr.user.models import User
+from muckr_api.venue.models import Venue
+from muckr_api.user.models import User
 from tests.venue.factories import VenueFactory
 
 

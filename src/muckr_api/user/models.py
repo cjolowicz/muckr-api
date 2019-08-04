@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from marshmallow import Schema, fields
 from marshmallow.validate import Length
 
-from muckr.extensions import bcrypt
-from muckr.extensions import database as db
+from muckr_api.extensions import bcrypt
+from muckr_api.extensions import database as db
 
 
 class User(db.Model):

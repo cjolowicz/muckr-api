@@ -1,8 +1,8 @@
 """Test main views."""
-import muckr
+import muckr_api
 
 
 class TestViews:
     def test_index(self, client):
         response = client.get("/")
-        assert muckr.__version__ in response.data.decode("utf-8")
+        assert muckr_api.__version__ in response.data.decode("utf-8")

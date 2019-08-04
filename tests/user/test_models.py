@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from muckr.user.models import User
+from muckr_api.user.models import User
 
 from tests.user.factories import UserFactory
 

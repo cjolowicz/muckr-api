@@ -2,7 +2,7 @@
 from werkzeug.http import HTTP_STATUS_CODES
 from flask import jsonify
 
-from muckr.extensions import database
+from muckr_api.extensions import database
 
 
 class APIError(Exception):

@@ -15,20 +15,20 @@ muckr API
 This package defines an API using the [Flask](http://flask.pocoo.org/)
 microframework.
 
-| Module                                        | Description                                  |
-| ---                                           | ---                                          |
-| [muckr.app](muckr/app.py)                     | Defines the app                              |
-| [muckr.extensions](muckr/extensions.py)       | Flask extensions                             |
-| [muckr.config](muckr/config.py)               | Reads the configuration from the environment |
-| [muckr.errors](muckr/errors.py)               | Implements error handling                    |
-| [muckr.user.models](muckr/user/models.py)     | Defines the user model                       |
-| [muckr.user.auth](muckr/user/auth.py)         | Implements user authentication               |
-| [muckr.user.views](muckr/user/views.py)       | Implements the user-related views            |
-| [muckr.main.views](muckr/main/views.py)       | Defines the main views (placeholder)         |
-| [muckr.artist.models](muckr/artist/models.py) | Defines the artist model                     |
-| [muckr.artist.views](muckr/artist/views.py)   | Implements the artist-related views          |
-| [muckr.venue.models](muckr/venue/models.py)   | Defines the venue model                      |
-| [muckr.venue.views](muckr/venue/views.py)     | Implements the venue-related views           |
+| Module                                                  | Description                                  |
+| ---                                                     | ---                                          |
+| [`muckr_api.app`](muckr_api/app.py)                     | Defines the app                              |
+| [`muckr_api.extensions`](muckr_api/extensions.py)       | Flask extensions                             |
+| [`muckr_api.config`](muckr_api/config.py)               | Reads the configuration from the environment |
+| [`muckr_api.errors`](muckr_api/errors.py)               | Implements error handling                    |
+| [`muckr_api.user.models`](muckr_api/user/models.py)     | Defines the user model                       |
+| [`muckr_api.user.auth`](muckr_api/user/auth.py)         | Implements user authentication               |
+| [`muckr_api.user.views`](muckr_api/user/views.py)       | Implements the user-related views            |
+| [`muckr_api.main.views`](muckr_api/main/views.py)       | Defines the main views (placeholder)         |
+| [`muckr_api.artist.models`](muckr_api/artist/models.py) | Defines the artist model                     |
+| [`muckr_api.artist.views`](muckr_api/artist/views.py)   | Implements the artist-related views          |
+| [`muckr_api.venue.models`](muckr_api/venue/models.py)   | Defines the venue model                      |
+| [`muckr_api.venue.views`](muckr_api/venue/views.py)     | Implements the venue-related views           |
 
 ## Installation
 

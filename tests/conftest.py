@@ -1,13 +1,13 @@
 """Defines fixtures available to all tests."""
 import pytest
 
-import muckr.app
-import muckr.extensions
+import muckr_api.app
+import muckr_api.extensions
 
 
 @pytest.fixture
 def app():
-    app = muckr.app.create_app("tests.config")
+    app = muckr_api.app.create_app("tests.config")
     context = app.test_request_context()
     context.push()
 
@@ -18,14 +18,14 @@ def app():
 
 @pytest.fixture
 def database(app):
-    muckr.extensions.database.app = app
+    muckr_api.extensions.database.app = app
     with app.app_context():
-        muckr.extensions.database.create_all()
+        muckr_api.extensions.database.create_all()
 
-    yield muckr.extensions.database
+    yield muckr_api.extensions.database
 
-    muckr.extensions.database.session.close()
-    muckr.extensions.database.drop_all()
+    muckr_api.extensions.database.session.close()
+    muckr_api.extensions.database.drop_all()
 
 
 @pytest.fixture

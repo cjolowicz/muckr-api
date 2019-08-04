@@ -8,8 +8,8 @@ import flask
 import flask.cli
 import requests
 
-from muckr.user.models import User
-from muckr.extensions import database
+from muckr_api.user.models import User
+from muckr_api.extensions import database
 
 
 @click.command()
@@ -28,7 +28,7 @@ def create_admin():
 def _get_admin_credentials(url):
     if "heroku" in url:
         process = subprocess.run(
-            ["heroku", "config", "--json", "--app=muckr-api"], capture_output=True
+            ["heroku", "config", "--json", "--app=muckr_api-api"], capture_output=True
         )
         config = json.loads(process.stdout)
     else:

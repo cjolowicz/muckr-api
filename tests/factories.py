@@ -1,7 +1,7 @@
 """Base Factory to help in model tests."""
 from factory.alchemy import SQLAlchemyModelFactory
 
-from muckr.extensions import database
+from muckr_api.extensions import database
 
 
 class BaseFactory(SQLAlchemyModelFactory):

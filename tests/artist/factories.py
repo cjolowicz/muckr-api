@@ -1,7 +1,7 @@
 """Factories to help in artist tests."""
 from factory import Sequence, SubFactory
 
-from muckr.artist.models import Artist
+from muckr_api.artist.models import Artist
 from tests.factories import BaseFactory
 from tests.user.factories import UserFactory
 

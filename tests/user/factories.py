@@ -1,7 +1,7 @@
 """Factories to help in user tests."""
 from factory import PostGenerationMethodCall, Sequence
 
-from muckr.user.models import User
+from muckr_api.user.models import User
 from tests.factories import BaseFactory
 
 

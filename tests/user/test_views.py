@@ -4,8 +4,8 @@ import random
 import json
 import pytest
 
-from muckr.user.models import User
-from muckr.user.views import user_schema, users_schema
+from muckr_api.user.models import User
+from muckr_api.user.views import user_schema, users_schema
 
 from tests.user.factories import UserFactory
 from tests.utils import create_basic_auth_header, create_token_auth_header

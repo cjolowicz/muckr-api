@@ -2,8 +2,8 @@
 import flask
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 
-from muckr.user.models import User
-from muckr.errors import APIError
+from muckr_api.user.models import User
+from muckr_api.errors import APIError
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
