@@ -28,7 +28,7 @@ def create_admin():
 def _get_admin_credentials(url):
     if "heroku" in url:
         process = subprocess.run(
-            ["heroku", "config", "--json", "--app=muckr-service"], capture_output=True
+            ["heroku", "config", "--json", "--app=muckr-api"], capture_output=True
         )
         config = json.loads(process.stdout)
     else:

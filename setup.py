@@ -8,14 +8,14 @@ with open("requirements/base.in") as file:
     install_requires = file.read().splitlines()
 
 setuptools.setup(
-    name="muckr-service",
+    name="muckr-api",
     version="0.4.2",
     author="Claudio Jolowicz",
     author_email="mail@claudiojolowicz.com",
-    description="Web service for muckr",
+    description="muckr API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/cjolowicz/muckr-service",
+    url="https://github.com/cjolowicz/muckr-api",
     packages=setuptools.find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=install_requires,

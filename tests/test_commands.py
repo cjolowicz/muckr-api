@@ -12,7 +12,7 @@ def test_create_admin_inserts_admin_user(app, database):
 
 
 @pytest.mark.parametrize(
-    "url", ["https://muckr-service.herokuapp.com/artists", "https://localhost/artists"]
+    "url", ["https://muckr-api.herokuapp.com/artists", "https://localhost/artists"]
 )
 def test_client_succeeds(app, mocker, url):
     mocker.patch("subprocess.run").return_value.stdout = '{"ADMIN_PASSWORD": ""}'

@@ -1,4 +1,4 @@
-"""The root of the web service."""
+"""The API root."""
 import flask
 
 import muckr
@@ -9,4 +9,4 @@ blueprint = flask.Blueprint("main", __name__)
 
 @blueprint.route("/")
 def index():
-    return "muckr-service {version}".format(version=muckr.__version__)
+    return "muckr API {version}".format(version=muckr.__version__)
