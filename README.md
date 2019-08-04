@@ -60,12 +60,5 @@ The database server is configured via the following environment variables:
 | `POSTGRES_PASSWORD`  | *required* |
 | `POSTGRES_DB`        | `postgres` |
 
-Also, use these environment variables for Flask:
-
-| Environment Variable | Default       |
-| ---                  | ---           |
-| `FLASK_APP`          | `wsgi.py`     |
-| `FLASK_ENV`          | `development` |
-
 A sample [env file](.env.sample) is provided. This is a file named
 `.env`, where each line contains an assignment of the form `VAR=VAL`.
