@@ -1,9 +1,6 @@
 import setuptools
 
 
-with open("VERSION") as file:
-    version = file.read()
-
 with open("README.md") as file:
     long_description = file.read()
 
@@ -12,7 +9,7 @@ with open("requirements/base.in") as file:
 
 setuptools.setup(
     name="muckr-service",
-    version=version,
+    version="0.4.1",
     author="Claudio Jolowicz",
     author_email="mail@claudiojolowicz.com",
     description="Web service for muckr",
