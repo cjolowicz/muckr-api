@@ -31,7 +31,7 @@ def tests(session):
         "lib",
         session.virtualenv._resolved_interpreter,
         "site-packages",
-        "muckr",
+        "muckr_api",
     )
     session.install("-r", "requirements/base.txt")
     session.install("-r", "requirements/tests.txt")

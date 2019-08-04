@@ -2,8 +2,8 @@
 import json
 import pytest
 
-from muckr.artist.models import Artist
-from muckr.artist.views import artist_schema, artists_schema
+from muckr_api.artist.models import Artist
+from muckr_api.artist.views import artist_schema, artists_schema
 
 from tests.artist.factories import ArtistFactory
 from tests.utils import create_token_auth_header

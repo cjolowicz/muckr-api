@@ -20,14 +20,14 @@ class TestConfig:
             pytest.skip("SECRET_KEY set in .env file")
 
         with pytest.raises(environs.EnvError):
-            import muckr.config  # noqa
+            import muckr_api.config  # noqa
 
     def test_config_reads_environment_variables(self):
         os.environ["ADMIN_PASSWORD"] = "password"
         os.environ["DATABASE_URL"] = "sqlite://"
         os.environ["SECRET_KEY"] = "secret-key"
 
-        import muckr.config
+        import muckr_api.config
 
-        assert muckr.config.SECRET_KEY == "secret-key"
-        assert muckr.config.SQLALCHEMY_DATABASE_URI == "sqlite://"
+        assert muckr_api.config.SECRET_KEY == "secret-key"
+        assert muckr_api.config.SQLALCHEMY_DATABASE_URI == "sqlite://"

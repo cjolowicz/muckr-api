@@ -1,6 +1,6 @@
 """Test artist models."""
-from muckr.artist.models import Artist
-from muckr.user.models import User
+from muckr_api.artist.models import Artist
+from muckr_api.user.models import User
 from tests.artist.factories import ArtistFactory
 
 

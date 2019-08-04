@@ -1,7 +1,7 @@
 """Common utilities"""
 import flask
 
-from muckr.errors import APIError
+from muckr_api.errors import APIError
 
 
 def jsonify(data):

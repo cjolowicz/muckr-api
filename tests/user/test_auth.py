@@ -4,7 +4,7 @@ import random
 import flask
 import pytest
 
-from muckr.user.auth import (
+from muckr_api.user.auth import (
     basic_auth_error,
     token_auth_error,
     verify_password,

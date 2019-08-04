@@ -2,11 +2,11 @@
 import flask
 from marshmallow import ValidationError
 
-from muckr.errors import APIError
-from muckr.extensions import database
-from muckr.user.auth import token_auth
-from muckr.artist.models import Artist, ArtistSchema
-from muckr.utils import (
+from muckr_api.errors import APIError
+from muckr_api.extensions import database
+from muckr_api.user.auth import token_auth
+from muckr_api.artist.models import Artist, ArtistSchema
+from muckr_api.utils import (
     check_unique_on_create,
     check_unique_on_update,
     jsonify,

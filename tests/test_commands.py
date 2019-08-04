@@ -1,22 +1,24 @@
 import pytest
 
-import muckr.commands
-from muckr.user.models import User
+import muckr_api.commands
+from muckr_api.user.models import User
 
 
 def test_create_admin_inserts_admin_user(app, database):
     runner = app.test_cli_runner()
-    result = runner.invoke(muckr.commands.create_admin, catch_exceptions=False)
+    result = runner.invoke(muckr_api.commands.create_admin, catch_exceptions=False)
     assert result.exit_code == 0
     assert "admin" in {user.username for user in User.query.all()}
 
 
 @pytest.mark.parametrize(
-    "url", ["https://muckr-api.herokuapp.com/artists", "https://localhost/artists"]
+    "url", ["https://muckr_api-api.herokuapp.com/artists", "https://localhost/artists"]
 )
 def test_client_succeeds(app, mocker, url):
     mocker.patch("subprocess.run").return_value.stdout = '{"ADMIN_PASSWORD": ""}'
     mocker.patch("requests.post").return_value.json.return_value = {"token": ""}
     runner = app.test_cli_runner()
-    result = runner.invoke(muckr.commands.client, ["GET", url], catch_exceptions=False)
+    result = runner.invoke(
+        muckr_api.commands.client, ["GET", url], catch_exceptions=False
+    )
     assert result.exit_code == 0

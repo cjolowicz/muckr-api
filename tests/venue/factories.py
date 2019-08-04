@@ -1,7 +1,7 @@
 """Factories to help in venue tests."""
 from factory import Sequence, SubFactory
 
-from muckr.venue.models import Venue
+from muckr_api.venue.models import Venue
 from tests.factories import BaseFactory
 from tests.user.factories import UserFactory
 

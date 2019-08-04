@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- Rename to muckr-api ([#30](../../pull/30))
+- Rename project to muckr-api ([#30](../../pull/30))
+- Rename package to muckr_api ([#31](../../pull/31))
 
 ## [0.4.2] - 2019-08-04
 ### Changed
