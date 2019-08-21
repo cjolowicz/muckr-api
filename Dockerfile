@@ -1,21 +1,32 @@
-FROM python:3.7-alpine as base
+FROM python:3.7.4-alpine3.10 as base
+
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
 
 FROM base as builder
 
-RUN apk add --no-cache gcc libffi-dev musl-dev postgresql-dev
-WORKDIR /wheels
-COPY ./requirements/base.txt ./requirements.txt
-RUN pip install --upgrade pip && pip wheel -r requirements.txt
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    POETRY_VERSION=1.0.0b1
 
-FROM base
+RUN apk add --no-cache gcc libffi-dev musl-dev postgresql-dev
+RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m venv /venv
+
+COPY pyproject.toml poetry.lock ./
+RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
+
+COPY . .
+RUN poetry build && /venv/bin/pip install dist/*.whl
+
+FROM base as final
 
 RUN apk add --no-cache libffi libpq
-COPY --from=builder /wheels /wheels
-RUN pip install --upgrade pip \
-  && pip install --no-cache-dir -r /wheels/requirements.txt -f /wheels \
-  && rm -rf /wheels \
-ENV PYTHONUNBUFFERED 1
-WORKDIR /usr/local/src/app
-COPY . .
-
+COPY --from=builder /venv /venv
+COPY docker-entrypoint.sh wsgi.py ./
+COPY migrations migrations
 CMD ["./docker-entrypoint.sh"]
