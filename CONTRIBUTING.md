@@ -10,13 +10,11 @@
 
 ## Development
 
-First, make sure you have `python3.7` in your `PATH`.
+You need Python 3.7 and the following tools:
 
-```sh
-curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-pyenv install 3.7.1
-pyenv local 3.7.1
-```
+- [poetry](https://poetry.eustace.io/)
+- [nox](https://nox.thea.codes/)
+- [pyenv](https://github.com/pyenv/pyenv) (optional)
 
 Reformat your changes before committing:
 
@@ -59,21 +57,6 @@ Use the following command to create the admin user:
 
 ```sh
 docker-compose exec muckr-api flask create-admin
-```
-
-## Requirements
-
-Requirements are declared in the files
-[requirements/base.in](requirements/base.in) and
-[requirements/dev.in](requirements/dev.in).
-
-Requirements for production are pinned to specific versions in the
-files [requirements/base.txt](requirements/base.txt) and
-[requirements/dev.txt](requirements/dev.txt). These files are
-generated using the following command:
-
-```sh
-nox -e upgrade
 ```
 
 ## Releasing
