@@ -4,7 +4,7 @@ set -e
 
 . /venv/bin/activate
 
-while ! flask db upgrade
+while ! muckr-api db upgrade
 do
      echo "Retry..."
      sleep 1
