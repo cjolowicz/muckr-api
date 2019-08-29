@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add commandline interface ([#32](../../pull/32))
+
 ### Changed
 - Use [poetry](https://poetry.eustace.io/) build backend ([#34](../../pull/34))
 - Use `localhost` in `DATABASE_URL`, except when using Docker Compose ([#35](../../pull/35))
