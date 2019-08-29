@@ -65,13 +65,15 @@ This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and
 [PEP 440](https://www.python.org/dev/peps/pep-0440).
 
-The [bumpversion](https://pypi.org/project/bumpversion/) tool is used
-to update the version number and add a Git tag to the repository.
+Use `poetry version` to update the version number in `pyproject.toml`. Update
+`__init__.py` and add a Git tag to the repository.
 
 1. Run `nox`.
 2. Update [CHANGELOG.md](CHANGELOG.md).
-3. Bump version.
-4. Push to Github.
+3. Bump version using `poetry version`.
+4. Update the version number in `__init__.py`.
+5. Add a Git tag to the repository.
+6. Push to Github.
 
 ## Continuous Integration
 
