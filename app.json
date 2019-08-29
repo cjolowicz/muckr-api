@@ -5,6 +5,9 @@
     "ADMIN_PASSWORD": {
       "generator": "secret"
     },
+    "BUILDPACK_URL": {
+      "required": true
+    },
     "DATABASE_URL": {
       "required": true
     },
