@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Use [poetry](https://poetry.eustace.io/) build backend ([#34](../../pull/34))
+- Use `localhost` in `DATABASE_URL`, except when using Docker Compose ([#35](../../pull/35))
 - Do not copy .git directory into Docker images ([#36](../../pull/36))
 
 ## [0.5.0] - 2019-08-04
