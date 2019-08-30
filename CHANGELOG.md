@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix broken isolation of nox session when installing via Poetry ([#42](../../pull/42))
 - Fix reverse migration for artist-user foreign key ([#45](../../pull/45))
 
+### Removed
+- Drop bumpversion ([#38](../../pull/38))
+
 ## [0.6.0] - 2019-08-29
 ### Added
 - Add commandline interface ([#32](../../pull/32))
