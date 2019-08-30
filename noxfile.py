@@ -27,4 +27,4 @@ def tests(session):
     tests = session.posargs or ["tests/"]
     env = {"VIRTUAL_ENV": session.virtualenv.location}
     session.run("poetry", "install", external=True, env=env)
-    session.run("pytest", f"--cov=muckr_api", *tests)
+    session.run("pytest", "--cov=muckr_api", *tests)
