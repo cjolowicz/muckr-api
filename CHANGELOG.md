@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Drop bumpversion ([#38](../../pull/38))
 
+### Changed
+- Update documentation ([#39](../../pull/39))
+
 ## [0.6.0] - 2019-08-29
 ### Added
 - Add commandline interface ([#32](../../pull/32))
