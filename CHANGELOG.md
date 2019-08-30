@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Drop bumpversion ([#38](../../pull/38))
+- Drop adminer ([#43](../../pull/43))
 
 ### Changed
 - Update documentation ([#39](../../pull/39))
