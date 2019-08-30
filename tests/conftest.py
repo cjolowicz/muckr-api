@@ -5,6 +5,16 @@ import muckr_api.app
 import muckr_api.extensions
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--with-integration-tests",
+        action="store_true",
+        dest="integration_tests",
+        default=False,
+        help="enable integration tests",
+    )
+
+
 @pytest.fixture
 def app():
     app = muckr_api.app.create_app("tests.config")
