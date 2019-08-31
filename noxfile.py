@@ -24,6 +24,7 @@ def lint(session):
 @nox.session(python="3.7")
 def tests(session):
     """Run the test suite."""
-    session.run("poetry", "install", external=True)
     tests = session.posargs or ["tests/"]
-    session.run("pytest", f"--cov=muckr_api", *tests)
+    env = {"VIRTUAL_ENV": session.virtualenv.location}
+    session.run("poetry", "install", external=True, env=env)
+    session.run("pytest", "--cov=muckr_api", *tests)
