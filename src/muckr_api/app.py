@@ -17,8 +17,6 @@ def create_app(config_object="muckr_api.config"):
     app = flask.Flask(__name__)
     app.config.from_object(config_object)
 
-    app.logger.info("muckr_api {version}".format(version=muckr_api.__version__))
-
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
