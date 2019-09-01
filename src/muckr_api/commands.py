@@ -6,10 +6,10 @@ import urllib.parse
 import click
 import flask
 import flask.cli
-import requests
 
 from muckr_api.user.models import User
 from muckr_api.extensions import database
+import muckr_api.client
 
 
 @click.command()
@@ -39,11 +39,6 @@ def _get_admin_credentials(url):
     return username, password
 
 
-def _get_baseurl(url):
-    url = urllib.parse.urlsplit(url)
-    return urllib.parse.urlunsplit([url.scheme, url.netloc, "", "", ""])
-
-
 def _get_heroku_app_from_url(url):
     url = urllib.parse.urlsplit(url)
     if "." in url.netloc:
@@ -52,19 +47,54 @@ def _get_heroku_app_from_url(url):
             return subdomain
 
 
-def _get_token(baseurl, auth):
-    response = requests.post(f"{baseurl}/tokens", auth=auth)
-    response.raise_for_status()
-    return response.json()["token"]
+def _resolve_resource(api, resource):
+    try:
+        return {
+            "user": api.users,
+            "users": api.users,
+            "artist": api.artists,
+            "artists": api.artists,
+            "venue": api.venues,
+            "venues": api.venues,
+        }[resource]
+    except KeyError:
+        raise Exception(f"invalid resource {resource}")
+
+
+def _invoke_api(api, method, resource, args):
+    resources = _resolve_resource(api, resource)
+    args = dict(arg.split("=") for arg in args)
+
+    if method == "list":
+        return resources.list()
+
+    if method == "get":
+        return resources.get(args["id"])
+
+    if method == "create":
+        return resources.create(args)
+
+    if method == "update":
+        return resources.update(args["id"], args)
+
+    if method == "delete":
+        return resources.delete(args["id"])
+
+    raise Exception(f"invalid method {method}")
 
 
 @click.command()
-@click.argument("method")
 @click.argument("url")
+@click.argument("method")
+@click.argument("resource")
 @click.argument("args", nargs=-1)
 @flask.cli.with_appcontext
-def client(method, url, args):
+def client(url, method, resource, args):
     """Simple HTTP client."""
-    token = _get_token(_get_baseurl(url), _get_admin_credentials(url))
-    args += (f"Authorization: Bearer {token}",)
-    subprocess.run(["http", "--print=b", method, url, *args])
+    api = muckr_api.client.API(url)
+    username, password = _get_admin_credentials(url)
+    api.authenticate(username, password)
+
+    result = _invoke_api(api, method, resource, args)
+
+    click.echo(json.dumps(result))
