@@ -54,6 +54,7 @@ def _get_heroku_app_from_url(url):
 
 def _get_token(baseurl, auth):
     response = requests.post(f"{baseurl}/tokens", auth=auth)
+    response.raise_for_status()
     return response.json()["token"]
 
 
