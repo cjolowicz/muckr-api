@@ -15,7 +15,6 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-bumpversion = {version = "^0.5.3", optional = true}
 click = "^7.0"
 environs = "^5.2"
 flask = "^1.1"
@@ -39,7 +38,6 @@ pytest-mock = "^1.10"
 
 [tool.poetry.extras]
 httpie = ["httpie"]
-bumpversion = ["bumpversion"]
 
 [tool.poetry.scripts]
 muckr-api = "muckr_api.__main__:main"
