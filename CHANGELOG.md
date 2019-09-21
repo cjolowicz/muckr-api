@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix reverse migration for artist-user foreign key ([#45](../../pull/45))
 - Fix invalid Heroku app name when retrieving client credentials ([#40](../../pull/40))
 
+### Added
+- Add integration tests ([#41](../../pull/41))
+
 ### Removed
 - Drop bumpversion ([#38](../../pull/38))
 - Drop adminer ([#43](../../pull/43))
