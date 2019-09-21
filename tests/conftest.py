@@ -33,11 +33,11 @@ def pytest_collection_modifyitems(config, items):
 def app():
     app = muckr_api.app.create_app("tests.config")
     context = app.test_request_context()
-    context.push()
+    context.push()  # type: ignore
 
     yield app
 
-    context.pop()
+    context.pop()  # type: ignore
 
 
 @pytest.fixture

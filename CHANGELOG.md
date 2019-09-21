@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add integration tests ([#41](../../pull/41))
+- Add static type checking using pytype ([#42](../../pull/42))
 
 ### Removed
 - Drop bumpversion ([#38](../../pull/38))

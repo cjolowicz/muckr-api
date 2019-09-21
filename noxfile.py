@@ -1,7 +1,7 @@
 import nox
 
 
-nox.options.sessions = "lint", "tests"
+nox.options.sessions = "lint", "tests", "pytype"
 
 locations = "migrations", "noxfile.py", "src", "tests", "wsgi.py"
 
@@ -19,6 +19,13 @@ def lint(session):
     session.install("flake8", "flake8-bugbear", "flake8-import-order", "black")
     session.run("black", "--check", *locations)
     session.run("flake8", *locations)
+
+
+@nox.session(python="3.7")
+def pytype(session):
+    """Run the test suite."""
+    session.install("pytype")
+    session.run("pytype", "-d", "import-error", *locations)
 
 
 @nox.session(python="3.7")
