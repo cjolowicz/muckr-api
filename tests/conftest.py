@@ -5,6 +5,30 @@ import muckr_api.app
 import muckr_api.extensions
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--with-integration-tests",
+        action="store_true",
+        dest="integration_tests",
+        default=False,
+        help="enable integration tests",
+    )
+
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "integration_test: mark integration test")
+
+
+def pytest_collection_modifyitems(config, items):
+    if not config.getoption("--with-integration-tests"):
+        skip_integration_tests = pytest.mark.skip(
+            reason="need --with-integration-tests option to run"
+        )
+        for item in items:
+            if "integration_test" in item.keywords:
+                item.add_marker(skip_integration_tests)
+
+
 @pytest.fixture
 def app():
     app = muckr_api.app.create_app("tests.config")

@@ -97,12 +97,13 @@ This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and
 [PEP 440](https://www.python.org/dev/peps/pep-0440).
 
-1. Update [CHANGELOG.md](CHANGELOG.md).
-2. Bump version using `poetry version`.
-3. Update the version number in `__init__.py`.
-4. Add a Git tag to the repository.
-5. Push to Github.
-6. Create the Github release.
+1. Run `nox -e integration_tests`.
+2. Update [CHANGELOG.md](CHANGELOG.md).
+3. Bump version using `poetry version`.
+4. Update the version number in `__init__.py`.
+5. Add a Git tag to the repository.
+6. Push to Github.
+7. Create the Github release.
 
 Useful scripts to help with the above:
 
@@ -113,6 +114,7 @@ Useful scripts to help with the above:
 Example shell session:
 
 ```sh
+$ nox -e integration_tests
 $ bumpversion-changelog 0.6.0
 $ bumpversion-poetry --push 0.6.0
 $ github-release 0.6.0
