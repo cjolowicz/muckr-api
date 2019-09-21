@@ -9,6 +9,7 @@ muckr API
 - [Contents](#contents)
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Running](#running)
 
 ## Contents
 
@@ -62,3 +63,31 @@ The database server is configured via the following environment variables:
 
 A sample [env file](.env.sample) is provided. This is a file named
 `.env`, where each line contains an assignment of the form `VAR=VAL`.
+
+### Running
+
+The following command will start up the API:
+
+```sh
+$ docker-compose up
+```
+
+The Docker Compose file comprises the following Docker containers:
+
+| Container         | Image                                                                                                                                 | Description                      |
+| ---               | ---                                                                                                                                   | ---                              |
+| `muckr-api`       | [Dockerfile](Dockerfile)                                                                                                              | the API itself                   |
+| `muckr-api-nginx` | [nginx/Dockerfile](nginx/Dockerfile)                                                                                                  | an nginx proxy for the API       |
+| `postgres`        | [postgres:11.2-alpine](https://github.com/docker-library/postgres/blob/6c3b27f1433ad81675afb386a182098dc867e3e8/11/alpine/Dockerfile) | the database server              |
+| `adminer`         | [adminer](https://github.com/TimWolla/docker-adminer/blob/0b7ac63344767be6d7903444f40d8b9885b5d7bd/4/Dockerfile)                      | a web interface for the database |
+
+Database files are stored on a volume named `muckr-api_database`.
+
+The API is accessible on port `9000` on the Docker host. The database management
+interface is accessible on port `9001` on the Docker host.
+
+Use the following command to create the admin user:
+
+```sh
+$ docker-compose exec muckr-api muckr-api create-admin
+```

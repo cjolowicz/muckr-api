@@ -1,14 +1,14 @@
-# Contributing
+# Contributor Guide
 
-- [Development](#development)
+- [Environment](#environment)
+- [Code Style](#code-style)
 - [Testing](#testing)
-- [Running](#running)
-- [Requirements](#requirements)
-- [Releasing](#releasing)
+- [Development Server](#development-server)
 - [Continuous Integration](#continuous-integration)
 - [Deployment](#deployment)
+- [Releasing](#releasing)
 
-## Development
+## Environment
 
 You need Python 3.7 and the following tools:
 
@@ -16,10 +16,18 @@ You need Python 3.7 and the following tools:
 - [nox](https://nox.thea.codes/)
 - [pyenv](https://github.com/pyenv/pyenv) (optional)
 
+Install the package with development requirements:
+
+```sh
+$ poetry install
+```
+
+## Code Style
+
 Reformat your changes before committing:
 
 ```sh
-nox -e black
+$ nox -e black
 ```
 
 ## Testing
@@ -30,50 +38,32 @@ The test suite is located under [tests](tests) and uses
 Run the test suite as follows:
 
 ```sh
-nox
+$ nox
 ```
 
-## Running
+## Development Server
 
-The following command will start up the API:
+First, configure the app as described in [Configuration](README.md#configuration).
+
+Start up the database server:
 
 ```sh
-docker-compose up
+$ docker-compose -f docker-compose.dev.yml up
 ```
 
-The Docker Compose file comprises the following Docker containers:
-
-- `muckr-api`
-- `muckr-api-nginx`
-- `postgres`
-- `adminer`
-
-Database files are stored on a volume named `database`.
-
-The API is accessible on port 9000 on the Docker host. The database management
-interface is accessible on port 9001 on the Docker host.
-
-Use the following command to create the admin user:
+Run the database migrations:
 
 ```sh
-docker-compose exec muckr-api muckr-api create-admin
+$ muckr-api db upgrade
 ```
 
-## Releasing
+Start up the API in development mode:
 
-This project adheres to
-[Semantic Versioning](https://semver.org/spec/v2.0.0.html) and
-[PEP 440](https://www.python.org/dev/peps/pep-0440).
+```sh
+$ muckr-api run
+```
 
-Use `poetry version` to update the version number in `pyproject.toml`. Update
-`__init__.py` and add a Git tag to the repository.
-
-1. Run `nox`.
-2. Update [CHANGELOG.md](CHANGELOG.md).
-3. Bump version using `poetry version`.
-4. Update the version number in `__init__.py`.
-5. Add a Git tag to the repository.
-6. Push to Github.
+Point your browser to http://localhost:5000/.
 
 ## Continuous Integration
 
@@ -96,7 +86,40 @@ Review apps are created automatically for Pull Requests using the
 To migrate the production database on Heroku,
 
 ```sh
-heroku run muckr-api db upgrade --app=muckr-api
+$ heroku run muckr-api db upgrade --app=muckr-api
 ```
 
 (Use `--app=muckr-api-staging` to migrate the staging database.)
+
+## Releasing
+
+This project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html) and
+[PEP 440](https://www.python.org/dev/peps/pep-0440).
+
+1. Update [CHANGELOG.md](CHANGELOG.md).
+2. Bump version using `poetry version`.
+3. Update the version number in `__init__.py`.
+4. Add a Git tag to the repository.
+5. Push to Github.
+6. Create the Github release.
+
+Useful scripts to help with the above:
+
+- https://github.com/cjolowicz/scripts/blob/master/github/bumpversion-changelog.sh
+- https://github.com/cjolowicz/scripts/blob/master/github/bumpversion-poetry.sh
+- https://github.com/cjolowicz/scripts/blob/master/github/github-release.sh
+
+Example shell session:
+
+```sh
+$ bumpversion-changelog 0.6.0
+$ bumpversion-poetry --push 0.6.0
+$ github-release 0.6.0
+```
+
+Steps to be done after release:
+
+1. Wait for CI.
+2. Wait for deployment to staging.
+3. If all looks good, promote staging to production.
