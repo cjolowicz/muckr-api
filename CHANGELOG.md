@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add integration tests ([#41](../../pull/41))
-- Add static type checking using pytype ([#42](../../pull/42))
+- Add static type checking using pytype ([#47](../../pull/47))
 
 ### Removed
 - Drop bumpversion ([#38](../../pull/38))
@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update documentation ([#39](../../pull/39))
 - Improve client message when authentication fails ([#44](../../pull/44))
 - Remove startup log message ([#46](../../pull/46))
+- Upgrade requirements ([#48](../../pull/48))
 
 ## [0.6.0] - 2019-08-29
 ### Added
