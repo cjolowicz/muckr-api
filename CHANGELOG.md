@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Update documentation ([#39](../../pull/39))
+- Improve client message when authentication fails ([#44](../../pull/44))
 
 ## [0.6.0] - 2019-08-29
 ### Added
