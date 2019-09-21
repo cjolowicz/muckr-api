@@ -25,7 +25,7 @@ def lint(session):
 def pytype(session):
     """Run the test suite."""
     session.install("pytype")
-    session.run("pytype", *locations)
+    session.run("pytype", "-d", "import-error", *locations)
 
 
 @nox.session(python="3.7")
