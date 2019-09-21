@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix broken isolation of nox session when installing via Poetry ([#42](../../pull/42))
 - Fix reverse migration for artist-user foreign key ([#45](../../pull/45))
+- Fix invalid Heroku app name when retrieving client credentials ([#40](../../pull/40))
 
 ### Removed
 - Drop bumpversion ([#38](../../pull/38))

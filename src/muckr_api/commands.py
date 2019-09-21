@@ -26,9 +26,10 @@ def create_admin():
 
 
 def _get_admin_credentials(url):
-    if "heroku" in url:
+    app = _get_heroku_app_from_url(url)
+    if app:
         process = subprocess.run(
-            ["heroku", "config", "--json", "--app=muckr_api-api"], capture_output=True
+            ["heroku", "config", "--json", f"--app={app}"], capture_output=True
         )
         config = json.loads(process.stdout)
     else:
@@ -41,6 +42,14 @@ def _get_admin_credentials(url):
 def _get_baseurl(url):
     url = urllib.parse.urlsplit(url)
     return urllib.parse.urlunsplit([url.scheme, url.netloc, "", "", ""])
+
+
+def _get_heroku_app_from_url(url):
+    url = urllib.parse.urlsplit(url)
+    if "." in url.netloc:
+        subdomain, domain = url.netloc.split(".", 1)
+        if domain == "herokuapp.com":
+            return subdomain
 
 
 def _get_token(baseurl, auth):
