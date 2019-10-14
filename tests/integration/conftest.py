@@ -3,7 +3,7 @@ import subprocess
 import environs
 import pytest
 
-from .client import API
+from muckr_api.client import API
 
 
 def _console(*args):
