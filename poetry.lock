@@ -193,7 +193,7 @@ Flask = "*"
 
 [[package]]
 name = "flask-cors"
-version = "3.0.8"
+version = "3.0.9"
 description = "A Flask extension adding a decorator for CORS support"
 category = "main"
 optional = false
@@ -778,8 +778,8 @@ flask-bcrypt = [
     {file = "Flask-Bcrypt-0.7.1.tar.gz", hash = "sha256:d71c8585b2ee1c62024392ebdbc447438564e2c8c02b4e57b56a4cafd8d13c5f"},
 ]
 flask-cors = [
-    {file = "Flask-Cors-3.0.8.tar.gz", hash = "sha256:72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16"},
-    {file = "Flask_Cors-3.0.8-py2.py3-none-any.whl", hash = "sha256:f4d97201660e6bbcff2d89d082b5b6d31abee04b1b3003ee073a6fd25ad1d69a"},
+    {file = "Flask-Cors-3.0.9.tar.gz", hash = "sha256:6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8"},
+    {file = "Flask_Cors-3.0.9-py2.py3-none-any.whl", hash = "sha256:cee4480aaee421ed029eaa788f4049e3e26d15b5affb6a880dade6bafad38324"},
 ]
 flask-httpauth = [
     {file = "Flask-HTTPAuth-3.3.0.tar.gz", hash = "sha256:6ef8b761332e780f9ff74d5f9056c2616f52babc1998b01d9f361a1e439e61b9"},
